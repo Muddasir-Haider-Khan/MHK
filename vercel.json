@@ -6,22 +6,19 @@
             "use": "@vercel/node"
         }
     ],
-    "routes": [
+    "rewrites": [
         {
-            "src": "/uploads/(.*)",
-            "dest": "/backend/uploads/$1"
+            "source": "/api/(.*)",
+            "destination": "backend/server.js"
         },
         {
-            "src": "/api/(.*)",
-            "dest": "backend/server.js"
+            "source": "/admin/(.*)",
+            "destination": "admin/index.html"
         },
         {
-            "src": "/admin/(.*)",
-            "dest": "backend/server.js"
-        },
-        {
-            "src": "/(.*)",
-            "dest": "backend/server.js"
+            "source": "/(?!api|admin|uploads)(.*)",
+            "destination": "frontend/index.html"
         }
-    ]
+    ],
+    "cleanUrls": true
 }
