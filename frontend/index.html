@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en" class="antialiased">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muddasir Haider Khan | AI Creative Engineer</title>
+    <meta name="description"
+        content="Award-winning level portfolio of Muddasir Haider Khan. AI Engineer & Creative Developer.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                        display: ['Clash Display', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        'brand-dark': '#050505',
+                        'brand-purple': '#8b5cf6',
+                        'brand-accent': '#6366f1',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- GSAP & Lenis -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/TextPlugin.min.js"></script>
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="bg-[#050505] text-white overflow-x-hidden selection:bg-brand-purple selection:text-white">
+
+    <!-- Global Noise & Cursor -->
+    <div class="fixed inset-0 pointer-events-none z-[9999] opacity-[0.03] mix-blend-overlay"
+        style="background-image: url('https://grainy-gradients.vercel.app/noise.svg');"></div>
+    <div id="cursor"
+        class="fixed w-4 h-4 bg-white rounded-full pointer-events-none z-[10000] mix-blend-difference hidden md:block transition-transform duration-100 ease-out">
+    </div>
+    <div id="cursor-follower"
+        class="fixed w-12 h-12 border border-white/20 rounded-full pointer-events-none z-[9999] hidden md:block transition-all duration-300 ease-out">
+    </div>
+
+    <!-- Loader -->
+    <div class="loader-bg fixed inset-0 bg-[#050505] z-[9999] flex flex-col justify-center items-center gap-4">
+        <div class="text-6xl md:text-9xl font-display font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500 reveal-text"
+            id="loader-text">
+            MHK
+        </div>
+        <div class="loader-line w-24 h-[2px] bg-white/20 rounded-full overflow-hidden">
+            <div class="loader-fill h-full bg-brand-purple rounded-full" style="width: 0%"></div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 w-full z-50 px-6 py-6 flex justify-between items-center mix-blend-difference">
+        <a href="#" class="text-xl font-display font-bold tracking-tighter hover-magnetic">MHK.</a>
+        <div
+            class="hidden md:flex gap-8 items-center bg-white/5 backdrop-blur-md px-8 py-3 rounded-full border border-white/10">
+            <a href="#story" class="text-sm font-medium hover:text-gray-300 transition-colors link-hover">Story</a>
+            <a href="#skills" class="text-sm font-medium hover:text-gray-300 transition-colors link-hover">Skills</a>
+            <a href="#work" class="text-sm font-medium hover:text-gray-300 transition-colors link-hover">Work</a>
+            <a href="#experience"
+                class="text-sm font-medium hover:text-gray-300 transition-colors link-hover">Journey</a>
+            <a href="#process" class="text-sm font-medium hover:text-gray-300 transition-colors link-hover">Process</a>
+        </div>
+        <a href="#contact"
+            class="hidden md:block px-6 py-3 bg-white text-black font-medium rounded-full hover:bg-gray-200 transition-colors hover-magnetic">Let's
+            Talk</a>
+        <button id="menuBtn" class="md:hidden text-white hover-magnetic"><i data-lucide="menu"
+                class="w-8 h-8"></i></button>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu"
+        class="fixed inset-0 bg-[#050505]/98 z-[60] flex flex-col items-center justify-center gap-8 translate-x-full transition-transform duration-500 md:hidden">
+        <button id="closeMenu" class="absolute top-6 right-6"><i data-lucide="x" class="w-8 h-8"></i></button>
+        <a href="#story" class="text-2xl font-display mobile-link">Story</a>
+        <a href="#skills" class="text-2xl font-display mobile-link">Skills</a>
+        <a href="#work" class="text-2xl font-display mobile-link">Work</a>
+        <a href="#experience" class="text-2xl font-display mobile-link">Journey</a>
+        <a href="#process" class="text-2xl font-display mobile-link">Process</a>
+        <a href="#contact" class="text-2xl font-display mobile-link">Connect</a>
+    </div>
+
+    <main class="relative z-10">
+
+        <!-- ========== 1. HERO SECTION ========== -->
+        <section id="hero" class="min-h-screen flex flex-col justify-center items-center relative px-4 overflow-hidden">
+            <!-- Floating particles -->
+            <div class="particles-container absolute inset-0 pointer-events-none" id="particles"></div>
+            <!-- Glow -->
+            <div
+                class="hero-glow absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[50vw] h-[50vw] bg-brand-purple/20 rounded-full blur-[120px] pointer-events-none opacity-50">
+            </div>
+            <div class="text-center relative z-20">
+                <p class="hero-subtitle text-xs md:text-sm uppercase tracking-[0.2em] text-gray-400 mb-4 opacity-0">
+                    <span id="hero-tagline">Based in Islamabad</span>
+                </p>
+                <div class="hero-3d-wrapper" id="hero3d" style="perspective: 800px;">
+                    <h1 class="hero-title font-display font-bold text-[22vw] md:text-[18vw] leading-[0.85] tracking-tighter"
+                        style="transform-style: preserve-3d;">
+                        <div class="overflow-hidden"><span class="block hero-3d-text" id="hero-name-line"
+                                style="transform: translateY(100%)">MHK</span></div>
+                    </h1>
+                </div>
+                <div class="flex flex-col md:flex-row items-center justify-center gap-4 mt-6 overflow-hidden">
+                    <div class="hero-tagline-pill bg-white/5 border border-white/10 px-6 py-2 rounded-full backdrop-blur-sm"
+                        style="transform: translateY(200%); opacity: 0">
+                        <span class="text-sm md:text-lg text-gray-300" id="hero-title-text">Creative AI Engineer</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Scroll Indicator -->
+            <div
+                class="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 scroll-indicator opacity-0">
+                <span class="text-[10px] uppercase tracking-[0.3em] text-gray-500">Scroll</span>
+                <div class="w-[1px] h-12 bg-gradient-to-b from-white/40 to-transparent scroll-line"></div>
+            </div>
+        </section>
+
+        <!-- ========== 2. STORY SECTION ========== -->
+        <section id="story" class="relative">
+            <div class="h-screen flex items-center justify-center px-4">
+                <div class="max-w-4xl text-center">
+                    <h2
+                        class="narrative-text text-3xl md:text-6xl font-display font-medium leading-snug text-transparent bg-clip-text bg-gradient-to-br from-white via-white to-gray-600">
+                    </h2>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== 3. SKILLS EXPERIENCE ENGINE ========== -->
+        <section id="skills" class="py-40 relative overflow-hidden">
+            <!-- Background decoration -->
+            <div
+                class="absolute top-0 right-0 w-[40vw] h-[40vw] bg-brand-purple/5 rounded-full blur-[140px] pointer-events-none">
+            </div>
+            <div
+                class="absolute bottom-1/4 left-0 w-[25vw] h-[25vw] bg-brand-accent/5 rounded-full blur-[100px] pointer-events-none">
+            </div>
+
+            <div class="px-4 md:px-12 mb-20">
+                <p class="text-sm uppercase tracking-widest text-gray-500 mb-8">01 / Capabilities</p>
+                <h2 class="text-5xl md:text-7xl font-display font-bold mb-6">The Engine <span
+                        class="gradient-text-animated italic">Behind</span></h2>
+                <p class="text-gray-500 text-lg max-w-xl">Technologies and tools I use to bring ideas to life — from
+                    concept to deployment.</p>
+            </div>
+            <div class="skills-universe relative px-4 md:px-12" id="skills-container">
+                <!-- Skills populated by JS -->
+            </div>
+            <!-- Skill Detail Panel -->
+            <div id="skill-detail"
+                class="fixed bottom-0 left-0 right-0 bg-[#0a0a0a]/95 backdrop-blur-xl border-t border-white/10 p-8 z-40 translate-y-full transition-transform duration-500">
+                <div class="max-w-2xl mx-auto">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 id="skill-detail-name" class="text-2xl font-display font-bold"></h3>
+                            <p id="skill-detail-category" class="text-brand-purple text-sm mt-1"></p>
+                        </div>
+                        <button id="close-skill-detail" class="text-gray-400 hover:text-white"><i data-lucide="x"
+                                class="w-6 h-6"></i></button>
+                    </div>
+                    <p id="skill-detail-desc" class="text-gray-300 mt-4 leading-relaxed"></p>
+                    <div class="mt-4 bg-white/5 rounded-full h-2 overflow-hidden">
+                        <div id="skill-detail-bar"
+                            class="h-full bg-gradient-to-r from-brand-purple to-brand-accent rounded-full transition-all duration-1000"
+                            style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== 4. PROJECT SHOWCASE ========== -->
+        <section id="work" class="py-32 bg-[#080808] relative z-10">
+            <div class="px-4 md:px-12 mb-24 flex justify-between items-end">
+                <div>
+                    <p class="text-sm uppercase tracking-widest text-gray-500 mb-8">02 / Portfolio</p>
+                    <h2 class="text-6xl md:text-8xl font-display font-bold">Selected<br>Works</h2>
+                </div>
+            </div>
+            <div class="space-y-40 px-4 md:px-12 max-w-7xl mx-auto" id="projects-container">
+                <!-- Projects populated by JS -->
+            </div>
+        </section>
+
+        <!-- Project Modal -->
+        <div id="project-modal"
+            class="fixed inset-0 z-[100] flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-500">
+            <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" id="modal-overlay"></div>
+            <div class="relative bg-[#0a0a0a] border border-white/10 rounded-2xl max-w-3xl w-full mx-4 max-h-[85vh] overflow-y-auto p-8 md:p-12 transform scale-95 transition-transform duration-500"
+                id="modal-content">
+                <button id="close-modal" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i
+                        data-lucide="x" class="w-6 h-6"></i></button>
+                <img id="modal-image" class="w-full aspect-video object-cover rounded-xl mb-8" src="" alt="">
+                <h3 id="modal-title" class="text-3xl font-display font-bold mb-2"></h3>
+                <p id="modal-role" class="text-brand-purple text-sm mb-6"></p>
+                <p id="modal-description" class="text-gray-300 leading-relaxed mb-6"></p>
+                <div id="modal-outcome" class="bg-white/5 border border-white/10 rounded-xl p-4 mb-6">
+                    <p class="text-sm text-gray-500 mb-1">Outcome</p>
+                    <p class="text-white"></p>
+                </div>
+                <div id="modal-techs" class="flex flex-wrap gap-2">
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== 5. EXPERIENCE TIMELINE ========== -->
+        <section id="experience" class="py-32 relative">
+            <div class="px-4 md:px-12 mb-16">
+                <p class="text-sm uppercase tracking-widest text-gray-500 mb-8">03 / Journey</p>
+                <h2 class="text-5xl md:text-7xl font-display font-bold">The Path<br><span
+                        class="text-brand-purple italic">So Far</span></h2>
+            </div>
+            <div class="max-w-4xl mx-auto px-4 md:px-12 relative">
+                <div class="absolute left-4 md:left-1/2 top-0 bottom-0 w-[2px] bg-white/10 timeline-line">
+                    <div class="timeline-progress absolute top-0 left-0 w-full bg-brand-purple" style="height: 0%">
+                    </div>
+                </div>
+                <div id="timeline-container" class="space-y-16">
+                    <!-- Timeline items populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Section Divider -->
+        <div class="section-divider"></div>
+
+        <!-- ========== 6. THINKING PROCESS ========== -->
+        <section id="process" class="py-32 bg-[#080808] relative overflow-hidden">
+            <!-- Background decoration -->
+            <div
+                class="absolute top-1/3 right-0 w-[30vw] h-[30vw] bg-brand-purple/5 rounded-full blur-[150px] pointer-events-none">
+            </div>
+            <div
+                class="absolute bottom-0 left-0 w-[20vw] h-[20vw] bg-brand-accent/5 rounded-full blur-[100px] pointer-events-none">
+            </div>
+
+            <div class="px-4 md:px-12 mb-20">
+                <p class="text-sm uppercase tracking-widest text-gray-500 mb-8">04 / Method</p>
+                <h2 class="text-5xl md:text-7xl font-display font-bold">How I <span
+                        class="gradient-text-animated italic">Think</span></h2>
+            </div>
+            <div class="max-w-6xl mx-auto px-4 md:px-12">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8 relative">
+                    <!-- Animated connectors (desktop) -->
+                    <svg class="hidden md:block absolute top-1/2 left-0 w-full h-4 -translate-y-1/2 z-0"
+                        preserveAspectRatio="none">
+                        <line x1="12.5%" y1="50%" x2="37.5%" y2="50%" stroke="url(#connector-grad)" stroke-width="2"
+                            class="process-connector" stroke-dasharray="100" stroke-dashoffset="100" />
+                        <line x1="37.5%" y1="50%" x2="62.5%" y2="50%" stroke="url(#connector-grad)" stroke-width="2"
+                            class="process-connector" stroke-dasharray="100" stroke-dashoffset="100" />
+                        <line x1="62.5%" y1="50%" x2="87.5%" y2="50%" stroke="url(#connector-grad)" stroke-width="2"
+                            class="process-connector" stroke-dasharray="100" stroke-dashoffset="100" />
+                        <defs>
+                            <linearGradient id="connector-grad">
+                                <stop offset="0%" stop-color="#8b5cf6" />
+                                <stop offset="100%" stop-color="#6366f1" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <!-- Cards -->
+                    <div class="process-step glass-card relative z-10 p-8 group cursor-default">
+                        <div
+                            class="icon-box w-14 h-14 rounded-2xl bg-brand-purple/10 flex items-center justify-center mb-6">
+                            <i data-lucide="scan-search" class="w-6 h-6 text-brand-purple"></i>
+                        </div>
+                        <span
+                            class="step-number text-7xl font-display font-bold text-white/[0.03] absolute top-4 right-6">01</span>
+                        <h3 class="text-xl font-display font-bold mb-3 relative z-10">Problem</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed relative z-10">Deep dive into the core
+                            challenge. Understanding data, requirements, and hidden patterns.</p>
+                    </div>
+                    <div class="process-step glass-card relative z-10 p-8 group cursor-default">
+                        <div
+                            class="icon-box w-14 h-14 rounded-2xl bg-brand-purple/10 flex items-center justify-center mb-6">
+                            <i data-lucide="layers" class="w-6 h-6 text-brand-purple"></i>
+                        </div>
+                        <span
+                            class="step-number text-7xl font-display font-bold text-white/[0.03] absolute top-4 right-6">02</span>
+                        <h3 class="text-xl font-display font-bold mb-3 relative z-10">Architecture</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed relative z-10">Selecting the right models, tech
+                            stack, and designing for scalability from day one.</p>
+                    </div>
+                    <div class="process-step glass-card relative z-10 p-8 group cursor-default">
+                        <div
+                            class="icon-box w-14 h-14 rounded-2xl bg-brand-purple/10 flex items-center justify-center mb-6">
+                            <i data-lucide="code-2" class="w-6 h-6 text-brand-purple"></i>
+                        </div>
+                        <span
+                            class="step-number text-7xl font-display font-bold text-white/[0.03] absolute top-4 right-6">03</span>
+                        <h3 class="text-xl font-display font-bold mb-3 relative z-10">Build</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed relative z-10">Clean, efficient code. Blending
+                            backend logic with stunning frontend interactivity.</p>
+                    </div>
+                    <div class="process-step glass-card relative z-10 p-8 group cursor-default">
+                        <div
+                            class="icon-box w-14 h-14 rounded-2xl bg-brand-purple/10 flex items-center justify-center mb-6">
+                            <i data-lucide="rocket" class="w-6 h-6 text-brand-purple"></i>
+                        </div>
+                        <span
+                            class="step-number text-7xl font-display font-bold text-white/[0.03] absolute top-4 right-6">04</span>
+                        <h3 class="text-xl font-display font-bold mb-3 relative z-10">Optimize</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed relative z-10">Performance tuning, testing,
+                            CI/CD pipelines, and real-world validation.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== 7. PERSONAL PHILOSOPHY ========== -->
+        <section id="philosophy" class="min-h-[80vh] flex items-center justify-center relative px-4">
+            <div
+                class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40vw] h-[40vw] bg-brand-accent/10 rounded-full blur-[100px] pointer-events-none">
+            </div>
+            <blockquote
+                class="philosophy-text text-4xl md:text-7xl lg:text-8xl font-display font-bold text-center leading-[1.1] max-w-5xl relative z-10">
+                <span class="text-white/10">"</span>
+                <span id="philosophy-quote">I build systems that run quietly for years.</span>
+                <span class="text-white/10">"</span>
+            </blockquote>
+        </section>
+
+        <!-- Section Divider -->
+        <div class="section-divider"></div>
+
+        <!-- ========== 8. TRUST SECTION ========== -->
+        <section id="trust" class="py-40 relative overflow-hidden">
+            <!-- Background decorative orbs -->
+            <div
+                class="absolute top-1/4 left-0 w-[30vw] h-[30vw] bg-brand-purple/5 rounded-full blur-[120px] pointer-events-none">
+            </div>
+            <div
+                class="absolute bottom-0 right-0 w-[25vw] h-[25vw] bg-brand-accent/5 rounded-full blur-[100px] pointer-events-none">
+            </div>
+
+            <div class="max-w-6xl mx-auto px-4 md:px-12">
+                <div class="text-center mb-20">
+                    <p class="text-sm uppercase tracking-widest text-gray-500 mb-8">Numbers That Speak</p>
+                    <h2 class="text-4xl md:text-6xl font-display font-bold">Impact at a <span
+                            class="gradient-text-animated italic">Glance</span></h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Card 1 -->
+                    <div class="trust-counter trust-card group">
+                        <div class="trust-card-border"></div>
+                        <div class="trust-card-inner">
+                            <div class="trust-icon-ring">
+                                <i data-lucide="folder-check" class="w-6 h-6 text-brand-purple"></i>
+                            </div>
+                            <span class="counter-value trust-number" data-target="25">0</span>
+                            <p class="trust-label">Projects Completed</p>
+                            <p class="text-gray-600 text-xs mt-2">Web apps, APIs & AI systems</p>
+                        </div>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="trust-counter trust-card group">
+                        <div class="trust-card-border"></div>
+                        <div class="trust-card-inner">
+                            <div class="trust-icon-ring">
+                                <i data-lucide="calendar-range" class="w-6 h-6 text-brand-purple"></i>
+                            </div>
+                            <span class="counter-value trust-number" data-target="3">0</span>
+                            <p class="trust-label">Years Experience</p>
+                            <p class="text-gray-600 text-xs mt-2">Building production systems</p>
+                        </div>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="trust-counter trust-card group">
+                        <div class="trust-card-border"></div>
+                        <div class="trust-card-inner">
+                            <div class="trust-icon-ring">
+                                <i data-lucide="layers" class="w-6 h-6 text-brand-purple"></i>
+                            </div>
+                            <span class="counter-value trust-number" data-target="30">0</span>
+                            <p class="trust-label">Technologies Used</p>
+                            <p class="text-gray-600 text-xs mt-2">From React to TensorFlow</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== 9. CONTACT SECTION ========== -->
+        <section id="contact"
+            class="min-h-screen flex flex-col justify-center items-center px-4 md:px-12 relative overflow-hidden">
+            <div
+                class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[60vw] h-[60vw] bg-brand-accent/10 rounded-full blur-[150px] pointer-events-none">
+            </div>
+            <div class="text-center relative z-10 max-w-3xl">
+                <p class="text-sm uppercase tracking-widest text-gray-500 mb-8">05 / What's Next?</p>
+
+
+                <h2
+                    class="text-5xl md:text-[8vw] font-display font-bold text-center leading-none mb-12 hover-scale contact-title">
+                    Let's<br><span class="gradient-text-animated italic">Connect</span>
+                </h2>
+                <div class="flex flex-col md:flex-row gap-6 items-center justify-center z-20">
+                    <a href="mailto:muddasirhaider048@gmail.com" id="contact-email-link"
+                        class="flex items-center gap-3 px-6 py-4 border border-white/20 rounded-full hover:bg-[#EA4335] hover:border-[#EA4335] hover:text-white transition-all duration-500 hover-magnetic">
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                            <path
+                                d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 010 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z" />
+                        </svg>
+                        <span>Gmail</span>
+                    </a>
+                    <a href="https://wa.me/923352767961" target="_blank" rel="noopener noreferrer"
+                        class="group flex items-center gap-3 px-8 py-4 border border-white/20 rounded-full hover:bg-[#25D366] hover:border-[#25D366] hover:text-black transition-all duration-500 hover-magnetic">
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                            <path
+                                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                        </svg>
+                        <span>WhatsApp</span>
+                    </a>
+                    <a href="https://www.instagram.com/_mudda5ir/" target="_blank" rel="noopener noreferrer"
+                        class="flex items-center gap-3 px-6 py-4 border border-white/20 rounded-full hover:bg-[#E1306C] hover:border-[#E1306C] hover:text-white transition-all duration-500 hover-magnetic">
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                            <path
+                                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+                        </svg>
+                        <span>Instagram</span>
+                    </a>
+                    <a href="https://www.linkedin.com/in/muddasir-haider-khan/" target="_blank"
+                        rel="noopener noreferrer"
+                        class="flex items-center gap-3 px-6 py-4 border border-white/20 rounded-full hover:bg-[#0A66C2] hover:border-[#0A66C2] hover:text-white transition-all duration-500 hover-magnetic">
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                            <path
+                                d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                        </svg>
+                        <span>LinkedIn</span>
+                    </a>
+                </div>
+                <div class="flex gap-6 items-center justify-center mt-8" id="social-links">
+                </div>
+            </div>
+            <footer
+                class="absolute bottom-8 w-full px-12 flex justify-between text-xs text-gray-600 uppercase tracking-widest">
+                <span>&copy; 2025 MHK — Crafted with precision</span>
+                <span>Local Time: <span id="time">00:00</span></span>
+            </footer>
+        </section>
+
+    </main>
+
+    <!-- Back to Top -->
+    <button id="backToTop"
+        class="fixed bottom-8 right-8 w-12 h-12 bg-white/5 border border-white/10 rounded-full backdrop-blur-md z-[100] opacity-0 pointer-events-none transition-all duration-500 hover:bg-white hover:text-black flex items-center justify-center">
+        <i data-lucide="arrow-up" class="w-5 h-5"></i>
+    </button>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

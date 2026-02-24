@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel | Portfolio System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config = { theme: { extend: { fontFamily: { sans: ['Outfit', 'sans-serif'] }, colors: { 'brand-purple': '#8b5cf6', 'brand-accent': '#6366f1', 'brand-dark': '#050505' } } } }</script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            background: #0a0a0a;
+            color: #fff;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .sidebar-link {
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-link:hover,
+        .sidebar-link.active {
+            background: rgba(139, 92, 246, 0.1);
+            border-left-color: #8b5cf6;
+            color: #fff;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 1rem;
+            padding: 1.5rem;
+        }
+
+        .btn-primary {
+            background: #8b5cf6;
+            color: #fff;
+            padding: 0.5rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background: #7c3aed;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: #fff;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: #ccc;
+            padding: 0.5rem 1.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        .input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.5rem;
+            padding: 0.625rem 1rem;
+            color: #fff;
+            width: 100%;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .input:focus {
+            border-color: #8b5cf6;
+        }
+
+        textarea.input {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 1rem 1.5rem;
+            border-radius: 0.75rem;
+            font-weight: 500;
+            z-index: 100;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.success {
+            background: #059669;
+        }
+
+        .toast.error {
+            background: #dc2626;
+        }
+
+        .tag-input {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            padding: 0.5rem;
+        }
+
+        .tag {
+            background: rgba(139, 92, 246, 0.2);
+            color: #8b5cf6;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .tag button {
+            background: none;
+            border: none;
+            color: #8b5cf6;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .section-page {
+            display: none;
+        }
+
+        .section-page.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- LOGIN SCREEN -->
+    <div id="loginScreen" class="fixed inset-0 bg-[#050505] z-50 flex items-center justify-center">
+        <div class="w-full max-w-md p-8">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold mb-2">MHK<span class="text-brand-purple">.</span></h1>
+                <p class="text-gray-400">Admin Dashboard</p>
+            </div>
+            <div class="card">
+                <div class="mb-4">
+                    <label class="block text-sm text-gray-400 mb-1">Username</label>
+                    <input type="text" id="loginUser" class="input" placeholder="admin" value="admin">
+                </div>
+                <div class="mb-6">
+                    <label class="block text-sm text-gray-400 mb-1">Password</label>
+                    <input type="password" id="loginPass" class="input" placeholder="••••••••" value="admin123">
+                </div>
+                <button onclick="login()" class="btn-primary w-full py-3 text-lg">Sign In</button>
+                <p id="loginError" class="text-red-400 text-sm text-center mt-3 hidden"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div id="dashboard" class="hidden">
+        <!-- Sidebar -->
+        <aside class="fixed left-0 top-0 bottom-0 w-64 bg-[#0a0a0a] border-r border-white/5 flex flex-col z-40">
+            <div class="p-6 border-b border-white/5">
+                <h2 class="text-xl font-bold">MHK<span class="text-brand-purple">.</span> Admin</h2>
+            </div>
+            <nav class="flex-1 py-4">
+                <a onclick="showSection('dashboard-home')"
+                    class="sidebar-link active block px-6 py-3 text-gray-400 cursor-pointer flex items-center gap-3"
+                    data-section="dashboard-home">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
+                </a>
+                <a onclick="showSection('profile')"
+                    class="sidebar-link block px-6 py-3 text-gray-400 cursor-pointer flex items-center gap-3"
+                    data-section="profile">
+                    <i data-lucide="user" class="w-5 h-5"></i> Profile
+                </a>
+                <a onclick="showSection('skills')"
+                    class="sidebar-link block px-6 py-3 text-gray-400 cursor-pointer flex items-center gap-3"
+                    data-section="skills">
+                    <i data-lucide="zap" class="w-5 h-5"></i> Skills
+                </a>
+                <a onclick="showSection('projects')"
+                    class="sidebar-link block px-6 py-3 text-gray-400 cursor-pointer flex items-center gap-3"
+                    data-section="projects">
+                    <i data-lucide="folder" class="w-5 h-5"></i> Projects
+                </a>
+                <a onclick="showSection('experience')"
+                    class="sidebar-link block px-6 py-3 text-gray-400 cursor-pointer flex items-center gap-3"
+                    data-section="experience">
+                    <i data-lucide="briefcase" class="w-5 h-5"></i> Experience
+                </a>
+                <a onclick="showSection('education')"
+                    class="sidebar-link block px-6 py-3 text-gray-400 cursor-pointer flex items-center gap-3"
+                    data-section="education">
+                    <i data-lucide="graduation-cap" class="w-5 h-5"></i> Education
+                </a>
+                <a onclick="showSection('media')"
+                    class="sidebar-link block px-6 py-3 text-gray-400 cursor-pointer flex items-center gap-3"
+                    data-section="media">
+                    <i data-lucide="image" class="w-5 h-5"></i> Media
+                </a>
+                <a onclick="showSection('settings')"
+                    class="sidebar-link block px-6 py-3 text-gray-400 cursor-pointer flex items-center gap-3"
+                    data-section="settings">
+                    <i data-lucide="settings" class="w-5 h-5"></i> Settings
+                </a>
+            </nav>
+            <div class="p-4 border-t border-white/5">
+                <button onclick="logout()" class="btn-secondary w-full flex items-center justify-center gap-2">
+                    <i data-lucide="log-out" class="w-4 h-4"></i> Logout
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="ml-64 p-8 min-h-screen">
+            <!-- Dashboard Home -->
+            <div id="page-dashboard-home" class="section-page active">
+                <div class="flex justify-between items-center mb-8">
+                    <div>
+                        <h1 class="text-3xl font-bold">Dashboard</h1>
+                        <p class="text-gray-400 mt-1">Welcome back, Admin</p>
+                    </div>
+                    <div class="flex gap-3">
+                        <button onclick="exportCV('pdf')" class="btn-primary flex items-center gap-2"><i
+                                data-lucide="file-text" class="w-4 h-4"></i> Export PDF CV</button>
+                        <button onclick="exportCV('docx')" class="btn-secondary flex items-center gap-2"><i
+                                data-lucide="file" class="w-4 h-4"></i> Export DOCX CV</button>
+                        <button onclick="generateAI()" class="btn-primary flex items-center gap-2"
+                            style="background:#6366f1"><i data-lucide="sparkles" class="w-4 h-4"></i> AI
+                            Generate</button>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8" id="stats-grid"></div>
+                <div class="card">
+                    <h3 class="text-lg font-bold mb-2">Quick Actions</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+                        <button onclick="showSection('profile')" class="btn-secondary py-3">Edit Profile</button>
+                        <button onclick="showSection('skills')" class="btn-secondary py-3">Manage Skills</button>
+                        <button onclick="showSection('projects')" class="btn-secondary py-3">Manage Projects</button>
+                        <a href="/" target="_blank" class="btn-secondary py-3 text-center">View Portfolio</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Editor -->
+            <div id="page-profile" class="section-page">
+                <h1 class="text-3xl font-bold mb-8">Profile Editor</h1>
+                <div class="card max-w-3xl">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div><label class="block text-sm text-gray-400 mb-1">Name</label><input id="pf-name"
+                                class="input"></div>
+                        <div><label class="block text-sm text-gray-400 mb-1">Title</label><input id="pf-title"
+                                class="input"></div>
+                    </div>
+                    <div class="mb-4"><label class="block text-sm text-gray-400 mb-1">Tagline</label><input
+                            id="pf-tagline" class="input"></div>
+                    <div class="mb-4"><label class="block text-sm text-gray-400 mb-1">Bio</label><textarea id="pf-bio"
+                            class="input"></textarea></div>
+                    <div class="mb-4"><label class="block text-sm text-gray-400 mb-1">Philosophy Quote</label><input
+                            id="pf-philosophy" class="input"></div>
+                    <div class="mb-4"><label class="block text-sm text-gray-400 mb-1">Narrative (JSON array of
+                            sentences)</label><textarea id="pf-narrative" class="input"
+                            style="min-height:80px"></textarea></div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div><label class="block text-sm text-gray-400 mb-1">Email</label><input id="pf-email"
+                                class="input"></div>
+                        <div><label class="block text-sm text-gray-400 mb-1">GitHub URL</label><input id="pf-github"
+                                class="input"></div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <div><label class="block text-sm text-gray-400 mb-1">LinkedIn URL</label><input id="pf-linkedin"
+                                class="input"></div>
+                        <div><label class="block text-sm text-gray-400 mb-1">Twitter URL</label><input id="pf-twitter"
+                                class="input"></div>
+                    </div>
+                    <div class="mb-6"><label class="block text-sm text-gray-400 mb-1">Website URL</label><input
+                            id="pf-website" class="input"></div>
+                    <button onclick="saveProfile()" class="btn-primary">Save Profile</button>
+                </div>
+            </div>
+
+            <!-- Skills Manager -->
+            <div id="page-skills" class="section-page">
+                <div class="flex justify-between items-center mb-8">
+                    <h1 class="text-3xl font-bold">Skills Manager</h1>
+                    <button onclick="openSkillForm()" class="btn-primary flex items-center gap-2"><i data-lucide="plus"
+                            class="w-4 h-4"></i> Add Skill</button>
+                </div>
+                <div id="skills-list" class="space-y-3"></div>
+                <!-- Skill Form Modal -->
+                <div id="skillModal" class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center hidden">
+                    <div class="card max-w-lg w-full mx-4">
+                        <h3 id="skillModalTitle" class="text-xl font-bold mb-4">Add Skill</h3>
+                        <input type="hidden" id="sk-id">
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div><label class="block text-sm text-gray-400 mb-1">Name</label><input id="sk-name"
+                                    class="input"></div>
+                            <div><label class="block text-sm text-gray-400 mb-1">Category</label><input id="sk-category"
+                                    class="input" placeholder="e.g. AI & Data"></div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div><label class="block text-sm text-gray-400 mb-1">Level (0-100)</label><input
+                                    type="number" id="sk-level" class="input" min="0" max="100"></div>
+                            <div><label class="block text-sm text-gray-400 mb-1">Icon (emoji)</label><input id="sk-icon"
+                                    class="input" placeholder="⚡"></div>
+                        </div>
+                        <div class="mb-4"><label class="block text-sm text-gray-400 mb-1">Description</label><textarea
+                                id="sk-desc" class="input"></textarea></div>
+                        <div class="mb-4"><label class="block text-sm text-gray-400 mb-1">Sort Order</label><input
+                                type="number" id="sk-sort" class="input" value="0"></div>
+                        <div class="flex gap-3">
+                            <button onclick="saveSkill()" class="btn-primary">Save</button>
+                            <button onclick="document.getElementById('skillModal').classList.add('hidden')"
+                                class="btn-secondary">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Projects Manager -->
+            <div id="page-projects" class="section-page">
+                <div class="flex justify-between items-center mb-8">
+                    <h1 class="text-3xl font-bold">Projects Manager</h1>
+                    <button onclick="openProjectForm()" class="btn-primary flex items-center gap-2"><i
+                            data-lucide="plus" class="w-4 h-4"></i> Add Project</button>
+                </div>
+                <div id="projects-list" class="space-y-3"></div>
+                <!-- Project Form Modal -->
+                <div id="projectModal"
+                    class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center hidden overflow-y-auto">
+                    <div class="card max-w-2xl w-full mx-4 my-8">
+                        <h3 id="projectModalTitle" class="text-xl font-bold mb-4">Add Project</h3>
+                        <input type="hidden" id="pj-id">
+                        <div class="mb-4"><label class="block text-sm text-gray-400 mb-1">Title</label><input
+                                id="pj-title" class="input"></div>
+                        <div class="mb-4"><label class="block text-sm text-gray-400 mb-1">Short
+                                Description</label><textarea id="pj-desc" class="input"
+                                style="min-height:60px"></textarea></div>
+                        <div class="mb-4"><label class="block text-sm text-gray-400 mb-1">Full
+                                Description</label><textarea id="pj-longdesc" class="input"></textarea></div>
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div><label class="block text-sm text-gray-400 mb-1">Image URL</label><input id="pj-image"
+                                    class="input"></div>
+                            <div><label class="block text-sm text-gray-400 mb-1">Role</label><input id="pj-role"
+                                    class="input"></div>
+                        </div>
+                        <div class="mb-4"><label class="block text-sm text-gray-400 mb-1">Outcome</label><input
+                                id="pj-outcome" class="input"></div>
+                        <div class="mb-4">
+                            <label class="block text-sm text-gray-400 mb-1">Technologies (press Enter to add)</label>
+                            <div class="input tag-input" id="pj-techs-container">
+                                <input id="pj-tech-input"
+                                    class="bg-transparent border-none outline-none text-white flex-1 min-w-[100px]"
+                                    placeholder="Add technology...">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div><label class="block text-sm text-gray-400 mb-1">Link</label><input id="pj-link"
+                                    class="input"></div>
+                            <div><label class="block text-sm text-gray-400 mb-1">GitHub Link</label><input
+                                    id="pj-github" class="input"></div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div><label class="block text-sm text-gray-400 mb-1">Sort Order</label><input type="number"
+                                    id="pj-sort" class="input" value="0"></div>
+                            <div class="flex items-center gap-2 mt-6"><input type="checkbox" id="pj-featured"><label
+                                    for="pj-featured" class="text-sm text-gray-400">Featured</label></div>
+                        </div>
+                        <div class="flex gap-3">
+                            <button onclick="saveProject()" class="btn-primary">Save</button>
+                            <button onclick="document.getElementById('projectModal').classList.add('hidden')"
+                                class="btn-secondary">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Experience Manager -->
+            <div id="page-experience" class="section-page">
+                <div class="flex justify-between items-center mb-8">
+                    <h1 class="text-3xl font-bold">Experience Manager</h1>
+                    <button onclick="openExpForm()" class="btn-primary flex items-center gap-2"><i data-lucide="plus"
+                            class="w-4 h-4"></i> Add Experience</button>
+                </div>
+                <div id="experience-list" class="space-y-3"></div>
+                <div id="expModal" class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center hidden">
+                    <div class="card max-w-lg w-full mx-4">
+                        <h3 id="expModalTitle" class="text-xl font-bold mb-4">Add Experience</h3>
+                        <input type="hidden" id="exp-id">
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div><label class="block text-sm text-gray-400 mb-1">Company</label><input id="exp-company"
+                                    class="input"></div>
+                            <div><label class="block text-sm text-gray-400 mb-1">Position</label><input
+                                    id="exp-position" class="input"></div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div><label class="block text-sm text-gray-400 mb-1">Start Date</label><input id="exp-start"
+                                    class="input" placeholder="2023"></div>
+                            <div><label class="block text-sm text-gray-400 mb-1">End Date</label><input id="exp-end"
+                                    class="input" placeholder="Present"></div>
+                        </div>
+                        <div class="mb-4"><label class="block text-sm text-gray-400 mb-1">Description</label><textarea
+                                id="exp-desc" class="input"></textarea></div>
+                        <div class="mb-4 flex items-center gap-2"><input type="checkbox" id="exp-current"><label
+                                for="exp-current" class="text-sm text-gray-400">Currently working here</label></div>
+                        <div class="mb-4"><label class="block text-sm text-gray-400 mb-1">Sort Order</label><input
+                                type="number" id="exp-sort" class="input" value="0"></div>
+                        <div class="flex gap-3">
+                            <button onclick="saveExp()" class="btn-primary">Save</button>
+                            <button onclick="document.getElementById('expModal').classList.add('hidden')"
+                                class="btn-secondary">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Education Manager -->
+            <div id="page-education" class="section-page">
+                <div class="flex justify-between items-center mb-8">
+                    <h1 class="text-3xl font-bold">Education Manager</h1>
+                    <button onclick="openEduForm()" class="btn-primary flex items-center gap-2"><i data-lucide="plus"
+                            class="w-4 h-4"></i> Add Education</button>
+                </div>
+                <div id="education-list" class="space-y-3"></div>
+                <div id="eduModal" class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center hidden">
+                    <div class="card max-w-lg w-full mx-4">
+                        <h3 id="eduModalTitle" class="text-xl font-bold mb-4">Add Education</h3>
+                        <input type="hidden" id="edu-id">
+                        <div class="mb-4"><label class="block text-sm text-gray-400 mb-1">Institution</label><input
+                                id="edu-institution" class="input"></div>
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div><label class="block text-sm text-gray-400 mb-1">Degree</label><input id="edu-degree"
+                                    class="input"></div>
+                            <div><label class="block text-sm text-gray-400 mb-1">Field</label><input id="edu-field"
+                                    class="input"></div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div><label class="block text-sm text-gray-400 mb-1">Start Date</label><input id="edu-start"
+                                    class="input"></div>
+                            <div><label class="block text-sm text-gray-400 mb-1">End Date</label><input id="edu-end"
+                                    class="input"></div>
+                        </div>
+                        <div class="mb-4"><label class="block text-sm text-gray-400 mb-1">Description</label><textarea
+                                id="edu-desc" class="input"></textarea></div>
+                        <div class="mb-4"><label class="block text-sm text-gray-400 mb-1">Sort Order</label><input
+                                type="number" id="edu-sort" class="input" value="0"></div>
+                        <div class="flex gap-3">
+                            <button onclick="saveEdu()" class="btn-primary">Save</button>
+                            <button onclick="document.getElementById('eduModal').classList.add('hidden')"
+                                class="btn-secondary">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Media Manager -->
+            <div id="page-media" class="section-page">
+                <div class="flex justify-between items-center mb-8">
+                    <h1 class="text-3xl font-bold">Media Manager</h1>
+                    <label class="btn-primary flex items-center gap-2 cursor-pointer"><i data-lucide="upload"
+                            class="w-4 h-4"></i> Upload Image <input type="file" accept="image/*" class="hidden"
+                            onchange="uploadMedia(this)"></label>
+                </div>
+                <div id="media-grid" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
+            </div>
+
+            <!-- Settings -->
+            <div id="page-settings" class="section-page">
+                <h1 class="text-3xl font-bold mb-8">Settings</h1>
+                <div class="card max-w-xl">
+                    <div class="mb-4"><label class="block text-sm text-gray-400 mb-1">Site Title</label><input
+                            id="set-site-title" class="input"></div>
+                    <div class="mb-4"><label class="block text-sm text-gray-400 mb-1">Projects Completed
+                            (counter)</label><input type="number" id="set-projects" class="input"></div>
+                    <div class="mb-4"><label class="block text-sm text-gray-400 mb-1">Years Experience
+                            (counter)</label><input type="number" id="set-years" class="input"></div>
+                    <div class="mb-4"><label class="block text-sm text-gray-400 mb-1">Technologies Used
+                            (counter)</label><input type="number" id="set-techs" class="input"></div>
+                    <button onclick="saveSettings()" class="btn-primary">Save Settings</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast"></div>
+
+    <!-- AI Generate Modal -->
+    <div id="aiModal" class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center hidden">
+        <div class="card max-w-lg w-full mx-4">
+            <h3 class="text-xl font-bold mb-4">AI Content Generator</h3>
+            <p class="text-gray-400 mb-4 text-sm">Generate professional content based on your portfolio data.</p>
+            <div class="space-y-3 mb-6">
+                <button onclick="runAI('bio')" class="btn-secondary w-full text-left px-4 py-3">Generate Professional
+                    Bio</button>
+                <button onclick="runAI('summary')" class="btn-secondary w-full text-left px-4 py-3">Generate CV
+                    Summary</button>
+                <button onclick="runAI('project_descriptions')"
+                    class="btn-secondary w-full text-left px-4 py-3">Generate Project Descriptions</button>
+                <button onclick="runAI('skill_descriptions')" class="btn-secondary w-full text-left px-4 py-3">Generate
+                    Skill Descriptions</button>
+                <button onclick="runAI('all')" class="btn-primary w-full py-3">Generate All Content</button>
+            </div>
+            <div id="ai-result" class="hidden card bg-black/50 mb-4">
+                <p class="text-sm text-gray-400 mb-2">Generated Content:</p>
+                <pre id="ai-content" class="text-sm text-white whitespace-pre-wrap"></pre>
+            </div>
+            <button onclick="document.getElementById('aiModal').classList.add('hidden')"
+                class="btn-secondary w-full">Close</button>
+        </div>
+    </div>
+
+    <script>
+        const API = window.location.origin + '/api';
+        let token = localStorage.getItem('admin_token');
+        let projectTechs = [];
+
+        // ============================================
+        // AUTH
+        // ============================================
+        function login() {
+            const user = document.getElementById('loginUser').value;
+            const pass = document.getElementById('loginPass').value;
+            fetch(API + '/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: user, password: pass }) })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.token) {
+                        token = data.token;
+                        localStorage.setItem('admin_token', token);
+                        document.getElementById('loginScreen').style.display = 'none';
+                        document.getElementById('dashboard').classList.remove('hidden');
+                        loadDashboard();
+                    } else {
+                        document.getElementById('loginError').textContent = data.error || 'Login failed';
+                        document.getElementById('loginError').classList.remove('hidden');
+                    }
+                }).catch(() => showToast('Server error', 'error'));
+        }
+
+        function logout() {
+            localStorage.removeItem('admin_token');
+            token = null;
+            location.reload();
+        }
+
+        function authHeaders() { return { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token }; }
+
+        // Check token on load
+        if (token) {
+            fetch(API + '/auth/verify', { headers: { 'Authorization': 'Bearer ' + token } })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.valid) {
+                        document.getElementById('loginScreen').style.display = 'none';
+                        document.getElementById('dashboard').classList.remove('hidden');
+                        loadDashboard();
+                    }
+                }).catch(() => { });
+        }
+
+        // ============================================
+        // NAVIGATION
+        // ============================================
+        function showSection(name) {
+            document.querySelectorAll('.section-page').forEach(p => p.classList.remove('active'));
+            document.getElementById('page-' + name)?.classList.add('active');
+            document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+            document.querySelector(`[data-section="${name}"]`)?.classList.add('active');
+            // Reload data for the section
+            if (name === 'skills') loadSkills();
+            if (name === 'projects') loadProjects();
+            if (name === 'experience') loadExperience();
+            if (name === 'education') loadEducation();
+            if (name === 'media') loadMedia();
+            if (name === 'profile') loadProfile();
+            if (name === 'settings') loadSettings();
+        }
+
+        // ============================================
+        // DASHBOARD
+        // ============================================
+        function loadDashboard() {
+            fetch(API + '/all').then(r => r.json()).then(data => {
+                const stats = [
+                    { label: 'Skills', value: data.skills?.length || 0, icon: 'zap' },
+                    { label: 'Projects', value: data.projects?.length || 0, icon: 'folder' },
+                    { label: 'Experience', value: data.experience?.length || 0, icon: 'briefcase' },
+                    { label: 'Education', value: data.education?.length || 0, icon: 'graduation-cap' },
+                ];
+                document.getElementById('stats-grid').innerHTML = stats.map(s => `
+            <div class="card flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-brand-purple/10 flex items-center justify-center"><i data-lucide="${s.icon}" class="w-6 h-6 text-brand-purple"></i></div>
+                <div><p class="text-2xl font-bold">${s.value}</p><p class="text-gray-400 text-xs">${s.label}</p></div>
+            </div>
+        `).join('');
+                lucide.createIcons();
+            });
+        }
+
+        // ============================================
+        // PROFILE
+        // ============================================
+        function loadProfile() {
+            fetch(API + '/profile').then(r => r.json()).then(p => {
+                document.getElementById('pf-name').value = p.name || '';
+                document.getElementById('pf-title').value = p.title || '';
+                document.getElementById('pf-tagline').value = p.tagline || '';
+                document.getElementById('pf-bio').value = p.bio || '';
+                document.getElementById('pf-philosophy').value = p.philosophy || '';
+                document.getElementById('pf-narrative').value = p.narrative || '[]';
+                document.getElementById('pf-email').value = p.email || '';
+                document.getElementById('pf-github').value = p.github || '';
+                document.getElementById('pf-linkedin').value = p.linkedin || '';
+                document.getElementById('pf-twitter').value = p.twitter || '';
+                document.getElementById('pf-website').value = p.website || '';
+            });
+        }
+
+        function saveProfile() {
+            const data = {
+                name: document.getElementById('pf-name').value,
+                title: document.getElementById('pf-title').value,
+                tagline: document.getElementById('pf-tagline').value,
+                bio: document.getElementById('pf-bio').value,
+                philosophy: document.getElementById('pf-philosophy').value,
+                narrative: document.getElementById('pf-narrative').value,
+                email: document.getElementById('pf-email').value,
+                github: document.getElementById('pf-github').value,
+                linkedin: document.getElementById('pf-linkedin').value,
+                twitter: document.getElementById('pf-twitter').value,
+                website: document.getElementById('pf-website').value,
+                avatar: ''
+            };
+            fetch(API + '/profile', { method: 'PUT', headers: authHeaders(), body: JSON.stringify(data) })
+                .then(r => r.json()).then(() => showToast('Profile saved!')).catch(() => showToast('Error saving', 'error'));
+        }
+
+        // ============================================
+        // SKILLS
+        // ============================================
+        function loadSkills() {
+            fetch(API + '/skills').then(r => r.json()).then(skills => {
+                document.getElementById('skills-list').innerHTML = skills.map(s => `
+            <div class="card flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <span class="text-xl">${s.icon || '⚡'}</span>
+                    <div><p class="font-bold">${s.name}</p><p class="text-xs text-gray-500">${s.category} · Level ${s.level}</p></div>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick='editSkill(${JSON.stringify(s)})' class="btn-secondary text-sm py-1 px-3">Edit</button>
+                    <button onclick="deleteSkill(${s.id})" class="btn-danger text-sm py-1 px-3">Delete</button>
+                </div>
+            </div>
+        `).join('');
+            });
+        }
+
+        function openSkillForm(skill) {
+            document.getElementById('skillModalTitle').textContent = skill ? 'Edit Skill' : 'Add Skill';
+            document.getElementById('sk-id').value = skill?.id || '';
+            document.getElementById('sk-name').value = skill?.name || '';
+            document.getElementById('sk-category').value = skill?.category || '';
+            document.getElementById('sk-level').value = skill?.level || 80;
+            document.getElementById('sk-icon').value = skill?.icon || '';
+            document.getElementById('sk-desc').value = skill?.description || '';
+            document.getElementById('sk-sort').value = skill?.sort_order || 0;
+            document.getElementById('skillModal').classList.remove('hidden');
+        }
+
+        window.editSkill = function (skill) { openSkillForm(skill); };
+
+        function saveSkill() {
+            const id = document.getElementById('sk-id').value;
+            const data = {
+                name: document.getElementById('sk-name').value,
+                category: document.getElementById('sk-category').value,
+                level: parseInt(document.getElementById('sk-level').value),
+                icon: document.getElementById('sk-icon').value,
+                description: document.getElementById('sk-desc').value,
+                sort_order: parseInt(document.getElementById('sk-sort').value)
+            };
+            const method = id ? 'PUT' : 'POST';
+            const url = id ? API + '/skills/' + id : API + '/skills';
+            fetch(url, { method, headers: authHeaders(), body: JSON.stringify(data) })
+                .then(r => r.json()).then(() => { showToast('Skill saved!'); document.getElementById('skillModal').classList.add('hidden'); loadSkills(); })
+                .catch(() => showToast('Error', 'error'));
+        }
+
+        window.deleteSkill = function (id) {
+            if (!confirm('Delete this skill?')) return;
+            fetch(API + '/skills/' + id, { method: 'DELETE', headers: authHeaders() })
+                .then(() => { showToast('Skill deleted'); loadSkills(); });
+        };
+
+        // ============================================
+        // PROJECTS
+        // ============================================
+        function loadProjects() {
+            fetch(API + '/projects').then(r => r.json()).then(projects => {
+                document.getElementById('projects-list').innerHTML = projects.map(p => `
+            <div class="card flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    ${p.image ? `<img src="${p.image}" class="w-16 h-12 object-cover rounded-lg" alt="">` : ''}
+                    <div><p class="font-bold">${p.title}</p><p class="text-xs text-gray-500">${(p.technologies || []).join(', ')}</p></div>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick='editProject(${JSON.stringify(p).replace(/'/g, "&#39;")})' class="btn-secondary text-sm py-1 px-3">Edit</button>
+                    <button onclick="deleteProject(${p.id})" class="btn-danger text-sm py-1 px-3">Delete</button>
+                </div>
+            </div>
+        `).join('');
+            });
+        }
+
+        function openProjectForm(proj) {
+            document.getElementById('projectModalTitle').textContent = proj ? 'Edit Project' : 'Add Project';
+            document.getElementById('pj-id').value = proj?.id || '';
+            document.getElementById('pj-title').value = proj?.title || '';
+            document.getElementById('pj-desc').value = proj?.description || '';
+            document.getElementById('pj-longdesc').value = proj?.long_description || '';
+            document.getElementById('pj-image').value = proj?.image || '';
+            document.getElementById('pj-role').value = proj?.role || '';
+            document.getElementById('pj-outcome').value = proj?.outcome || '';
+            document.getElementById('pj-link').value = proj?.link || '';
+            document.getElementById('pj-github').value = proj?.github_link || '';
+            document.getElementById('pj-sort').value = proj?.sort_order || 0;
+            document.getElementById('pj-featured').checked = proj?.featured === 1;
+            projectTechs = proj?.technologies || [];
+            renderTechTags();
+            document.getElementById('projectModal').classList.remove('hidden');
+        }
+
+        window.editProject = function (proj) { openProjectForm(proj); };
+
+        // Tech tags
+        document.getElementById('pj-tech-input')?.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' && this.value.trim()) {
+                e.preventDefault();
+                projectTechs.push(this.value.trim());
+                this.value = '';
+                renderTechTags();
+            }
+        });
+
+        function renderTechTags() {
+            const container = document.getElementById('pj-techs-container');
+            const input = document.getElementById('pj-tech-input');
+            container.querySelectorAll('.tag').forEach(t => t.remove());
+            projectTechs.forEach((tech, i) => {
+                const tag = document.createElement('span');
+                tag.className = 'tag';
+                tag.innerHTML = `${tech} <button onclick="removeTech(${i})">&times;</button>`;
+                container.insertBefore(tag, input);
+            });
+        }
+        window.removeTech = function (i) { projectTechs.splice(i, 1); renderTechTags(); };
+
+        function saveProject() {
+            const id = document.getElementById('pj-id').value;
+            const data = {
+                title: document.getElementById('pj-title').value,
+                description: document.getElementById('pj-desc').value,
+                long_description: document.getElementById('pj-longdesc').value,
+                image: document.getElementById('pj-image').value,
+                role: document.getElementById('pj-role').value,
+                outcome: document.getElementById('pj-outcome').value,
+                technologies: projectTechs,
+                link: document.getElementById('pj-link').value,
+                github_link: document.getElementById('pj-github').value,
+                sort_order: parseInt(document.getElementById('pj-sort').value),
+                featured: document.getElementById('pj-featured').checked ? 1 : 0
+            };
+            const method = id ? 'PUT' : 'POST';
+            const url = id ? API + '/projects/' + id : API + '/projects';
+            fetch(url, { method, headers: authHeaders(), body: JSON.stringify(data) })
+                .then(r => r.json()).then(() => { showToast('Project saved!'); document.getElementById('projectModal').classList.add('hidden'); loadProjects(); })
+                .catch(() => showToast('Error', 'error'));
+        }
+
+        window.deleteProject = function (id) {
+            if (!confirm('Delete this project?')) return;
+            fetch(API + '/projects/' + id, { method: 'DELETE', headers: authHeaders() })
+                .then(() => { showToast('Project deleted'); loadProjects(); });
+        };
+
+        // ============================================
+        // EXPERIENCE
+        // ============================================
+        function loadExperience() {
+            fetch(API + '/experience').then(r => r.json()).then(exps => {
+                document.getElementById('experience-list').innerHTML = exps.map(e => `
+            <div class="card flex items-center justify-between">
+                <div><p class="font-bold">${e.position}</p><p class="text-xs text-gray-500">${e.company} · ${e.start_date} - ${e.current ? 'Present' : e.end_date}</p></div>
+                <div class="flex gap-2">
+                    <button onclick='editExp(${JSON.stringify(e)})' class="btn-secondary text-sm py-1 px-3">Edit</button>
+                    <button onclick="deleteExp(${e.id})" class="btn-danger text-sm py-1 px-3">Delete</button>
+                </div>
+            </div>
+        `).join('');
+            });
+        }
+
+        function openExpForm(exp) {
+            document.getElementById('expModalTitle').textContent = exp ? 'Edit Experience' : 'Add Experience';
+            document.getElementById('exp-id').value = exp?.id || '';
+            document.getElementById('exp-company').value = exp?.company || '';
+            document.getElementById('exp-position').value = exp?.position || '';
+            document.getElementById('exp-start').value = exp?.start_date || '';
+            document.getElementById('exp-end').value = exp?.end_date || '';
+            document.getElementById('exp-desc').value = exp?.description || '';
+            document.getElementById('exp-current').checked = exp?.current === 1;
+            document.getElementById('exp-sort').value = exp?.sort_order || 0;
+            document.getElementById('expModal').classList.remove('hidden');
+        }
+
+        window.editExp = function (exp) { openExpForm(exp); };
+
+        function saveExp() {
+            const id = document.getElementById('exp-id').value;
+            const data = {
+                company: document.getElementById('exp-company').value,
+                position: document.getElementById('exp-position').value,
+                start_date: document.getElementById('exp-start').value,
+                end_date: document.getElementById('exp-end').value,
+                description: document.getElementById('exp-desc').value,
+                technologies: [],
+                current: document.getElementById('exp-current').checked ? 1 : 0,
+                sort_order: parseInt(document.getElementById('exp-sort').value)
+            };
+            const method = id ? 'PUT' : 'POST';
+            const url = id ? API + '/experience/' + id : API + '/experience';
+            fetch(url, { method, headers: authHeaders(), body: JSON.stringify(data) })
+                .then(r => r.json()).then(() => { showToast('Experience saved!'); document.getElementById('expModal').classList.add('hidden'); loadExperience(); })
+                .catch(() => showToast('Error', 'error'));
+        }
+
+        window.deleteExp = function (id) {
+            if (!confirm('Delete this experience?')) return;
+            fetch(API + '/experience/' + id, { method: 'DELETE', headers: authHeaders() })
+                .then(() => { showToast('Deleted'); loadExperience(); });
+        };
+
+        // ============================================
+        // EDUCATION
+        // ============================================
+        function loadEducation() {
+            fetch(API + '/education').then(r => r.json()).then(edus => {
+                document.getElementById('education-list').innerHTML = edus.map(e => `
+            <div class="card flex items-center justify-between">
+                <div><p class="font-bold">${e.degree}${e.field ? ' in ' + e.field : ''}</p><p class="text-xs text-gray-500">${e.institution} · ${e.start_date} - ${e.end_date}</p></div>
+                <div class="flex gap-2">
+                    <button onclick='editEdu(${JSON.stringify(e)})' class="btn-secondary text-sm py-1 px-3">Edit</button>
+                    <button onclick="deleteEdu(${e.id})" class="btn-danger text-sm py-1 px-3">Delete</button>
+                </div>
+            </div>
+        `).join('');
+            });
+        }
+
+        function openEduForm(edu) {
+            document.getElementById('eduModalTitle').textContent = edu ? 'Edit Education' : 'Add Education';
+            document.getElementById('edu-id').value = edu?.id || '';
+            document.getElementById('edu-institution').value = edu?.institution || '';
+            document.getElementById('edu-degree').value = edu?.degree || '';
+            document.getElementById('edu-field').value = edu?.field || '';
+            document.getElementById('edu-start').value = edu?.start_date || '';
+            document.getElementById('edu-end').value = edu?.end_date || '';
+            document.getElementById('edu-desc').value = edu?.description || '';
+            document.getElementById('edu-sort').value = edu?.sort_order || 0;
+            document.getElementById('eduModal').classList.remove('hidden');
+        }
+
+        window.editEdu = function (edu) { openEduForm(edu); };
+
+        function saveEdu() {
+            const id = document.getElementById('edu-id').value;
+            const data = {
+                institution: document.getElementById('edu-institution').value,
+                degree: document.getElementById('edu-degree').value,
+                field: document.getElementById('edu-field').value,
+                start_date: document.getElementById('edu-start').value,
+                end_date: document.getElementById('edu-end').value,
+                description: document.getElementById('edu-desc').value,
+                sort_order: parseInt(document.getElementById('edu-sort').value)
+            };
+            const method = id ? 'PUT' : 'POST';
+            const url = id ? API + '/education/' + id : API + '/education';
+            fetch(url, { method, headers: authHeaders(), body: JSON.stringify(data) })
+                .then(r => r.json()).then(() => { showToast('Education saved!'); document.getElementById('eduModal').classList.add('hidden'); loadEducation(); })
+                .catch(() => showToast('Error', 'error'));
+        }
+
+        window.deleteEdu = function (id) {
+            if (!confirm('Delete this education?')) return;
+            fetch(API + '/education/' + id, { method: 'DELETE', headers: authHeaders() })
+                .then(() => { showToast('Deleted'); loadEducation(); });
+        };
+
+        // ============================================
+        // MEDIA
+        // ============================================
+        function loadMedia() {
+            fetch(API + '/media', { headers: authHeaders() }).then(r => r.json()).then(media => {
+                document.getElementById('media-grid').innerHTML = media.length ? media.map(m => `
+            <div class="card p-2 group relative">
+                <img src="/uploads/${m.filename}" alt="${m.original_name}" class="w-full aspect-square object-cover rounded-lg">
+                <p class="text-xs text-gray-500 mt-2 truncate">${m.original_name}</p>
+                <button onclick="deleteMedia(${m.id})" class="absolute top-3 right-3 bg-red-500 text-white w-6 h-6 rounded-full text-xs opacity-0 group-hover:opacity-100 transition-opacity">&times;</button>
+                <button onclick="navigator.clipboard.writeText('/uploads/${m.filename}');showToast('URL copied!')" class="absolute top-3 right-10 bg-brand-purple text-white w-6 h-6 rounded-full text-xs opacity-0 group-hover:opacity-100 transition-opacity">📋</button>
+            </div>
+        `).join('') : '<p class="text-gray-500 col-span-4 text-center py-12">No media uploaded yet</p>';
+            });
+        }
+
+        function uploadMedia(input) {
+            const file = input.files[0];
+            if (!file) return;
+            const formData = new FormData();
+            formData.append('file', file);
+            fetch(API + '/media/upload', { method: 'POST', headers: { 'Authorization': 'Bearer ' + token }, body: formData })
+                .then(r => r.json()).then(data => { showToast('Uploaded: ' + data.filename); loadMedia(); input.value = ''; })
+                .catch(() => showToast('Upload failed', 'error'));
+        }
+
+        window.deleteMedia = function (id) {
+            if (!confirm('Delete this file?')) return;
+            fetch(API + '/media/' + id, { method: 'DELETE', headers: authHeaders() })
+                .then(() => { showToast('Deleted'); loadMedia(); });
+        };
+
+        // ============================================
+        // SETTINGS
+        // ============================================
+        function loadSettings() {
+            fetch(API + '/settings').then(r => r.json()).then(s => {
+                document.getElementById('set-site-title').value = s.site_title || '';
+                document.getElementById('set-projects').value = s.projects_completed || '25';
+                document.getElementById('set-years').value = s.years_experience || '3';
+                document.getElementById('set-techs').value = s.technologies_used || '30';
+            });
+        }
+
+        function saveSettings() {
+            const data = {
+                site_title: document.getElementById('set-site-title').value,
+                projects_completed: document.getElementById('set-projects').value,
+                years_experience: document.getElementById('set-years').value,
+                technologies_used: document.getElementById('set-techs').value,
+            };
+            fetch(API + '/settings', { method: 'PUT', headers: authHeaders(), body: JSON.stringify(data) })
+                .then(r => r.json()).then(() => showToast('Settings saved!')).catch(() => showToast('Error', 'error'));
+        }
+
+        // ============================================
+        // CV EXPORT
+        // ============================================
+        function exportCV(format) {
+            window.open(API + '/cv/' + format, '_blank');
+            showToast('Downloading ' + format.toUpperCase() + ' CV...');
+        }
+
+        // ============================================
+        // AI CONTENT
+        // ============================================
+        function generateAI() { document.getElementById('aiModal').classList.remove('hidden'); }
+
+        function runAI(type) {
+            document.getElementById('ai-result').classList.remove('hidden');
+            document.getElementById('ai-content').textContent = 'Generating...';
+            fetch(API + '/ai/generate', { method: 'POST', headers: authHeaders(), body: JSON.stringify({ type }) })
+                .then(r => r.json())
+                .then(data => {
+                    const content = typeof data.content === 'string' ? data.content : JSON.stringify(data.content, null, 2);
+                    document.getElementById('ai-content').textContent = content;
+                    showToast('Content generated! Source: ' + (data.source || 'template'));
+                })
+                .catch(() => { document.getElementById('ai-content').textContent = 'Error generating content'; showToast('Error', 'error'); });
+        }
+
+        // ============================================
+        // TOAST
+        // ============================================
+        function showToast(msg, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.className = 'toast ' + type + ' show';
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // Init icons
+        document.addEventListener('DOMContentLoaded', () => { if (typeof lucide !== 'undefined') lucide.createIcons(); });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,15 @@
+# Environment variables
+.env
+
+# Dependencies
+node_modules/
+dist/
+
+# Database
+database/portfolio.db
+database/portfolio.db-shm
+database/portfolio.db-wal
+
+# OS files
+.DS_Store
+Thumbs.db
