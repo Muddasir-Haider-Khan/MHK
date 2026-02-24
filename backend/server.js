@@ -31,14 +31,43 @@ try {
     console.warn('⚠️ Could not create uploads directory (expected in serverless)');
 }
 
-// Health check
-app.get('/api/status', (req, res) => res.json({ status: 'online', serverless: isVercel }));
+// Health check & Diagnostics
+app.get('/api/health', async (req, res) => {
+    try {
+        const dbStatus = await db.ping();
+        res.json({ status: 'ok', db: 'connected', time: dbStatus.now, serverless: isVercel });
+    } catch (err) {
+        res.status(500).json({ status: 'error', db: 'disconnected', error: err.message, serverless: isVercel });
+    }
+});
+
+app.get('/api/debug-env', (req, res) => {
+    res.json({
+        has_db_url: !!process.env.DATABASE_URL,
+        db_url_prefix: process.env.DATABASE_URL ? process.env.DATABASE_URL.substring(0, 10) + '...' : 'none',
+        node_env: process.env.NODE_ENV,
+        ver_version: process.env.VERCEL_GIT_COMMIT_SHA || 'local'
+    });
+});
 
 // API Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api', require('./routes/api'));
 app.use('/api/cv', require('./routes/cv'));
 app.use('/api/ai', require('./routes/ai'));
+
+// Global Error Handler
+app.use((err, req, res, next) => {
+    console.error('🔥 Server Error:', err);
+    res.status(500).json({
+        error: 'Internal Server Error',
+        detail: isVercel ? 'Check Vercel logs for stack trace' : err.message
+    });
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('🌪️ Unhandled Rejection at:', promise, 'reason:', reason);
+});
 
 // Start server (Only if NOT in serverless)
 if (!isVercel) {
@@ -49,4 +78,5 @@ if (!isVercel) {
         console.log(`  📡 API:       http://localhost:${PORT}/api\n`);
     });
 }
-module.exports = app; // At the very bottom
+
+module.exports = app;
