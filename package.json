@@ -2,10 +2,10 @@
   "name": "portfolio-system",
   "version": "1.0.0",
   "description": "Cinematic Portfolio System with Admin Panel & CV Generator",
-  "main": "backend/server.js",
+  "main": "api/index.js",
   "scripts": {
-    "start": "node backend/server.js",
-    "dev": "node backend/server.js"
+    "start": "node api/index.js",
+    "dev": "node api/index.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
