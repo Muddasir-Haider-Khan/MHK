@@ -13,42 +13,51 @@ function auth(req, res, next) {
 }
 
 router.post('/generate', auth, async (req, res) => {
-    const { type } = req.body; // 'bio', 'summary', 'project_descriptions', 'skill_descriptions', 'all'
-    const profile = db.prepare('SELECT * FROM profile WHERE id = 1').get();
-    const skills = db.prepare('SELECT * FROM skills ORDER BY sort_order ASC').all();
-    const projects = db.prepare('SELECT * FROM projects ORDER BY sort_order ASC').all();
-    const experience = db.prepare('SELECT * FROM experience ORDER BY sort_order ASC').all();
+    try {
+        const { type } = req.body; // 'bio', 'summary', 'project_descriptions', 'skill_descriptions', 'all'
+        const profileRes = await db.query('SELECT * FROM profile WHERE id = 1');
+        const skillsRes = await db.query('SELECT * FROM skills ORDER BY sort_order ASC');
+        const projectsRes = await db.query('SELECT * FROM projects ORDER BY sort_order ASC');
+        const experienceRes = await db.query('SELECT * FROM experience ORDER BY sort_order ASC');
 
-    // If OpenAI key is available, use it
-    if (process.env.OPENAI_API_KEY) {
-        try {
-            const response = await fetch('https://api.openai.com/v1/chat/completions', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${process.env.OPENAI_API_KEY}` },
-                body: JSON.stringify({
-                    model: 'gpt-3.5-turbo',
-                    messages: [
-                        { role: 'system', content: 'You are a professional portfolio content writer. Write in first person, confident tone, minimal marketing language. Focus on impact and results.' },
-                        { role: 'user', content: buildPrompt(type, { profile, skills, projects, experience }) }
-                    ],
-                    temperature: 0.7
-                })
-            });
-            const data = await response.json();
-            return res.json({ content: data.choices[0].message.content, source: 'ai' });
-        } catch (err) {
-            // Fall through to fallback
+        const profile = profileRes.rows[0];
+        const skills = skillsRes.rows;
+        const projects = projectsRes.rows;
+        const experience = experienceRes.rows;
+
+        // If OpenAI key is available, use it
+        if (process.env.OPENAI_API_KEY) {
+            try {
+                const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${process.env.OPENAI_API_KEY}` },
+                    body: JSON.stringify({
+                        model: 'gpt-3.5-turbo',
+                        messages: [
+                            { role: 'system', content: 'You are a professional portfolio content writer. Write in first person, confident tone, minimal marketing language. Focus on impact and results.' },
+                            { role: 'user', content: buildPrompt(type, { profile, skills, projects, experience }) }
+                        ],
+                        temperature: 0.7
+                    })
+                });
+                const data = await response.json();
+                return res.json({ content: data.choices[0].message.content, source: 'ai' });
+            } catch (err) {
+                // Fall through to fallback
+            }
         }
-    }
 
-    // Fallback: generate professional content without AI
-    const content = generateFallbackContent(type, { profile, skills, projects, experience });
-    res.json({ content, source: 'template' });
+        // Fallback: generate professional content without AI
+        const content = generateFallbackContent(type, { profile, skills, projects, experience });
+        res.json({ content, source: 'template' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
 function buildPrompt(type, data) {
     const { profile, skills, projects, experience } = data;
-    const context = `Name: ${profile.name}, Title: ${profile.title}, Skills: ${skills.map(s => s.name).join(', ')}, Projects: ${projects.map(p => p.title).join(', ')}`;
+    const context = `Name: ${profile.name || ''}, Title: ${profile.title || ''}, Skills: ${skills.map(s => s.name).join(', ')}, Projects: ${projects.map(p => p.title).join(', ')}`;
 
     switch (type) {
         case 'bio': return `Write a professional 3-sentence bio for a portfolio. ${context}. Tone: confident, not salesy.`;

@@ -33,185 +33,288 @@ const storage = multer.diskStorage({
 const upload = multer({ storage, limits: { fileSize: 10 * 1024 * 1024 } });
 
 // ==================== PROFILE ====================
-router.get('/profile', (req, res) => {
-    const profile = db.prepare('SELECT * FROM profile WHERE id = 1').get();
-    res.json(profile || {});
+router.get('/profile', async (req, res) => {
+    try {
+        const result = await db.query('SELECT * FROM profile WHERE id = 1');
+        res.json(result.rows[0] || {});
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
-router.put('/profile', auth, (req, res) => {
-    const { name, title, bio, tagline, email, github, linkedin, twitter, website, avatar, philosophy, narrative } = req.body;
-    db.prepare(`UPDATE profile SET name=?, title=?, bio=?, tagline=?, email=?, github=?, linkedin=?, twitter=?, website=?, avatar=?, philosophy=?, narrative=? WHERE id=1`).run(
-        name, title, bio, tagline, email, github, linkedin, twitter, website, avatar, philosophy, typeof narrative === 'string' ? narrative : JSON.stringify(narrative)
-    );
-    res.json({ message: 'Profile updated' });
+router.put('/profile', auth, async (req, res) => {
+    try {
+        const { name, title, bio, tagline, email, github, linkedin, twitter, website, avatar, philosophy, narrative } = req.body;
+        await db.query(`UPDATE profile SET name=$1, title=$2, bio=$3, tagline=$4, email=$5, github=$6, linkedin=$7, twitter=$8, website=$9, avatar=$10, philosophy=$11, narrative=$12 WHERE id=1`, [
+            name, title, bio, tagline, email, github, linkedin, twitter, website, avatar, philosophy, typeof narrative === 'string' ? narrative : JSON.stringify(narrative)
+        ]);
+        res.json({ message: 'Profile updated' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
 // ==================== SKILLS ====================
-router.get('/skills', (req, res) => {
-    const skills = db.prepare('SELECT * FROM skills ORDER BY sort_order ASC').all();
-    res.json(skills);
+router.get('/skills', async (req, res) => {
+    try {
+        const result = await db.query('SELECT * FROM skills ORDER BY sort_order ASC');
+        res.json(result.rows);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
-router.post('/skills', auth, (req, res) => {
-    const { name, category, level, description, icon, sort_order } = req.body;
-    const result = db.prepare('INSERT INTO skills (name, category, level, description, icon, sort_order) VALUES (?, ?, ?, ?, ?, ?)').run(
-        name, category || 'General', level || 80, description || '', icon || '', sort_order || 0
-    );
-    res.json({ id: result.lastInsertRowid, message: 'Skill created' });
+router.post('/skills', auth, async (req, res) => {
+    try {
+        const { name, category, level, description, icon, sort_order } = req.body;
+        const result = await db.query('INSERT INTO skills (name, category, level, description, icon, sort_order) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id', [
+            name, category || 'General', level || 80, description || '', icon || '', sort_order || 0
+        ]);
+        res.json({ id: result.rows[0].id, message: 'Skill created' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
-router.put('/skills/:id', auth, (req, res) => {
-    const { name, category, level, description, icon, sort_order } = req.body;
-    db.prepare('UPDATE skills SET name=?, category=?, level=?, description=?, icon=?, sort_order=? WHERE id=?').run(
-        name, category, level, description, icon, sort_order, req.params.id
-    );
-    res.json({ message: 'Skill updated' });
+router.put('/skills/:id', auth, async (req, res) => {
+    try {
+        const { name, category, level, description, icon, sort_order } = req.body;
+        await db.query('UPDATE skills SET name=$1, category=$2, level=$3, description=$4, icon=$5, sort_order=$6 WHERE id=$7', [
+            name, category, level, description, icon, sort_order, req.params.id
+        ]);
+        res.json({ message: 'Skill updated' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
-router.delete('/skills/:id', auth, (req, res) => {
-    db.prepare('DELETE FROM skills WHERE id=?').run(req.params.id);
-    res.json({ message: 'Skill deleted' });
+router.delete('/skills/:id', auth, async (req, res) => {
+    try {
+        await db.query('DELETE FROM skills WHERE id=$1', [req.params.id]);
+        res.json({ message: 'Skill deleted' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
 // ==================== PROJECTS ====================
-router.get('/projects', (req, res) => {
-    const projects = db.prepare('SELECT * FROM projects ORDER BY sort_order ASC').all();
-    res.json(projects.map(p => ({ ...p, technologies: JSON.parse(p.technologies || '[]') })));
+router.get('/projects', async (req, res) => {
+    try {
+        const result = await db.query('SELECT * FROM projects ORDER BY sort_order ASC');
+        res.json(result.rows.map(p => ({ ...p, technologies: JSON.parse(p.technologies || '[]') })));
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
-router.post('/projects', auth, (req, res) => {
-    const { title, description, long_description, image, technologies, role, outcome, link, github_link, featured, sort_order } = req.body;
-    const result = db.prepare('INSERT INTO projects (title, description, long_description, image, technologies, role, outcome, link, github_link, featured, sort_order) VALUES (?,?,?,?,?,?,?,?,?,?,?)').run(
-        title, description || '', long_description || '', image || '', JSON.stringify(technologies || []), role || '', outcome || '', link || '', github_link || '', featured || 0, sort_order || 0
-    );
-    res.json({ id: result.lastInsertRowid, message: 'Project created' });
+router.post('/projects', auth, async (req, res) => {
+    try {
+        const { title, description, long_description, image, technologies, role, outcome, link, github_link, featured, sort_order } = req.body;
+        const result = await db.query('INSERT INTO projects (title, description, long_description, image, technologies, role, outcome, link, github_link, featured, sort_order) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) RETURNING id', [
+            title, description || '', long_description || '', image || '', JSON.stringify(technologies || []), role || '', outcome || '', link || '', github_link || '', featured || 0, sort_order || 0
+        ]);
+        res.json({ id: result.rows[0].id, message: 'Project created' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
-router.put('/projects/:id', auth, (req, res) => {
-    const { title, description, long_description, image, technologies, role, outcome, link, github_link, featured, sort_order } = req.body;
-    db.prepare('UPDATE projects SET title=?, description=?, long_description=?, image=?, technologies=?, role=?, outcome=?, link=?, github_link=?, featured=?, sort_order=? WHERE id=?').run(
-        title, description, long_description, image, JSON.stringify(technologies || []), role, outcome, link, github_link, featured, sort_order, req.params.id
-    );
-    res.json({ message: 'Project updated' });
+router.put('/projects/:id', auth, async (req, res) => {
+    try {
+        const { title, description, long_description, image, technologies, role, outcome, link, github_link, featured, sort_order } = req.body;
+        await db.query('UPDATE projects SET title=$1, description=$2, long_description=$3, image=$4, technologies=$5, role=$6, outcome=$7, link=$8, github_link=$9, featured=$10, sort_order=$11 WHERE id=$12', [
+            title, description, long_description, image, JSON.stringify(technologies || []), role, outcome, link, github_link, featured, sort_order, req.params.id
+        ]);
+        res.json({ message: 'Project updated' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
-router.delete('/projects/:id', auth, (req, res) => {
-    db.prepare('DELETE FROM projects WHERE id=?').run(req.params.id);
-    res.json({ message: 'Project deleted' });
+router.delete('/projects/:id', auth, async (req, res) => {
+    try {
+        await db.query('DELETE FROM projects WHERE id=$1', [req.params.id]);
+        res.json({ message: 'Project deleted' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
 // ==================== EXPERIENCE ====================
-router.get('/experience', (req, res) => {
-    const exp = db.prepare('SELECT * FROM experience ORDER BY sort_order ASC').all();
-    res.json(exp.map(e => ({ ...e, technologies: JSON.parse(e.technologies || '[]') })));
+router.get('/experience', async (req, res) => {
+    try {
+        const result = await db.query('SELECT * FROM experience ORDER BY sort_order ASC');
+        res.json(result.rows.map(e => ({ ...e, technologies: JSON.parse(e.technologies || '[]') })));
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
-router.post('/experience', auth, (req, res) => {
-    const { company, position, start_date, end_date, description, technologies, current, sort_order } = req.body;
-    const result = db.prepare('INSERT INTO experience (company, position, start_date, end_date, description, technologies, current, sort_order) VALUES (?,?,?,?,?,?,?,?)').run(
-        company, position, start_date || '', end_date || '', description || '', JSON.stringify(technologies || []), current || 0, sort_order || 0
-    );
-    res.json({ id: result.lastInsertRowid, message: 'Experience created' });
+router.post('/experience', auth, async (req, res) => {
+    try {
+        const { company, position, start_date, end_date, description, technologies, current, sort_order } = req.body;
+        const result = await db.query('INSERT INTO experience (company, position, start_date, end_date, description, technologies, current, sort_order) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING id', [
+            company, position, start_date || '', end_date || '', description || '', JSON.stringify(technologies || []), current || 0, sort_order || 0
+        ]);
+        res.json({ id: result.rows[0].id, message: 'Experience created' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
-router.put('/experience/:id', auth, (req, res) => {
-    const { company, position, start_date, end_date, description, technologies, current, sort_order } = req.body;
-    db.prepare('UPDATE experience SET company=?, position=?, start_date=?, end_date=?, description=?, technologies=?, current=?, sort_order=? WHERE id=?').run(
-        company, position, start_date, end_date, description, JSON.stringify(technologies || []), current, sort_order, req.params.id
-    );
-    res.json({ message: 'Experience updated' });
+router.put('/experience/:id', auth, async (req, res) => {
+    try {
+        const { company, position, start_date, end_date, description, technologies, current, sort_order } = req.body;
+        await db.query('UPDATE experience SET company=$1, position=$2, start_date=$3, end_date=$4, description=$5, technologies=$6, current=$7, sort_order=$8 WHERE id=$9', [
+            company, position, start_date, end_date, description, JSON.stringify(technologies || []), current, sort_order, req.params.id
+        ]);
+        res.json({ message: 'Experience updated' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
-router.delete('/experience/:id', auth, (req, res) => {
-    db.prepare('DELETE FROM experience WHERE id=?').run(req.params.id);
-    res.json({ message: 'Experience deleted' });
+router.delete('/experience/:id', auth, async (req, res) => {
+    try {
+        await db.query('DELETE FROM experience WHERE id=$1', [req.params.id]);
+        res.json({ message: 'Experience deleted' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
 // ==================== EDUCATION ====================
-router.get('/education', (req, res) => {
-    const edu = db.prepare('SELECT * FROM education ORDER BY sort_order ASC').all();
-    res.json(edu);
+router.get('/education', async (req, res) => {
+    try {
+        const result = await db.query('SELECT * FROM education ORDER BY sort_order ASC');
+        res.json(result.rows);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
-router.post('/education', auth, (req, res) => {
-    const { institution, degree, field, start_date, end_date, description, sort_order } = req.body;
-    const result = db.prepare('INSERT INTO education (institution, degree, field, start_date, end_date, description, sort_order) VALUES (?,?,?,?,?,?,?)').run(
-        institution, degree, field || '', start_date || '', end_date || '', description || '', sort_order || 0
-    );
-    res.json({ id: result.lastInsertRowid, message: 'Education created' });
+router.post('/education', auth, async (req, res) => {
+    try {
+        const { institution, degree, field, start_date, end_date, description, sort_order } = req.body;
+        const result = await db.query('INSERT INTO education (institution, degree, field, start_date, end_date, description, sort_order) VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING id', [
+            institution, degree, field || '', start_date || '', end_date || '', description || '', sort_order || 0
+        ]);
+        res.json({ id: result.rows[0].id, message: 'Education created' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
-router.put('/education/:id', auth, (req, res) => {
-    const { institution, degree, field, start_date, end_date, description, sort_order } = req.body;
-    db.prepare('UPDATE education SET institution=?, degree=?, field=?, start_date=?, end_date=?, description=?, sort_order=? WHERE id=?').run(
-        institution, degree, field, start_date, end_date, description, sort_order, req.params.id
-    );
-    res.json({ message: 'Education updated' });
+router.put('/education/:id', auth, async (req, res) => {
+    try {
+        const { institution, degree, field, start_date, end_date, description, sort_order } = req.body;
+        await db.query('UPDATE education SET institution=$1, degree=$2, field=$3, start_date=$4, end_date=$5, description=$6, sort_order=$7 WHERE id=$8', [
+            institution, degree, field, start_date, end_date, description, sort_order, req.params.id
+        ]);
+        res.json({ message: 'Education updated' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
-router.delete('/education/:id', auth, (req, res) => {
-    db.prepare('DELETE FROM education WHERE id=?').run(req.params.id);
-    res.json({ message: 'Education deleted' });
+router.delete('/education/:id', auth, async (req, res) => {
+    try {
+        await db.query('DELETE FROM education WHERE id=$1', [req.params.id]);
+        res.json({ message: 'Education deleted' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
 // ==================== SETTINGS ====================
-router.get('/settings', (req, res) => {
-    const rows = db.prepare('SELECT * FROM settings').all();
-    const settings = {};
-    rows.forEach(r => settings[r.key] = r.value);
-    res.json(settings);
+router.get('/settings', async (req, res) => {
+    try {
+        const result = await db.query('SELECT * FROM settings');
+        const settings = {};
+        result.rows.forEach(r => settings[r.key] = r.value);
+        res.json(settings);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
-router.put('/settings', auth, (req, res) => {
-    const upsert = db.prepare('INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)');
-    const transaction = db.transaction((data) => {
-        Object.entries(data).forEach(([key, value]) => upsert.run(key, String(value)));
-    });
-    transaction(req.body);
-    res.json({ message: 'Settings updated' });
+router.put('/settings', auth, async (req, res) => {
+    try {
+        const entries = Object.entries(req.body);
+        for (const [key, value] of entries) {
+            await db.query('INSERT INTO settings (key, value) VALUES ($1, $2) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value', [key, String(value)]);
+        }
+        res.json({ message: 'Settings updated' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
 // ==================== MEDIA ====================
-router.get('/media', (req, res) => {
-    const media = db.prepare('SELECT * FROM media ORDER BY uploaded_at DESC').all();
-    res.json(media);
-});
-
-router.post('/media/upload', auth, upload.single('file'), (req, res) => {
-    if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
-    const result = db.prepare('INSERT INTO media (filename, original_name, mimetype, size) VALUES (?, ?, ?, ?)').run(
-        req.file.filename, req.file.originalname, req.file.mimetype, req.file.size
-    );
-    res.json({
-        id: result.lastInsertRowid,
-        filename: req.file.filename,
-        url: `/uploads/${req.file.filename}`,
-        message: 'File uploaded'
-    });
-});
-
-router.delete('/media/:id', auth, (req, res) => {
-    const media = db.prepare('SELECT * FROM media WHERE id=?').get(req.params.id);
-    if (media) {
-        const filePath = path.join(uploadDir, media.filename);
-        if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
-        db.prepare('DELETE FROM media WHERE id=?').run(req.params.id);
+router.get('/media', async (req, res) => {
+    try {
+        const result = await db.query('SELECT * FROM media ORDER BY uploaded_at DESC');
+        res.json(result.rows);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
     }
-    res.json({ message: 'Media deleted' });
+});
+
+router.post('/media/upload', auth, upload.single('file'), async (req, res) => {
+    try {
+        if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
+        const result = await db.query('INSERT INTO media (filename, original_name, mimetype, size) VALUES ($1, $2, $3, $4) RETURNING id', [
+            req.file.filename, req.file.originalname, req.file.mimetype, req.file.size
+        ]);
+        res.json({
+            id: result.rows[0].id,
+            filename: req.file.filename,
+            url: `/uploads/${req.file.filename}`,
+            message: 'File uploaded'
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+router.delete('/media/:id', auth, async (req, res) => {
+    try {
+        const result = await db.query('SELECT * FROM media WHERE id=$1', [req.params.id]);
+        const media = result.rows[0];
+        if (media) {
+            const filePath = path.join(uploadDir, media.filename);
+            if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+            await db.query('DELETE FROM media WHERE id=$1', [req.params.id]);
+        }
+        res.json({ message: 'Media deleted' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
 // ==================== ALL DATA (for portfolio) ====================
-router.get('/all', (req, res) => {
-    const profile = db.prepare('SELECT * FROM profile WHERE id = 1').get();
-    const skills = db.prepare('SELECT * FROM skills ORDER BY sort_order ASC').all();
-    const projects = db.prepare('SELECT * FROM projects ORDER BY sort_order ASC').all().map(p => ({ ...p, technologies: JSON.parse(p.technologies || '[]') }));
-    const experience = db.prepare('SELECT * FROM experience ORDER BY sort_order ASC').all().map(e => ({ ...e, technologies: JSON.parse(e.technologies || '[]') }));
-    const education = db.prepare('SELECT * FROM education ORDER BY sort_order ASC').all();
-    const settingsRows = db.prepare('SELECT * FROM settings').all();
-    const settings = {};
-    settingsRows.forEach(r => settings[r.key] = r.value);
+router.get('/all', async (req, res) => {
+    try {
+        const profileRes = await db.query('SELECT * FROM profile WHERE id = 1');
+        const skillsRes = await db.query('SELECT * FROM skills ORDER BY sort_order ASC');
+        const projectsRes = await db.query('SELECT * FROM projects ORDER BY sort_order ASC');
+        const experienceRes = await db.query('SELECT * FROM experience ORDER BY sort_order ASC');
+        const educationRes = await db.query('SELECT * FROM education ORDER BY sort_order ASC');
+        const settingsRes = await db.query('SELECT * FROM settings');
 
-    res.json({ profile, skills, projects, experience, education, settings });
+        const profile = profileRes.rows[0];
+        const skills = skillsRes.rows;
+        const projects = projectsRes.rows.map(p => ({ ...p, technologies: JSON.parse(p.technologies || '[]') }));
+        const experience = experienceRes.rows.map(e => ({ ...e, technologies: JSON.parse(e.technologies || '[]') }));
+        const education = educationRes.rows;
+
+        const settings = {};
+        settingsRes.rows.forEach(r => settings[r.key] = r.value);
+
+        res.json({ profile, skills, projects, experience, education, settings });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
 module.exports = router;

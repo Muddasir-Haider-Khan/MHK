@@ -6,6 +6,10 @@ const fs = require('fs');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const db = require('./database');
+
+// Initialize Database
+db.initDB();
 
 // Middleware
 app.use(cors());
@@ -43,3 +47,4 @@ app.listen(PORT, () => {
     console.log(`  🔧 Admin:     http://localhost:${PORT}/admin`);
     console.log(`  📡 API:       http://localhost:${PORT}/api\n`);
 });
+module.exports = app; // At the very bottom
