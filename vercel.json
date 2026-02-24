@@ -16,12 +16,19 @@
             "destination": "api/index.js"
         },
         {
-            "source": "/admin/(.*)",
-            "destination": "admin/index.html"
+            "source": "/admin",
+            "destination": "/admin/index.html"
         },
         {
-            "source": "/(?!api|admin|uploads)(.*)",
-            "destination": "index.html"
+            "source": "/admin/(.*)",
+            "destination": "/admin/index.html"
+        },
+        {
+            "handle": "filesystem"
+        },
+        {
+            "source": "/(.*)",
+            "destination": "/index.html"
         }
     ],
     "cleanUrls": true
