@@ -1,0 +1,11 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://portfolio-eta-blue-72.vercel.app/sitemap.xml
+
+# Crawl-delay (be respectful)
+Crawl-delay: 1
