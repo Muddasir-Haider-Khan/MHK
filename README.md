@@ -1,60 +1,36 @@
-# Cinematic Portfolio System
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-Award-winning interactive portfolio with admin panel, ATS CV generator, and AI content engine.
+## Getting Started
 
-## Quick Start
+First, run the development server:
 
 ```bash
-cd portfolio-system
-npm install
-npm start
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-Then open:
-- **Portfolio**: http://localhost:3000
-- **Admin Panel**: http://localhost:3000/admin
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Default Admin Credentials
-- **Username**: admin
-- **Password**: admin123
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-## Features
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-- ✨ Cinematic long-scroll portfolio with GSAP animations
-- 🎛️ Full admin dashboard (profile, skills, projects, experience, education, media)
-- 📄 ATS-compatible CV generator (PDF + DOCX)
-- 🤖 AI content engine (bio, summaries, descriptions)
-- 🔒 JWT authentication
-- 💾 SQLite database
-- 📱 Mobile responsive
+## Learn More
 
-## Tech Stack
-- **Frontend**: HTML, Tailwind CSS CDN, GSAP, Lenis
-- **Backend**: Express.js, better-sqlite3
-- **CV**: PDFKit, docx
-- **Auth**: JWT, bcryptjs
+To learn more about Next.js, take a look at the following resources:
 
-## API Endpoints
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-| Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
-| POST | /api/auth/login | No | Admin login |
-| GET | /api/all | No | All portfolio data |
-| GET/PUT | /api/profile | PUT auth | Profile CRUD |
-| GET/POST/PUT/DELETE | /api/skills/:id | Mutate auth | Skills CRUD |
-| GET/POST/PUT/DELETE | /api/projects/:id | Mutate auth | Projects CRUD |
-| GET/POST/PUT/DELETE | /api/experience/:id | Mutate auth | Experience CRUD |
-| GET/POST/PUT/DELETE | /api/education/:id | Mutate auth | Education CRUD |
-| GET/PUT | /api/settings | PUT auth | Settings |
-| GET | /api/cv/pdf | No | Download PDF CV |
-| GET | /api/cv/docx | No | Download DOCX CV |
-| POST | /api/ai/generate | Auth | AI content generation |
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Environment Variables (.env)
-```
-PORT=3000
-JWT_SECRET=your_secret
-ADMIN_USERNAME=admin
-ADMIN_PASSWORD=admin123
-OPENAI_API_KEY=  # Optional, for AI content
-```
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

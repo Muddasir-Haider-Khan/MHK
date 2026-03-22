@@ -1,0 +1,75 @@
+'use client';
+
+import { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { TextPlugin } from 'gsap/TextPlugin';
+
+gsap.registerPlugin(ScrollTrigger, TextPlugin);
+
+export default function Story({ narrativeRaw }: { narrativeRaw: string }) {
+  const storyRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLHeadingElement>(null);
+
+  useEffect(() => {
+    let sentences = [
+      "Hello there.",
+      "I see you're looking for something specific.",
+      "Something that solves a problem...",
+      "...and looks good doing it.",
+      "I build with precision.",
+      "Every line of code has a purpose."
+    ];
+    
+    try {
+      if (narrativeRaw) {
+        const parsed = JSON.parse(narrativeRaw);
+        if (Array.isArray(parsed) && parsed.length > 0) sentences = parsed;
+      }
+    } catch {}
+
+    let ctx = gsap.context(() => {
+      const narrativeEl = textRef.current;
+      if (!narrativeEl) return;
+
+      const scrollDistance = sentences.length * 80; // 80vh per sentence
+
+      const storyTimeline = gsap.timeline({
+        scrollTrigger: {
+          trigger: storyRef.current,
+          start: "top top",
+          end: `+=${scrollDistance}%`,
+          scrub: 0.5,
+          pin: true,
+        }
+      });
+
+      sentences.forEach((sentence, i) => {
+        if (i > 0) {
+          storyTimeline.to(narrativeEl, { opacity: 0, duration: 0.3 });
+        }
+        storyTimeline.to(narrativeEl, { text: sentence, duration: 0.01, ease: "none" })
+          .to(narrativeEl, { opacity: 1, duration: 0.5 })
+          .to(narrativeEl, { opacity: 1, duration: 0.8 }); // hold
+      });
+
+      storyTimeline.to(narrativeEl, { opacity: 0, duration: 0.5 });
+    }, storyRef);
+
+    return () => ctx.revert();
+  }, [narrativeRaw]);
+
+  return (
+    <section id="story" className="relative" ref={storyRef}>
+      <div className="h-screen flex items-center justify-center px-4">
+        <div className="max-w-4xl text-center">
+          <h2 
+            ref={textRef}
+            className="text-3xl md:text-6xl font-display font-medium leading-snug text-transparent bg-clip-text bg-gradient-to-br from-white via-white to-gray-600"
+          >
+          </h2>
+        </div>
+      </div>
+    </section>
+  );
+}
