@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Outfit, JetBrains_Mono } from "next/font/google";
 import Navbar from "@/components/Navbar";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -54,6 +55,7 @@ export default function RootLayout({
         
         <Navbar />
         {children}
+        <Analytics />
 
         {/* JSON-LD Schema */}
         <script
