@@ -21,7 +21,7 @@ function getPool() {
     ssl: {
       rejectUnauthorized: false
     },
-    max: 10,
+    max: 5,
     idleTimeoutMillis: 30000,
     connectionTimeoutMillis: 10000,
   });

@@ -5,10 +5,16 @@
 node_modules/
 dist/
 
-# Database
+# Database (legacy SQLite)
 database/portfolio.db
 database/portfolio.db-shm
 database/portfolio.db-wal
+
+# Uploads (local dev only)
+uploads/
+
+# Vercel
+.vercel/
 
 # OS files
 .DS_Store

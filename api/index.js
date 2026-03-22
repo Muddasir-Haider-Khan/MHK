@@ -1,15 +1,13 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const path = require('path');
-const fs = require('fs');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const db = require('./database');
-
-// Initialize Database (Async startup guard)
 const isVercel = process.env.VERCEL === '1';
+
+// Initialize Database
 if (db.initDB) {
     db.initDB().catch(err => {
         console.error('⚠️ Database migration failed at startup:', err);
@@ -20,35 +18,15 @@ if (db.initDB) {
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Ensure uploads directory exists (Serverless safe)
-const uploadsDir = path.join(__dirname, 'uploads');
-try {
-    if (!fs.existsSync(uploadsDir) && !isVercel) {
-        fs.mkdirSync(uploadsDir, { recursive: true });
-    }
-} catch (e) {
-    console.warn('⚠️ Could not create uploads directory (expected in serverless)');
-}
-
-// Health check & Diagnostics
+// Health check
 app.get('/api/health', async (req, res) => {
     try {
         const dbStatus = await db.ping();
         res.json({ status: 'ok', db: 'connected', time: dbStatus.now, serverless: isVercel });
     } catch (err) {
-        res.status(500).json({ status: 'error', db: 'disconnected', error: err.message, serverless: isVercel });
+        res.status(500).json({ status: 'error', db: 'disconnected', error: err.message });
     }
-});
-
-app.get('/api/debug-env', (req, res) => {
-    res.json({
-        has_db_url: !!process.env.DATABASE_URL,
-        db_url_prefix: process.env.DATABASE_URL ? process.env.DATABASE_URL.substring(0, 10) + '...' : 'none',
-        node_env: process.env.NODE_ENV,
-        ver_version: process.env.VERCEL_GIT_COMMIT_SHA || 'local'
-    });
 });
 
 // API Routes

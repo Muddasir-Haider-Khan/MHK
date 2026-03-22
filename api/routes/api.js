@@ -20,22 +20,33 @@ function auth(req, res, next) {
 }
 
 // File upload config
-const uploadDir = path.join(__dirname, '..', 'uploads');
-if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
+// NOTE: Vercel has a read-only filesystem. Disk storage won't persist.
+// For production file uploads, migrate to Vercel Blob, Cloudinary, or AWS S3.
+const isVercel = process.env.VERCEL === '1';
 
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => cb(null, uploadDir),
-    filename: (req, file, cb) => {
-        const ext = path.extname(file.originalname);
-        cb(null, Date.now() + '-' + Math.round(Math.random() * 1E9) + ext);
-    }
-});
-const upload = multer({ storage, limits: { fileSize: 10 * 1024 * 1024 } });
+let upload;
+if (isVercel) {
+    // Memory storage for serverless — files stored in buffer only
+    upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 * 1024 * 1024 } });
+} else {
+    // Disk storage for local development
+    const uploadDir = path.join(__dirname, '..', 'uploads');
+    if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
+    const storage = multer.diskStorage({
+        destination: (req, file, cb) => cb(null, uploadDir),
+        filename: (req, file, cb) => {
+            const ext = path.extname(file.originalname);
+            cb(null, Date.now() + '-' + Math.round(Math.random() * 1E9) + ext);
+        }
+    });
+    upload = multer({ storage, limits: { fileSize: 10 * 1024 * 1024 } });
+}
 
 // ==================== PROFILE ====================
 router.get('/profile', async (req, res) => {
     try {
         const result = await db.query('SELECT * FROM profile WHERE id = 1');
+        res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate');
         res.json(result.rows[0] || {});
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -263,14 +274,18 @@ router.get('/media', async (req, res) => {
 router.post('/media/upload', auth, upload.single('file'), async (req, res) => {
     try {
         if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
+
+        // On Vercel (memory storage), file won't persist on disk
+        // For production, integrate with Vercel Blob, Cloudinary, or S3
+        const filename = req.file.filename || `${Date.now()}-${req.file.originalname}`;
         const result = await db.query('INSERT INTO media (filename, original_name, mimetype, size) VALUES ($1, $2, $3, $4) RETURNING id', [
-            req.file.filename, req.file.originalname, req.file.mimetype, req.file.size
+            filename, req.file.originalname, req.file.mimetype, req.file.size
         ]);
         res.json({
             id: result.rows[0].id,
-            filename: req.file.filename,
-            url: `/uploads/${req.file.filename}`,
-            message: 'File uploaded'
+            filename: filename,
+            url: isVercel ? null : `/uploads/${filename}`,
+            message: isVercel ? 'File metadata saved. Note: File storage requires cloud integration (Vercel Blob/S3).' : 'File uploaded'
         });
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -282,8 +297,12 @@ router.delete('/media/:id', auth, async (req, res) => {
         const result = await db.query('SELECT * FROM media WHERE id=$1', [req.params.id]);
         const media = result.rows[0];
         if (media) {
-            const filePath = path.join(uploadDir, media.filename);
-            if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+            // Only attempt file deletion in local dev (not on Vercel)
+            if (!isVercel) {
+                const uploadDir = path.join(__dirname, '..', 'uploads');
+                const filePath = path.join(uploadDir, media.filename);
+                if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+            }
             await db.query('DELETE FROM media WHERE id=$1', [req.params.id]);
         }
         res.json({ message: 'Media deleted' });
@@ -311,6 +330,7 @@ router.get('/all', async (req, res) => {
         const settings = {};
         settingsRes.rows.forEach(r => settings[r.key] = r.value);
 
+        res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate');
         res.json({ profile, skills, projects, experience, education, settings });
     } catch (error) {
         res.status(500).json({ error: error.message });
