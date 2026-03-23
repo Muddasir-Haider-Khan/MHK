@@ -87,6 +87,17 @@ export default function Skills({ initialSkills }: { initialSkills: Skill[] }) {
     return () => ctx.revert();
   }, [initialSkills]);
 
+  // Close skill panel on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && selectedSkill) {
+        setSelectedSkill(null);
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [selectedSkill]);
+
   return (
     <section id="skills" className="py-40 relative overflow-hidden" ref={containerRef}>
       {/* Background decoration */}
@@ -179,7 +190,7 @@ export default function Skills({ initialSkills }: { initialSkills: Skill[] }) {
                     ></div>
                  </div>
                </div>
-               <button onClick={() => setSelectedSkill(null)} className="text-gray-400 hover:text-white bg-white/5 p-2 rounded-full transition-colors">
+               <button onClick={() => setSelectedSkill(null)} className="text-gray-400 hover:text-white bg-white/5 p-2 rounded-full transition-colors" aria-label="Close skill details">
                  <Icons.X className="w-5 h-5" />
                </button>
              </div>

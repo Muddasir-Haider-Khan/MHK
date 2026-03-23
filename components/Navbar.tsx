@@ -1,10 +1,27 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { usePathname } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
+
+  // Hide navbar on admin pages
+  if (pathname?.startsWith('/admin')) return null;
+
+  // Close mobile menu on Escape key
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (e.key === 'Escape' && isMobileMenuOpen) {
+      setIsMobileMenuOpen(false);
+    }
+  }, [isMobileMenuOpen]);
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [handleKeyDown]);
 
   return (
     <>
@@ -27,6 +44,7 @@ export default function Navbar() {
         <button 
           className="md:hidden text-white hover-magnetic"
           onClick={() => setIsMobileMenuOpen(true)}
+          aria-label="Open navigation menu"
         >
           <Menu className="w-8 h-8" />
         </button>
@@ -37,10 +55,14 @@ export default function Navbar() {
         className={`fixed inset-0 bg-[#050505]/98 z-[60] flex flex-col items-center justify-center gap-8 transition-transform duration-500 md:hidden text-white ${
           isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Navigation menu"
       >
         <button 
           className="absolute top-6 right-6"
           onClick={() => setIsMobileMenuOpen(false)}
+          aria-label="Close navigation menu"
         >
           <X className="w-8 h-8" />
         </button>

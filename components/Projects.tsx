@@ -45,13 +45,25 @@ export default function Projects({ initialProjects }: { initialProjects: Project
     return () => ctx.revert();
   }, [initialProjects]);
 
-  // Lock body scroll when modal is open
+  // Lock body scroll when modal is open + cleanup on unmount
   useEffect(() => {
     if (selectedProject) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
     }
+    return () => { document.body.style.overflow = ''; };
+  }, [selectedProject]);
+
+  // Close on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && selectedProject) {
+        setSelectedProject(null);
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
   }, [selectedProject]);
 
   return (
@@ -106,6 +118,9 @@ export default function Projects({ initialProjects }: { initialProjects: Project
       {/* Project Modal */}
       <div 
         className={`fixed inset-0 z-[100] flex items-center justify-center transition-all duration-500 ${selectedProject ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+        role="dialog"
+        aria-modal="true"
+        aria-label={selectedProject ? `Project details: ${selectedProject.title}` : undefined}
       >
         <div 
           className="absolute inset-0 bg-black/80 backdrop-blur-sm cursor-pointer" 
@@ -117,6 +132,7 @@ export default function Projects({ initialProjects }: { initialProjects: Project
             <button 
               onClick={() => setSelectedProject(null)} 
               className="absolute top-4 right-4 text-gray-400 hover:text-white bg-white/5 p-2 rounded-full transition-colors"
+              aria-label="Close project details"
             >
               <X className="w-5 h-5" />
             </button>

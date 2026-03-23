@@ -94,7 +94,7 @@ export default function Contact({ profile }: { profile: any }) {
         </div>
       </div>
       
-      <footer className="absolute bottom-8 w-full px-12 flex justify-between text-xs text-gray-600 uppercase tracking-widest font-mono">
+      <footer className="absolute bottom-8 w-full px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-2 text-xs text-gray-600 uppercase tracking-widest font-mono text-center md:text-left">
         <span>&copy; {new Date().getFullYear()} MHK — Crafted with precision</span>
         <span>Local Time: <span>{time}</span></span>
       </footer>

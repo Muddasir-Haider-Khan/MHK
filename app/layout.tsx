@@ -30,6 +30,11 @@ export const metadata: Metadata = {
     firstName: "Muddasir",
     lastName: "Haider Khan",
     username: "muddasirhaider048"
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Muddasir Haider Khan | Top AI Engineer",
+    description: "Hire the best freelance AI engineer and SaaS developer in Pakistan for global custom software solutions."
   }
 };
 
@@ -44,14 +49,13 @@ export default function RootLayout({
       className={`${outfit.variable} ${jetbrainsMono.variable} antialiased`}
     >
       <head>
+        <link rel="preconnect" href="https://api.fontshare.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://api.fontshare.com" />
         <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet" />
       </head>
       <body className="bg-[#050505] text-white overflow-x-hidden selection:bg-brand-purple selection:text-white min-h-full flex flex-col font-sans">
-        {/* Global Noise */}
-        <div 
-          className="fixed inset-0 pointer-events-none z-[9999] opacity-[0.03] mix-blend-overlay" 
-          style={{ backgroundImage: "url('https://grainy-gradients.vercel.app/noise.svg')" }}
-        ></div>
+        {/* Global Noise — uses inline CSS data URI, no external dependency */}
+        <div className="noise-overlay" aria-hidden="true" />
         
         <Navbar />
         {children}

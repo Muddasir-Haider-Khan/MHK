@@ -12,6 +12,7 @@ export default function AdminPage() {
   // Dashboard state
   const [activeTab, setActiveTab] = useState('dashboard');
   const [stats, setStats] = useState({ skills: 0, projects: 0, experience: 0 });
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('admin_token');
@@ -24,6 +25,7 @@ export default function AdminPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setIsLoading(true);
     
     try {
       const res = await fetch('/api/auth/login', {
@@ -42,6 +44,8 @@ export default function AdminPage() {
       }
     } catch (err) {
       setError('Server error');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -72,26 +76,34 @@ export default function AdminPage() {
           <p className="text-gray-400 mb-8">Admin Dashboard</p>
           
           <div className="mb-4 text-left">
-            <label className="block text-sm text-gray-400 mb-1">Username</label>
+            <label htmlFor="admin-username" className="block text-sm text-gray-400 mb-1">Username</label>
             <input 
+              id="admin-username"
               type="text" 
-              className="w-full bg-white/5 border border-white/10 rounded-lg p-3 text-white outline-none focus:border-brand-purple" 
+              autoComplete="username"
+              className="w-full bg-white/5 border border-white/10 rounded-lg p-3 text-white outline-none focus:border-brand-purple transition-colors" 
               value={username} 
               onChange={v => setUsername(v.target.value)} 
             />
           </div>
           <div className="mb-8 text-left">
-            <label className="block text-sm text-gray-400 mb-1">Password</label>
+            <label htmlFor="admin-password" className="block text-sm text-gray-400 mb-1">Password</label>
             <input 
+              id="admin-password"
               type="password" 
-              className="w-full bg-white/5 border border-white/10 rounded-lg p-3 text-white outline-none focus:border-brand-purple" 
+              autoComplete="current-password"
+              className="w-full bg-white/5 border border-white/10 rounded-lg p-3 text-white outline-none focus:border-brand-purple transition-colors" 
               value={password} 
               onChange={v => setPassword(v.target.value)} 
             />
           </div>
           
-          <button type="submit" className="w-full py-3 bg-brand-purple hover:bg-brand-accent transition-colors rounded-lg font-bold">
-            Sign In
+          <button 
+            type="submit" 
+            disabled={isLoading}
+            className="w-full py-3 bg-brand-purple hover:bg-brand-accent disabled:opacity-50 disabled:cursor-not-allowed transition-colors rounded-lg font-bold"
+          >
+            {isLoading ? 'Signing in...' : 'Sign In'}
           </button>
           
           {error && <p className="text-red-400 text-sm mt-4">{error}</p>}

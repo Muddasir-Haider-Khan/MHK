@@ -96,7 +96,7 @@ export default async function ProgrammaticHirePage({ params }: Props) {
           Looking for talent in {location.name}?
         </p>
         <h1 className="text-5xl md:text-7xl font-display font-bold mb-8 leading-tight">
-          Hire Top <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-accent to-brand-purple">{role.name}</span> in {location.name}
+          Hire <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-accent to-brand-purple">{role.name}</span> in {location.name}
         </h1>
         
         <p className="text-xl text-gray-300 leading-relaxed mb-12">
