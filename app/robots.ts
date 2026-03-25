@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: ['/admin/', '/api/'],
     },
-    sitemap: 'https://portfolio-eta-blue-72.vercel.app/sitemap.xml',
+    sitemap: 'https://mhk-delta.vercel.app/sitemap.xml',
   };
 }

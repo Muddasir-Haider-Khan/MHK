@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 import { services, locations, roles } from '@/lib/seo-data';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://portfolio-eta-blue-72.vercel.app';
+  const baseUrl = 'https://mhk-delta.vercel.app';
   
   // Standard routes
   const routes: MetadataRoute.Sitemap = [
