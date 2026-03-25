@@ -11,11 +11,11 @@ export async function getPortfolioData() {
       settingsRes
     ] = await Promise.all([
       query('SELECT * FROM profile WHERE id = 1'),
-      query('SELECT * FROM skills ORDER BY sort_order ASC'),
-      query('SELECT * FROM projects ORDER BY sort_order ASC'),
-      query('SELECT * FROM experience ORDER BY sort_order ASC'),
-      query('SELECT * FROM education ORDER BY sort_order ASC'),
-      query('SELECT * FROM settings')
+      query('SELECT * FROM skills WHERE is_active = true ORDER BY sort_order ASC'),
+      query('SELECT * FROM projects WHERE is_active = true ORDER BY sort_order ASC'),
+      query('SELECT * FROM experience WHERE is_active = true ORDER BY sort_order ASC'),
+      query('SELECT * FROM education WHERE is_active = true ORDER BY sort_order ASC'),
+      query('SELECT * FROM site_settings')
     ]);
 
     const profile = profileRes.rows[0] || {};

@@ -5,7 +5,7 @@ let pool: Pool | undefined;
 export function getPool(): Pool {
   if (pool) return pool;
 
-  const connectionString = process.env.DATABASE_URL;
+  let connectionString = process.env.DATABASE_URL;
   if (!connectionString) {
     console.error('❌ DATABASE_URL is not defined in environment variables');
     // Provide a dummy pool-like object to prevent crash on instantiating
@@ -14,6 +14,12 @@ export function getPool(): Pool {
       connect: () => { throw new Error('DATABASE_URL is missing'); },
       end: () => Promise.resolve()
     } as unknown as Pool;
+  }
+
+  // Next.js dev server violently throws a visual overlay for the 'pg' SSL warning.
+  // Appending uselibpqcompat suppresses it per the warning's instructions.
+  if (!connectionString.includes('uselibpqcompat')) {
+    connectionString += (connectionString.includes('?') ? '&' : '?') + 'uselibpqcompat=true';
   }
 
   pool = new Pool({
@@ -39,7 +45,7 @@ export async function initDB() {
   const p = getPool();
   if (!p.connect) return; 
 
-  console.log('📡 Initializing PostgreSQL Database...');
+
   const client = await p.connect();
   try {
     await client.query('BEGIN');
@@ -74,7 +80,7 @@ export async function initDB() {
     }
 
     await client.query('COMMIT');
-    console.log('✅ PostgreSQL Database schema and seeding verified');
+
   } catch (error) {
     await client.query('ROLLBACK');
     console.error('❌ Database initialization error:', error);

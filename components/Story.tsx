@@ -4,12 +4,14 @@ import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { TextPlugin } from 'gsap/TextPlugin';
+import { useProfile } from '@/hooks/useContent';
 
 gsap.registerPlugin(ScrollTrigger, TextPlugin);
 
-export default function Story({ narrativeRaw }: { narrativeRaw: string }) {
+export default function Story({ narrativeRaw }: { narrativeRaw?: string }) {
   const storyRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLHeadingElement>(null);
+  const { profile, isLoading } = useProfile();
 
   useEffect(() => {
     let sentences = [
@@ -21,12 +23,17 @@ export default function Story({ narrativeRaw }: { narrativeRaw: string }) {
       "Every line of code has a purpose."
     ];
     
-    try {
-      if (narrativeRaw) {
+    if (profile?.narrative) {
+      try {
+        const parsed = typeof profile.narrative === 'string' ? JSON.parse(profile.narrative) : profile.narrative;
+        if (Array.isArray(parsed) && parsed.length > 0) sentences = parsed;
+      } catch {}
+    } else if (narrativeRaw) {
+      try {
         const parsed = JSON.parse(narrativeRaw);
         if (Array.isArray(parsed) && parsed.length > 0) sentences = parsed;
-      }
-    } catch {}
+      } catch {}
+    }
 
     let ctx = gsap.context(() => {
       const narrativeEl = textRef.current;

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useExperience, useEducation } from '@/hooks/useContent';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -43,28 +44,39 @@ type TimelineItemProps = {
 };
 
 export default function Experience({ 
-  experience, 
-  education 
+  experience: initialExperience, 
+  education: initialEducation 
 }: { 
-  experience: ExperienceItem[]; 
-  education: EducationItem[]; 
+  experience?: ExperienceItem[]; 
+  education?: EducationItem[]; 
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({});
+
+  const { experience: fetchedExperience, isLoading: isExpLoading } = useExperience();
+  const { education: fetchedEducation, isLoading: isEduLoading } = useEducation();
+
+  const experience = Array.isArray(fetchedExperience) ? fetchedExperience : (Array.isArray(initialExperience) ? initialExperience : []);
+  const education = Array.isArray(fetchedEducation) ? fetchedEducation : (Array.isArray(initialEducation) ? initialEducation : []);
 
   const toggleExpand = (id: string) => {
     setExpandedItems(prev => ({ ...prev, [id]: !prev[id] }));
   };
 
   const timelineItems: TimelineItemProps[] = [
-    ...experience.map(e => ({ ...e, type: 'experience' as const })),
-    ...education.map(e => ({
+    ...experience.map((e: any) => ({ 
+      ...e, 
+      type: 'experience' as const,
+      company: e.company,
+      position: e.role
+    })),
+    ...education.map((e: any) => ({
       ...e,
       type: 'education' as const,
       company: e.institution,
-      position: `${e.degree}${e.field ? ' in ' + e.field : ''}`
+      position: `${e.degree}${e.field_of_study ? ' in ' + e.field_of_study : ''}`
     }))
-  ].sort((a, b) => a.sort_order - b.sort_order); // Assuming lower sort_order is newer
+  ].sort((a: any, b: any) => a.sort_order - b.sort_order);
 
   useEffect(() => {
     let ctx = gsap.context(() => {
@@ -89,7 +101,7 @@ export default function Experience({
           height: '100%',
           ease: 'none',
           scrollTrigger: {
-            trigger: '#experience',
+            trigger: containerRef.current,
             start: 'top center',
             end: 'bottom center',
             scrub: true
@@ -130,8 +142,17 @@ export default function Experience({
 
                 {/* Content Card */}
                 <div 
-                  className={`w-full max-w-sm glass-card border border-white/5 p-6 rounded-2xl cursor-pointer hover:border-brand-purple/30 transition-colors ${isLeft ? 'md:text-right' : ''}`}
+                  className={`w-full max-w-sm glass-card border border-white/5 p-6 rounded-2xl cursor-pointer hover:border-brand-purple/30 transition-colors focus-visible ${isLeft ? 'md:text-right' : ''}`}
                   onClick={() => toggleExpand(uid)}
+                  tabIndex={0}
+                  role="button"
+                  aria-expanded={isExpanded}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      toggleExpand(uid);
+                    }
+                  }}
                 >
                   <div className={`flex items-center gap-2 mb-2 ${isLeft ? 'md:justify-end' : ''}`}>
                     <span className="text-xs text-brand-purple font-mono">

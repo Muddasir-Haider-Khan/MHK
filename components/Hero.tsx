@@ -2,10 +2,11 @@
 
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
-import { Linkedin, Mail, Instagram } from 'lucide-react';
+import { useHero } from '@/hooks/useContent';
 
 export default function Hero({ profile }: { profile?: any }) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const { hero, isLoading } = useHero('home');
 
   useEffect(() => {
     // Simple entry animation
@@ -31,24 +32,26 @@ export default function Hero({ profile }: { profile?: any }) {
       
       <div className="text-center relative z-20">
         <p className="text-xs md:text-sm uppercase tracking-[0.2em] text-gray-400 mb-4 opacity-100">
-          {profile?.tagline || 'Based in Islamabad'}
+          {isLoading ? <span className="inline-block w-40 h-4 bg-white/10 animate-pulse rounded"></span> : (hero?.badge_text || profile?.tagline || 'Based in Islamabad')}
         </p>
         
         <div className="hero-3d-wrapper" style={{ perspective: '800px' }}>
           <h1 className="hero-title font-display font-bold text-[22vw] md:text-[18vw] leading-[0.85] tracking-tighter" style={{ transformStyle: 'preserve-3d' }}>
             <div className="overflow-hidden">
               <span className="block hero-3d-text text-white filter drop-shadow-[0_4px_20px_rgba(139,92,246,0.12)]">
-                {profile?.name ? profile.name.split(' ').map((w: string) => w[0]).join('').toUpperCase() : 'MHK'}
+                {isLoading ? <span className="inline-block w-64 h-32 md:h-48 bg-white/10 animate-pulse rounded-2xl"></span> : (hero?.heading || (profile?.name ? profile.name.split(' ').map((w: string) => w[0]).join('').toUpperCase() : 'MHK'))}
               </span>
             </div>
-            {/* Hidden SR-only explicit full name for rank density */}
-            <span className="sr-only">Muddasir Haider Khan - Top Freelancer in Pakistan</span>
+            {/* Hidden SR-only explicit full title for rank density */}
+            <span className="sr-only">{hero?.heading || 'Muddasir Haider Khan - Top Freelancer in Pakistan'}</span>
           </h1>
         </div>
         
         <div className="flex flex-col md:flex-row items-center justify-center gap-4 mt-6 overflow-hidden">
           <div className="hero-tagline-pill bg-white/5 border border-white/10 px-6 py-2 rounded-full backdrop-blur-sm">
-            <h2 className="text-sm md:text-lg text-gray-300">{profile?.title || 'Top AI Engineer'}</h2>
+            <h2 className="text-sm md:text-lg text-gray-300">
+              {isLoading ? <span className="inline-block w-32 h-4 bg-white/10 animate-pulse rounded"></span> : (hero?.subheading || profile?.title || 'Top AI Engineer')}
+            </h2>
           </div>
         </div>
       </div>

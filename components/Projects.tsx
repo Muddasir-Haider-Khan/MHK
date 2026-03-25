@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { X, ExternalLink, Github } from 'lucide-react';
-import Image from 'next/image';
+import { useProjects } from '@/hooks/useContent';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -23,9 +23,12 @@ export type Project = {
   sort_order: number;
 };
 
-export default function Projects({ initialProjects }: { initialProjects: Project[] }) {
+export default function Projects({ initialProjects }: { initialProjects?: Project[] }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const { projects: fetchedProjects, isLoading } = useProjects();
+
+  const projects = Array.isArray(fetchedProjects) ? fetchedProjects : (Array.isArray(initialProjects) ? initialProjects : []);
 
   useEffect(() => {
     let ctx = gsap.context(() => {
@@ -43,7 +46,7 @@ export default function Projects({ initialProjects }: { initialProjects: Project
       });
     }, containerRef);
     return () => ctx.revert();
-  }, [initialProjects]);
+  }, [projects]);
 
   // Lock body scroll when modal is open + cleanup on unmount
   useEffect(() => {
@@ -76,19 +79,18 @@ export default function Projects({ initialProjects }: { initialProjects: Project
       </div>
       
       <div className="space-y-40 px-4 md:px-12 max-w-7xl mx-auto">
-        {initialProjects.map((proj, i) => {
+        {projects.map((proj: Project, i: number) => {
           const isOdd = i % 2 !== 0;
           return (
             <div key={proj.id} className="project-card group grid md:grid-cols-2 gap-12 items-center">
               <div 
                 onClick={() => setSelectedProject(proj)}
-                className={`relative overflow-hidden rounded-2xl aspect-[4/3] cursor-pointer project-image-container border border-white/5 ${isOdd ? 'order-2' : 'order-2 md:order-1'}`}
+                className={`relative overflow-hidden aspect-[4/3] cursor-pointer project-image-container ${isOdd ? 'order-2' : 'order-2 md:order-1'}`}
               >
                 <img 
                   src={proj.image || 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop'}
                   alt={proj.title} 
-                  loading="lazy"
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-6">
                   <span className="text-sm font-mono text-white/80">Click to explore →</span>
@@ -123,52 +125,54 @@ export default function Projects({ initialProjects }: { initialProjects: Project
         aria-label={selectedProject ? `Project details: ${selectedProject.title}` : undefined}
       >
         <div 
-          className="absolute inset-0 bg-black/80 backdrop-blur-sm cursor-pointer" 
+          className="absolute inset-0 bg-black/90 backdrop-blur-md cursor-pointer" 
           onClick={() => setSelectedProject(null)}
         />
         
         {selectedProject && (
-          <div className="relative bg-[#0a0a0a] border border-white/10 rounded-2xl max-w-3xl w-full mx-4 max-h-[85vh] overflow-y-auto p-8 md:p-12 transform transition-transform duration-500 scale-100">
+          <div className="relative bg-[#050505] border border-white/5 rounded-3xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto transform transition-transform duration-500 scale-100 shadow-2xl">
             <button 
               onClick={() => setSelectedProject(null)} 
-              className="absolute top-4 right-4 text-gray-400 hover:text-white bg-white/5 p-2 rounded-full transition-colors"
+              className="absolute top-6 right-6 z-10 text-gray-400 hover:text-white bg-black/40 p-3 rounded-full transition-colors backdrop-blur-sm"
               aria-label="Close project details"
             >
-              <X className="w-5 h-5" />
+              <X className="w-6 h-6" />
             </button>
             <img 
-              className="w-full aspect-video object-cover rounded-xl mb-8 border border-white/5" 
+              className="w-full aspect-[16/9] object-cover" 
               src={selectedProject.image || 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070'} 
               alt={selectedProject.title} 
             />
-            <h3 className="text-3xl font-display font-bold mb-2 text-white">{selectedProject.title}</h3>
-            <p className="text-brand-purple text-sm mb-6 font-mono">{selectedProject.role}</p>
-            <p className="text-gray-300 leading-relaxed mb-6 whitespace-pre-line">{selectedProject.long_description || selectedProject.description}</p>
-            
-            <div className="bg-white/5 border border-white/10 rounded-xl p-4 mb-6">
-              <p className="text-sm font-mono text-gray-500 mb-1">Outcome</p>
-              <p className="text-white">{selectedProject.outcome}</p>
-            </div>
-            
-            <div className="flex flex-wrap gap-2 mb-8">
-              {selectedProject.technologies?.map(t => (
-                <span key={t} className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-xs text-brand-purple font-mono">
-                  {t}
-                </span>
-              ))}
-            </div>
+            <div className="p-8 md:p-16">
+              <h3 className="text-4xl md:text-5xl font-display font-bold mb-4 text-white">{selectedProject.title}</h3>
+              <p className="text-brand-purple text-lg mb-8 font-mono">{selectedProject.role}</p>
+              <p className="text-gray-300 text-lg leading-relaxed mb-8 whitespace-pre-line">{selectedProject.long_description || selectedProject.description}</p>
+              
+              <div className="bg-white/5 border border-white/10 rounded-xl p-4 mb-6">
+                <p className="text-sm font-mono text-gray-500 mb-1">Outcome</p>
+                <p className="text-white">{selectedProject.outcome}</p>
+              </div>
+              
+              <div className="flex flex-wrap gap-2 mb-8">
+                {selectedProject.technologies?.map(t => (
+                  <span key={t} className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-xs text-brand-purple font-mono">
+                    {t}
+                  </span>
+                ))}
+              </div>
 
-            <div className="flex gap-4">
-              {selectedProject.link && (
-                <a href={selectedProject.link} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-6 py-3 bg-brand-purple hover:bg-brand-accent transition-colors rounded-full text-white font-bold text-sm">
-                  <ExternalLink className="w-4 h-4" /> Live Demo
-                </a>
-              )}
-              {selectedProject.github_link && (
-                <a href={selectedProject.github_link} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-6 py-3 bg-white/5 hover:bg-white/10 transition-colors border border-white/10 rounded-full text-white font-bold text-sm">
-                  <Github className="w-4 h-4" /> Source
-                </a>
-              )}
+              <div className="flex gap-4">
+                {selectedProject.link && (
+                  <a href={selectedProject.link} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-6 py-3 bg-brand-purple hover:bg-brand-accent transition-colors rounded-full text-white font-bold text-sm">
+                    <ExternalLink className="w-4 h-4" /> Live Demo
+                  </a>
+                )}
+                {selectedProject.github_link && (
+                  <a href={selectedProject.github_link} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-6 py-3 bg-white/5 hover:bg-white/10 transition-colors border border-white/10 rounded-full text-white font-bold text-sm">
+                    <Github className="w-4 h-4" /> Source
+                  </a>
+                )}
+              </div>
             </div>
           </div>
         )}

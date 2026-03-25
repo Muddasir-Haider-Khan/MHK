@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Outfit, JetBrains_Mono } from "next/font/google";
 import Navbar from "@/components/Navbar";
+import RealtimeProvider from "@/components/RealtimeProvider";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
@@ -56,6 +57,8 @@ export default function RootLayout({
       <body className="bg-[#050505] text-white overflow-x-hidden selection:bg-brand-purple selection:text-white min-h-full flex flex-col font-sans">
         {/* Global Noise — uses inline CSS data URI, no external dependency */}
         <div className="noise-overlay" aria-hidden="true" />
+        <RealtimeProvider />
+        
         
         <Navbar />
         {children}

@@ -4,19 +4,26 @@ import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ScanSearch, Layers, Code2, Rocket, FolderCheck, Clock, Cpu } from 'lucide-react';
+import { useProfile, useSiteSettings } from '@/hooks/useContent';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Process({ 
-  philosophy,
-  settings
+  philosophy: initialPhilosophy,
+  settings: initialSettings
 }: {
-  philosophy: string;
-  settings: Record<string, string>;
+  philosophy?: string;
+  settings?: Record<string, string>;
 }) {
   const processRef = useRef<HTMLDivElement>(null);
   const philosophyRef = useRef<HTMLDivElement>(null);
   const trustRef = useRef<HTMLDivElement>(null);
+
+  const { profile } = useProfile();
+  const { settings: fetchedSettings } = useSiteSettings();
+
+  const philosophy = profile?.philosophy || initialPhilosophy;
+  const settings = fetchedSettings || initialSettings || {};
 
   useEffect(() => {
     let ctx = gsap.context(() => {
@@ -174,12 +181,12 @@ export default function Process({
       </section>
 
       {/* ========== 7. PERSONAL PHILOSOPHY ========== */}
-      <section id="philosophy" className="min-h-[80vh] flex items-center justify-center relative px-4" ref={philosophyRef}>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40vw] h-[40vw] bg-brand-accent/10 rounded-full blur-[100px] pointer-events-none"></div>
-        <blockquote className="philosophy-text opacity-0 text-4xl md:text-7xl lg:text-8xl font-display font-bold text-center leading-[1.1] max-w-5xl relative z-10 text-white">
-          <span className="text-white/10">"</span>
+      <section id="philosophy" className="min-h-[60vh] md:min-h-[80vh] flex items-center justify-center relative px-6 md:px-12" ref={philosophyRef}>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[60vw] bg-brand-accent/5 rounded-full blur-[120px] pointer-events-none"></div>
+        <blockquote className="philosophy-text opacity-0 text-3xl sm:text-4xl md:text-7xl lg:text-8xl font-display font-bold text-center leading-[1.1] max-w-5xl relative z-10 text-white">
+          <span className="absolute -top-8 -left-4 md:-top-16 md:-left-12 text-white/5 text-8xl md:text-[12rem] pointer-events-none">"</span>
           <span>{philosophy || 'I build systems that run quietly for years.'}</span>
-          <span className="text-white/10">"</span>
+          <span className="absolute -bottom-16 -right-4 md:-bottom-32 md:-right-12 text-white/5 text-8xl md:text-[12rem] rotate-180 pointer-events-none">"</span>
         </blockquote>
       </section>
 

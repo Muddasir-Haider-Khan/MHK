@@ -54,12 +54,18 @@ const skillIconsMap: Record<string, string> = {
   'Machine Learning': 'brain', 'OpenAI': 'bot', 'NLP': 'message-square'
 };
 
-export default function Skills({ initialSkills }: { initialSkills: Skill[] }) {
+import { useSkills } from '@/hooks/useContent';
+
+export default function Skills({ initialSkills }: { initialSkills?: Skill[] }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
+  const { skills: fetchedSkills, isLoading } = useSkills();
+
+  const skills = Array.isArray(fetchedSkills) ? fetchedSkills : (Array.isArray(initialSkills) ? initialSkills : []);
 
   // Group by category
-  const categories = initialSkills.reduce((acc, skill) => {
+  const categories = (skills || []).reduce((acc: any, skill: any) => {
+    if (!skill || !skill.category) return acc;
     if (!acc[skill.category]) acc[skill.category] = [];
     acc[skill.category].push(skill);
     return acc;
@@ -115,7 +121,7 @@ export default function Skills({ initialSkills }: { initialSkills: Skill[] }) {
       </div>
 
       <div className="skills-universe relative px-4 md:px-12 max-w-7xl mx-auto">
-        {Object.entries(categories).map(([catName, catSkills]) => {
+        {(Object.entries(categories) as [string, Skill[]][]).map(([catName, catSkills]) => {
           const catIconName = categoryIcons[catName] || 'zap';
           return (
             <div key={catName} className="skill-category-section mb-16">
@@ -127,7 +133,7 @@ export default function Skills({ initialSkills }: { initialSkills: Skill[] }) {
                 <span className="text-xs text-gray-600 bg-white/5 px-3 py-1 rounded-full">{catSkills.length} skills</span>
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                {catSkills.map((skill) => {
+                {catSkills.map((skill: Skill) => {
                   const level = skill.level || 80;
                   const circumference = 2 * Math.PI * 28;
                   const offset = circumference - (level / 100) * circumference;
@@ -136,8 +142,16 @@ export default function Skills({ initialSkills }: { initialSkills: Skill[] }) {
                   return (
                     <div 
                       key={skill.id} 
-                      className="skill-card group relative p-6 rounded-2xl bg-white/5 border border-white/10 overflow-hidden cursor-pointer hover:border-brand-purple/50 transition-colors"
+                      className="skill-card group relative p-6 rounded-2xl bg-white/5 border border-white/10 overflow-hidden cursor-pointer hover:border-brand-purple/50 transition-colors focus-visible"
                       onClick={() => setSelectedSkill(skill)}
+                      tabIndex={0}
+                      role="button"
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          setSelectedSkill(skill);
+                        }
+                      }}
                     >
                       <div className="absolute inset-0 bg-gradient-to-br from-brand-purple/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                       <div className="relative z-10 flex flex-col items-center text-center">

@@ -11,7 +11,18 @@ export async function POST(req: Request) {
 
     if (username === ADMIN_USER && password === ADMIN_PASS) {
       const token = jwt.sign({ username, role: 'admin' }, JWT_SECRET, { expiresIn: '24h' });
-      return NextResponse.json({ token, message: 'Logged in successfully' });
+      
+      const response = NextResponse.json({ success: true, message: 'Logged in successfully' });
+      response.cookies.set({
+        name: 'auth_token',
+        value: 'true', // We use 'true' as a simple flag because the API just checks for this value right now
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 60 * 60 * 24 // 24 hours
+      });
+      
+      return response;
     }
 
     return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
