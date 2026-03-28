@@ -84,7 +84,7 @@ export default function Projects({ initialProjects }: { initialProjects?: Projec
 
       <div className="px-4 md:px-12 mb-24 max-w-7xl mx-auto relative z-10">
         <h2 className="text-6xl md:text-8xl font-display font-bold text-[#292f3b] tracking-tighter" style={{ letterSpacing: '-0.04em' }}>
-          Selected Works
+          Selected <span className="ml-3 md:ml-6">Works</span>
         </h2>
       </div>
       
