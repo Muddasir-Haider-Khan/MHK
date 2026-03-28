@@ -69,18 +69,11 @@ export default function Contact({ profile: initialProfile }: { profile?: any }) 
       </div>
       
       <div className="relative z-10 w-full py-32 max-w-7xl mx-auto flex flex-col md:flex-row gap-16 md:gap-8 justify-between">
-        
         {/* Left column: Title & Info */}
         <div className="flex-1 max-w-xl md:sticky md:top-40 self-start">
-          <p className="text-sm uppercase tracking-widest text-[#4f5d6d] font-bold mb-8 font-mono">05 / What's Next?</p>
-
-          <h2 className="opacity-0 text-6xl md:text-[6rem] font-display font-bold leading-none mb-8 contact-title text-[#292f3b] tracking-tighter" style={{ letterSpacing: '-0.04em' }}>
+          <h2 className="opacity-0 text-6xl md:text-[6rem] font-display font-bold leading-none mb-4 contact-title text-[#292f3b] tracking-tighter" style={{ letterSpacing: '-0.04em' }}>
             Let's<br/><span className="text-brand-purple italic">Connect.</span>
           </h2>
-          
-          <p className="text-[#4f5d6d] text-xl md:text-2xl font-medium max-w-md leading-relaxed mb-12">
-            Have an idea? Ready to scale? Drop me a line to explore collaboration opportunities.
-          </p>
         </div>
 
         {/* Right column: Editorial Icon Dock */}
