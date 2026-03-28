@@ -16,7 +16,6 @@ export default function Process({
   settings?: Record<string, string>;
 }) {
   const processRef = useRef<HTMLDivElement>(null);
-  const philosophyRef = useRef<HTMLDivElement>(null);
   const trustRef = useRef<HTMLDivElement>(null);
 
   const { profile } = useProfile();
@@ -65,20 +64,7 @@ export default function Process({
         });
       }
 
-      // Philosophy animation
-      if (philosophyRef.current) {
-        ScrollTrigger.create({
-          trigger: philosophyRef.current,
-          start: 'top 60%',
-          onEnter: () => {
-            gsap.fromTo('.philosophy-text', 
-              { opacity: 0, scale: 0.9 },
-              { opacity: 1, scale: 1, duration: 1.8, ease: "power3.out" }
-            );
-          },
-          once: true
-        });
-      }
+
 
       // Trust Counters animation
       if (trustRef.current) {
@@ -208,17 +194,7 @@ export default function Process({
         </div>
       </section>
 
-      {/* ========== 7. PERSONAL PHILOSOPHY ========== */}
-      <section id="philosophy" className="py-40 bg-[#f5f6ff] flex items-center justify-center relative px-6 md:px-12" ref={philosophyRef}>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[60vw] bg-brand-purple/5 rounded-full blur-[120px] pointer-events-none"></div>
-        <blockquote className="philosophy-text opacity-0 text-3xl sm:text-4xl md:text-7xl lg:text-8xl font-display font-bold text-center leading-[1.1] max-w-5xl relative z-10 text-[#292f3b] tracking-tighter" style={{ letterSpacing: '-0.04em' }}>
-          <span className="absolute -top-8 -left-4 md:-top-16 md:-left-12 text-[#292f3b]/5 text-8xl md:text-[12rem] pointer-events-none">"</span>
-          <span>{philosophy || 'I build systems that run quietly for years.'}</span>
-          <span className="absolute -bottom-16 -right-4 md:-bottom-32 md:-right-12 text-[#292f3b]/5 text-8xl md:text-[12rem] rotate-180 pointer-events-none">"</span>
-        </blockquote>
-      </section>
 
-      <div className="w-full h-px bg-[#a7adbd] opacity-20 max-w-7xl mx-auto"></div>
 
       {/* ========== 8. TRUST SECTION ========== */}
       <section id="trust" className="py-40 bg-[#f5f6ff] relative overflow-hidden" ref={trustRef}>
