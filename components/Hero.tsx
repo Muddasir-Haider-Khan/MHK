@@ -38,15 +38,6 @@ export default function Hero({ profile }: { profile?: any }) {
       gsap.to(".hero-mesh-2", {
         y: "-50px", x: "40px", rotation: -5, duration: 15, repeat: -1, yoyo: true, ease: "sine.inOut"
       });
-      
-      // Scroll indicator animation
-      gsap.to(".scroll-indicator-dot", {
-        y: 40,
-        opacity: 0,
-        duration: 1.5,
-        repeat: -1,
-        ease: "power2.in"
-      });
     }, containerRef);
     
     return () => ctx.revert();
@@ -90,13 +81,6 @@ export default function Hero({ profile }: { profile?: any }) {
         </div>
       </div>
 
-      {/* Scroll Indicator */}
-      <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 z-20 opacity-50 hover:opacity-100 transition-opacity">
-        <span className="text-[10px] uppercase tracking-[0.3em] font-bold text-[#4f5d6d]">Scroll</span>
-        <div className="w-[1px] h-16 bg-gradient-to-b from-[#4f5d6d] to-transparent overflow-hidden relative">
-           <div className="w-[1px] h-6 bg-brand-purple scroll-indicator-dot absolute top-0 left-0"></div>
-        </div>
-      </div>
     </section>
   );
 }
