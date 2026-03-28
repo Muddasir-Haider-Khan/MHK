@@ -33,24 +33,13 @@ export default function Projects({ initialProjects }: { initialProjects?: Projec
 
   useEffect(() => {
     let ctx = gsap.context(() => {
-      // Animate project list items
-      gsap.from('.project-list-container > div', {
+      // Animate project accordion items
+      gsap.from('.accordion-container > div', {
         opacity: 0,
-        x: -40,
-        duration: 0.8,
-        stagger: 0.1,
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top 70%",
-        }
-      });
-      
-      // Animate image container
-      gsap.from('.lg\\:col-span-7', {
-        opacity: 0,
-        scale: 0.95,
+        y: 60,
         duration: 1.2,
-        ease: "power3.out",
+        stagger: 0.1,
+        ease: "power4.out",
         scrollTrigger: {
           trigger: containerRef.current,
           start: "top 70%",
@@ -102,70 +91,58 @@ export default function Projects({ initialProjects }: { initialProjects?: Projec
         </div>
       </div>
       
-        <div className="max-w-7xl mx-auto px-4 md:px-12 relative z-10 flex flex-col-reverse lg:grid lg:grid-cols-12 gap-12 lg:gap-20 min-h-[60vh] pb-24 items-center">
-          
-          {/* Left Side: Editorial Project List */}
-          <div className="lg:col-span-5 flex flex-col gap-6 md:gap-10 w-full project-list-container">
-            {projects.map((proj: Project, index: number) => {
-              const isActive = (activeProject || projects[0])?.id === proj.id;
-              
-              return (
-                <div 
-                  key={proj.id}
-                  onMouseEnter={() => setActiveProject(proj)}
-                  onClick={() => setSelectedProject(proj)}
-                  className={`group flex items-center gap-6 cursor-pointer transition-all duration-500 ease-[cubic-bezier(0.17,0.67,0.21,1)] ${isActive ? 'opacity-100 translate-x-4' : 'opacity-30 hover:opacity-60'}`}
-                >
-                  <span className="text-xs font-mono font-bold tracking-[0.2em] text-[#a7adbd] hidden sm:block">
-                    {(index + 1).toString().padStart(2, '0')}
-                  </span>
-                  <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold text-[#292f3b] whitespace-nowrap overflow-hidden text-ellipsis transition-colors hover:text-brand-purple">
-                    {proj.title}
-                  </h3>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Right Side: Dynamic Cinematic Preview */}
-          <div 
-            className="lg:col-span-7 relative w-full aspect-[4/3] rounded-[2.5rem] overflow-hidden shadow-[0_30px_80px_rgba(104,66,189,0.15)] group cursor-pointer" 
-            onClick={() => { if(activeProject || projects[0]) setSelectedProject(activeProject || projects[0]) }}
-          >
-            {projects.map((proj: Project) => {
-              const isActive = (activeProject || projects[0])?.id === proj.id;
-              return (
-                <div 
-                  key={`img-${proj.id}`}
-                  className={`absolute inset-0 transition-opacity duration-1000 ease-[cubic-bezier(0.17,0.67,0.21,1)] ${isActive ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
-                >
-                  <div className="absolute inset-0 bg-[#f5f6ff] animate-pulse -z-10"></div>
-                  <img 
-                    src={proj.image || 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070'}
-                    alt={proj.title}
-                    className={`w-full h-full object-cover transition-all duration-[2s] ease-out ${isActive ? 'scale-100 group-hover:scale-105 filter' : 'scale-110 filter blur-sm grayscale'}`}
-                  />
-                </div>
-              );
-            })}
+        <div className="max-w-[1400px] w-full mx-auto px-4 md:px-12 relative z-10 flex flex-col lg:flex-row h-[120vh] lg:h-[75vh] gap-3 md:gap-4 pb-24 items-stretch accordion-container overflow-hidden">
+          {projects.map((proj: Project, index: number) => {
+            const isActive = (activeProject || projects[0])?.id === proj.id;
             
-            {/* Cinematic Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#292f3b]/80 via-transparent to-transparent z-20 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            
-            {/* Hover Reveal Meta Data */}
-            <div className="absolute bottom-10 left-10 right-10 z-30 flex justify-between items-end opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-8 group-hover:translate-y-0 pointer-events-none">
-              <div>
-                <p className="text-white/90 text-sm font-medium mb-3 uppercase tracking-widest font-mono">
-                  {(activeProject || projects[0])?.technologies?.slice(0,3).join(" • ")}
-                </p>
-                <span className="text-white font-display text-2xl font-bold tracking-tight">Click To Explore</span>
-              </div>
-              <div className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-xl border border-white/20 flex items-center justify-center shadow-2xl">
-                <ExternalLink className="w-6 h-6 text-white" />
-              </div>
-            </div>
-          </div>
+            return (
+              <div 
+                key={proj.id}
+                onMouseEnter={() => setActiveProject(proj)}
+                onClick={() => setSelectedProject(proj)}
+                className={`group relative overflow-hidden rounded-[2.5rem] transition-all duration-700 ease-[cubic-bezier(0.19,1,0.22,1)] cursor-pointer shadow-[0_20px_40px_rgba(104,66,189,0.08)] bg-[#1a1f2b]`}
+                style={{ flex: isActive ? 10 : 1 }}
+              >
+                {/* Background Image */}
+                <div className="absolute inset-0 bg-[#f5f6ff] animate-pulse -z-10"></div>
+                <img 
+                  src={proj.image || 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070'}
+                  alt={proj.title}
+                  className={`absolute inset-0 w-full h-full object-cover transition-all duration-[2s] ease-out ${isActive ? 'scale-100 filter' : 'scale-110 filter blur-[2px] grayscale-[0.8]'}`}
+                />
+                
+                {/* Dark Overlays */}
+                <div className={`absolute inset-0 bg-[#292f3b] transition-opacity duration-700 ${isActive ? 'opacity-10' : 'opacity-60 group-hover:opacity-40'}`}></div>
+                <div className={`absolute inset-0 bg-gradient-to-t from-[#1a1f2b] via-[#1a1f2b]/30 to-transparent transition-opacity duration-700 ${isActive ? 'opacity-90' : 'opacity-80'}`}></div>
+                
+                {/* Content Container (Active) */}
+                <div className={`absolute bottom-0 left-0 right-0 p-8 md:p-12 transition-all duration-700 flex flex-col justify-end w-full whitespace-normal min-w-[300px] ${isActive ? 'opacity-100 delay-200 translate-y-0' : 'opacity-0 translate-y-8 pointer-events-none'}`}>
+                   <p className="text-white/80 text-xs md:text-sm font-medium mb-3 uppercase tracking-[0.2em] font-mono">
+                     {proj.technologies?.slice(0,3).join(" • ")}
+                   </p>
+                   <h3 className="text-4xl md:text-6xl lg:text-7xl font-display font-bold text-white tracking-tighter mb-6 leading-none">
+                     {proj.title}
+                   </h3>
+                   <div className="flex justify-between items-end w-full">
+                     <p className="text-white/70 max-w-lg hidden lg:block text-lg line-clamp-2 leading-relaxed">
+                       {proj.description}
+                     </p>
+                     <div className="w-14 h-14 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center shrink-0 shadow-2xl ml-auto group-hover/btn:bg-white transition-colors duration-500 text-white">
+                       <ExternalLink className="w-6 h-6" />
+                     </div>
+                   </div>
+                </div>
 
+                {/* Vertical Title (Inactive) */}
+                <div className={`absolute inset-0 flex items-center justify-center transition-opacity duration-700 pointer-events-none ${isActive ? 'opacity-0 delay-0' : 'opacity-100 delay-300'}`}>
+                   <h3 className="lg:-rotate-90 origin-center text-white font-display font-bold text-xl md:text-3xl uppercase tracking-widest whitespace-nowrap opacity-40 group-hover:opacity-100 transition-opacity duration-500">
+                     {proj.title}
+                   </h3>
+                </div>
+
+              </div>
+            );
+          })}
         </div>
 
       {/* Project Modal */}
