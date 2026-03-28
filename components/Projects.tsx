@@ -88,7 +88,7 @@ export default function Projects({ initialProjects }: { initialProjects?: Projec
         </h2>
       </div>
       
-        <div className="max-w-[1400px] w-full mx-auto px-4 md:px-12 relative z-10 flex flex-col lg:flex-row h-[120vh] lg:h-[75vh] gap-3 md:gap-4 pb-24 items-stretch accordion-container overflow-hidden">
+        <div className="max-w-[1400px] w-full mx-auto px-4 md:px-12 relative z-10 flex flex-col lg:flex-row h-[130vh] lg:h-[70vh] gap-4 md:gap-5 pb-24 items-stretch accordion-container overflow-hidden">
           {projects.map((proj: Project, index: number) => {
             const isActive = (activeProject || projects[0])?.id === proj.id;
             
@@ -97,8 +97,8 @@ export default function Projects({ initialProjects }: { initialProjects?: Projec
                 key={proj.id}
                 onMouseEnter={() => setActiveProject(proj)}
                 onClick={() => setSelectedProject(proj)}
-                className={`group relative overflow-hidden rounded-[2rem] transition-all duration-700 ease-[cubic-bezier(0.19,1,0.22,1)] cursor-pointer shadow-[0_20px_40px_rgba(104,66,189,0.08)] bg-[#1a1f2b] border border-[#a7adbd]/10`}
-                style={{ flex: isActive ? 6 : 1 }}
+                className={`group relative overflow-hidden rounded-[2rem] transition-all duration-700 ease-[cubic-bezier(0.19,1,0.22,1)] cursor-pointer shadow-[0_20px_40px_rgba(104,66,189,0.06)] bg-[#1a1f2b] border border-[#a7adbd]/5`}
+                style={{ flex: isActive ? 5 : 1 }}
               >
                 {/* Background Image */}
                 <div className="absolute inset-0 bg-[#f5f6ff] animate-pulse -z-10"></div>
@@ -113,26 +113,26 @@ export default function Projects({ initialProjects }: { initialProjects?: Projec
                 <div className={`absolute inset-0 bg-gradient-to-t from-[#1a1f2b] via-[#1a1f2b]/30 to-transparent transition-opacity duration-700 ${isActive ? 'opacity-90' : 'opacity-80'}`}></div>
                 
                 {/* Content Container (Active) */}
-                <div className={`absolute bottom-0 left-0 right-0 p-6 md:p-10 transition-all duration-700 flex flex-col justify-end w-full whitespace-normal min-w-[300px] z-30 ${isActive ? 'opacity-100 delay-200 translate-y-0' : 'opacity-0 translate-y-8 pointer-events-none'}`}>
-                   <p className="text-brand-purple text-[10px] md:text-xs font-bold mb-2 uppercase tracking-[0.2em] font-mono">
+                <div className={`absolute bottom-0 left-0 right-0 p-5 md:p-8 transition-all duration-700 flex flex-col justify-end w-full whitespace-normal min-w-[300px] z-30 ${isActive ? 'opacity-100 delay-200 translate-y-0' : 'opacity-0 translate-y-8 pointer-events-none'}`}>
+                   <p className="text-brand-purple text-[9px] md:text-[10px] font-bold mb-1.5 uppercase tracking-[0.3em] font-mono">
                      {proj.technologies?.slice(0,3).join(" • ")}
                    </p>
-                   <h3 className="text-2xl md:text-4xl lg:text-5xl font-display font-bold text-white tracking-tighter mb-4 leading-tight">
+                   <h3 className="text-xl md:text-3xl lg:text-4xl font-display font-bold text-white tracking-tighter mb-3 leading-tight">
                      {proj.title}
                    </h3>
-                   <div className="flex justify-between items-end w-full gap-6">
-                     <p className="text-white/60 max-w-md hidden lg:block text-sm leading-relaxed font-medium">
+                   <div className="flex justify-between items-end w-full gap-4">
+                     <p className="text-white/50 max-w-sm hidden lg:block text-[13px] leading-relaxed font-medium">
                        {proj.description}
                      </p>
-                     <div className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center shrink-0 shadow-2xl ml-auto hover:bg-white hover:text-brand-purple transition-all duration-500 text-white">
-                       <ExternalLink className="w-5 h-5" />
+                     <div className="w-10 h-10 rounded-full bg-white/5 backdrop-blur-lg border border-white/10 flex items-center justify-center shrink-0 shadow-2xl ml-auto hover:bg-white hover:text-brand-purple transition-all duration-500 text-white">
+                       <ExternalLink className="w-4 h-4" />
                      </div>
                    </div>
                 </div>
 
                 {/* Vertical Title (Inactive) */}
                 <div className={`absolute inset-0 flex items-center justify-center transition-opacity duration-700 pointer-events-none z-20 ${isActive ? 'opacity-0 delay-0' : 'opacity-100 delay-300'}`}>
-                   <h3 className="lg:-rotate-90 origin-center text-white/40 font-display font-bold text-xs md:text-sm uppercase tracking-[0.3em] whitespace-nowrap group-hover:text-white transition-colors duration-500">
+                   <h3 className="lg:-rotate-90 origin-center text-white/20 font-display font-bold text-[10px] md:text-[11px] uppercase tracking-[0.4em] whitespace-nowrap group-hover:text-white/60 transition-colors duration-500">
                      {proj.title}
                    </h3>
                 </div>
