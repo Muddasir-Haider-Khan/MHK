@@ -215,36 +215,43 @@ export default function Process({
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="trust-counter bg-[#ffffff] shadow-[0_20px_40px_rgba(104,66,189,0.06)] border-0 p-8 rounded-3xl text-center relative overflow-hidden group">
-              <div className="absolute inset-0 bg-gradient-to-t from-brand-purple/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-              <div className="w-16 h-16 rounded-full bg-brand-purple/10 mx-auto flex items-center justify-center mb-6 relative z-10 transition-transform group-hover:scale-110 duration-300">
-                <FolderCheck className="w-8 h-8 text-brand-purple" />
-              </div>
-              <span className="counter-value text-5xl font-display font-bold text-[#292f3b] tracking-tighter relative z-10 block mb-2" data-target={settings?.projects_completed || "25"}>0</span>
-              <p className="text-[#292f3b] font-medium relative z-10">Projects Completed</p>
-              <p className="text-[#4f5d6d] text-xs mt-2 relative z-10">Web apps, APIs & AI systems</p>
+          <div className="flex flex-col md:flex-row justify-between items-center gap-24 md:gap-8 w-full relative">
+            
+            {/* Massive Background Text Elements */}
+            <div className="absolute inset-0 pointer-events-none flex justify-between items-center z-0 overflow-hidden hidden lg:flex">
+              <span className="text-[18rem] font-display font-bold text-brand-purple/[0.02] -ml-20 tracking-tighter">25+</span>
+              <span className="text-[18rem] font-display font-bold text-brand-purple/[0.02] tracking-tighter">04+</span>
+              <span className="text-[18rem] font-display font-bold text-brand-purple/[0.02] -mr-20 tracking-tighter">40+</span>
             </div>
 
-            <div className="trust-counter bg-[#ffffff] shadow-[0_20px_40px_rgba(104,66,189,0.06)] border-0 p-8 rounded-3xl text-center relative overflow-hidden group">
-              <div className="absolute inset-0 bg-gradient-to-t from-brand-purple/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-              <div className="w-16 h-16 rounded-full bg-brand-purple/10 mx-auto flex items-center justify-center mb-6 relative z-10 transition-transform group-hover:scale-110 duration-300">
-                <Clock className="w-8 h-8 text-brand-purple" />
+            <div className="trust-counter flex-1 flex flex-col items-center justify-center relative z-10 group w-full">
+              <div className="w-full flex flex-col items-center justify-center py-10 border border-transparent hover:border-[#a7adbd]/20 rounded-[3rem] transition-all duration-700 hover:bg-[#ffffff]/50 backdrop-blur-xl hover:shadow-[0_20px_40px_rgba(104,66,189,0.04)]">
+                <span className="counter-value text-7xl md:text-8xl lg:text-9xl font-display font-medium text-[#292f3b] tracking-tighter group-hover:text-brand-purple transition-colors duration-500 mb-6" data-target={settings?.projects_completed || "25"}>0</span>
+                <p className="text-xs md:text-sm uppercase tracking-[0.2em] font-bold text-[#4f5d6d]">Projects Delivered</p>
+                <p className="text-[#a7adbd] text-xs mt-3 font-mono">Web / AI / SaaS</p>
               </div>
-              <span className="counter-value text-5xl font-display font-bold text-[#292f3b] tracking-tighter relative z-10 block mb-2" data-target={settings?.years_experience || "4"}>0</span>
-              <p className="text-[#292f3b] font-medium relative z-10">Years Experience</p>
-              <p className="text-[#4f5d6d] text-xs mt-2 relative z-10">Continuous learning & shipping</p>
             </div>
 
-            <div className="trust-counter bg-[#ffffff] shadow-[0_20px_40px_rgba(104,66,189,0.06)] border-0 p-8 rounded-3xl text-center relative overflow-hidden group">
-              <div className="absolute inset-0 bg-gradient-to-t from-brand-purple/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-              <div className="w-16 h-16 rounded-full bg-brand-purple/10 mx-auto flex items-center justify-center mb-6 relative z-10 transition-transform group-hover:scale-110 duration-300">
-                <Cpu className="w-8 h-8 text-brand-purple" />
+            <div className="hidden md:block w-px h-32 bg-gradient-to-b from-transparent via-[#a7adbd]/30 to-transparent"></div>
+
+            <div className="trust-counter flex-1 flex flex-col items-center justify-center relative z-10 group w-full">
+              <div className="w-full flex flex-col items-center justify-center py-10 border border-transparent hover:border-[#a7adbd]/20 rounded-[3rem] transition-all duration-700 hover:bg-[#ffffff]/50 backdrop-blur-xl hover:shadow-[0_20px_40px_rgba(104,66,189,0.04)]">
+                <span className="counter-value text-7xl md:text-8xl lg:text-9xl font-display font-medium text-[#292f3b] tracking-tighter group-hover:text-brand-purple transition-colors duration-500 mb-6" data-target={settings?.years_experience || "4"}>0</span>
+                <p className="text-xs md:text-sm uppercase tracking-[0.2em] font-bold text-[#4f5d6d]">Years Experience</p>
+                <p className="text-[#a7adbd] text-xs mt-3 font-mono">Continuous Shipping</p>
               </div>
-              <span className="counter-value text-5xl font-display font-bold text-[#292f3b] tracking-tighter relative z-10 block mb-2" data-target={settings?.technologies_used || "40"}>0</span>
-              <p className="text-[#292f3b] font-medium relative z-10">Technologies Mastered</p>
-              <p className="text-[#4f5d6d] text-xs mt-2 relative z-10">Frontend, Backend & DevOps</p>
             </div>
+
+            <div className="hidden md:block w-px h-32 bg-gradient-to-b from-transparent via-[#a7adbd]/30 to-transparent"></div>
+
+            <div className="trust-counter flex-1 flex flex-col items-center justify-center relative z-10 group w-full">
+              <div className="w-full flex flex-col items-center justify-center py-10 border border-transparent hover:border-[#a7adbd]/20 rounded-[3rem] transition-all duration-700 hover:bg-[#ffffff]/50 backdrop-blur-xl hover:shadow-[0_20px_40px_rgba(104,66,189,0.04)]">
+                <span className="counter-value text-7xl md:text-8xl lg:text-9xl font-display font-medium text-[#292f3b] tracking-tighter group-hover:text-brand-purple transition-colors duration-500 mb-6" data-target={settings?.technologies_used || "40"}>0</span>
+                <p className="text-xs md:text-sm uppercase tracking-[0.2em] font-bold text-[#4f5d6d]">Core Tech</p>
+                <p className="text-[#a7adbd] text-xs mt-3 font-mono">Mastered Stack</p>
+              </div>
+            </div>
+
           </div>
         </div>
       </section>
