@@ -83,28 +83,18 @@ export default function Contact({ profile: initialProfile }: { profile?: any }) 
           </p>
         </div>
 
-        {/* Right column: Editorial Social Links List */}
-        <div className="flex-1 flex flex-col w-full z-20">
-          <div className="border-t border-[#a7adbd]/20 w-full"></div>
+        {/* Right column: Editorial Icon Dock */}
+        <div className="flex-1 flex flex-wrap content-start gap-6 w-full z-20">
           {socialLinks.map((link) => (
             <a 
               key={link.id}
               href={link.url} 
               target="_blank" 
+              title={link.label}
               rel="noopener noreferrer"
-              className="group flex flex-col sm:flex-row items-start sm:items-center justify-between py-10 md:py-12 border-b border-[#a7adbd]/20 hover:border-brand-purple transition-colors duration-500 w-full"
+              className="group w-20 h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center bg-[#ffffff]/80 backdrop-blur-xl border border-[#ffffff] shadow-[0_10px_30px_rgba(104,66,189,0.08)] hover:shadow-[0_20px_40px_rgba(104,66,189,0.2)] hover:bg-brand-purple transition-all duration-500 ease-[cubic-bezier(0.17,0.67,0.21,1)] transform hover:-translate-y-2"
             >
-              <div className="flex items-center gap-6 md:gap-10 mb-6 sm:mb-0">
-                <span className="text-lg md:text-xl font-mono text-[#a7adbd] group-hover:text-brand-purple transition-colors duration-500 font-bold tracking-widest">
-                  {String(socialLinks.indexOf(link) + 1).padStart(2, '0')}
-                </span>
-                <span className="text-5xl md:text-6xl lg:text-7xl font-display font-bold text-[#292f3b] group-hover:text-brand-purple transition-colors duration-500 tracking-tighter hover:italic">
-                  {link.label}
-                </span>
-              </div>
-              <div className="w-16 h-16 rounded-full border border-[#a7adbd]/30 flex items-baseline justify-center items-center group-hover:bg-brand-purple group-hover:border-brand-purple group-hover:shadow-[0_10px_30px_rgba(104,66,189,0.3)] transition-all duration-500 transform sm:translate-x-0 group-hover:-rotate-12 group-hover:scale-110 shrink-0 ml-14 sm:ml-0">
-                <link.icon className="w-6 h-6 text-[#4f5d6d] group-hover:text-white transition-colors duration-500" />
-              </div>
+              <link.icon className="w-8 h-8 md:w-10 md:h-10 text-[#a7adbd] group-hover:text-white transition-colors duration-500" />
             </a>
           ))}
         </div>

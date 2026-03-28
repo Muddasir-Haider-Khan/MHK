@@ -2,14 +2,15 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { usePathname } from 'next/navigation';
-import { Menu, X } from 'lucide-react';
-import { useNav, useSiteSettings } from '@/hooks/useContent';
+import { Menu, X, Phone, Instagram, Calendar } from 'lucide-react';
+import { useNav, useSiteSettings, useProfile } from '@/hooks/useContent';
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
   const { navItems, isLoading } = useNav();
   const { settings } = useSiteSettings();
+  const { profile } = useProfile();
 
   // Hide navbar on admin, hire, and services pages
   const hiddenRoutes = ['/admin', '/hire', '/services'];
@@ -58,19 +59,30 @@ export default function Navbar() {
           )}
         </div>
         
-        {isLoading ? (
-          <div className="hidden md:block w-32 h-10 bg-[#e1e8fc] animate-pulse rounded-full shadow-[0_10px_20px_rgba(104,66,189,0.08)]"></div>
-        ) : Array.isArray(navItems) && navItems.filter((i: any) => i?.is_cta_button).length > 0 ? (
-          navItems.filter((i: any) => i?.is_cta_button).map((item: any) => (
-            <a key={item.id} href={item.url} target={item.open_in_new_tab ? "_blank" : "_self"} className="hidden md:block px-8 py-3.5 bg-[#292f3b] text-[#ffffff] font-bold tracking-widest uppercase text-[12px] rounded-full shadow-[0_10px_30px_rgba(104,66,189,0.15)] hover:bg-brand-purple hover:shadow-[0_15px_40px_rgba(104,66,189,0.3)] transition-all duration-500 ease-[cubic-bezier(0.17,0.67,0.21,1)] transform hover:scale-105 active:scale-95">
-              {item.label}
-            </a>
-          ))
-        ) : (
-          <a href="#contact" className="hidden md:block px-8 py-3.5 bg-[#292f3b] text-[#ffffff] font-bold tracking-widest uppercase text-[12px] rounded-full shadow-[0_10px_30px_rgba(104,66,189,0.15)] hover:bg-brand-purple hover:shadow-[0_15px_40px_rgba(104,66,189,0.3)] transition-all duration-500 ease-[cubic-bezier(0.17,0.67,0.21,1)] transform hover:scale-105 active:scale-95">
-            Let's Talk
+        <div className="hidden md:flex items-center gap-3">
+          {/* Quick Social Icons */}
+          <a href={profile?.phone ? `https://wa.me/${profile.phone.replace(/[^0-9]/g, '')}` : '#'} target="_blank" rel="noreferrer" title="WhatsApp" className="w-11 h-11 rounded-full bg-[#ffffff]/60 saturate-200 backdrop-blur-3xl flex items-center justify-center border border-[#ffffff] shadow-[0_5px_15px_rgba(104,66,189,0.06)] hover:bg-[#25D366] hover:border-transparent hover:text-white text-[#a7adbd] transition-all duration-300 ease-[cubic-bezier(0.17,0.67,0.21,1)] transform hover:scale-110">
+             <Phone className="w-[18px] h-[18px]" />
           </a>
-        )}
+          <a href={profile?.instagram || '#'} target="_blank" rel="noreferrer" title="Instagram" className="w-11 h-11 rounded-full bg-[#ffffff]/60 saturate-200 backdrop-blur-3xl flex items-center justify-center border border-[#ffffff] shadow-[0_5px_15px_rgba(104,66,189,0.06)] hover:bg-[#bc1888] hover:border-transparent hover:text-white text-[#a7adbd] transition-all duration-300 ease-[cubic-bezier(0.17,0.67,0.21,1)] transform hover:scale-110 mr-2">
+             <Instagram className="w-[18px] h-[18px]" />
+          </a>
+          
+          {isLoading ? (
+            <div className="hidden md:block w-32 h-11 bg-[#e1e8fc] animate-pulse rounded-full shadow-[0_10px_20px_rgba(104,66,189,0.08)]"></div>
+          ) : Array.isArray(navItems) && navItems.filter((i: any) => i?.is_cta_button).length > 0 ? (
+            navItems.filter((i: any) => i?.is_cta_button).map((item: any) => (
+              <a key={item.id} href={item.url} target={item.open_in_new_tab ? "_blank" : "_self"} className="hidden md:flex items-center gap-2 px-8 py-3.5 bg-[#292f3b] text-[#ffffff] font-bold tracking-widest uppercase text-[12px] rounded-full shadow-[0_10px_30px_rgba(104,66,189,0.15)] hover:bg-brand-purple hover:shadow-[0_15px_40px_rgba(104,66,189,0.3)] transition-all duration-500 ease-[cubic-bezier(0.17,0.67,0.21,1)] transform hover:scale-105 active:scale-95">
+                <span>{item.label}</span>
+              </a>
+            ))
+          ) : (
+            <a href={profile?.cal_link || '#contact'} className="hidden md:flex items-center gap-2 px-8 py-3.5 bg-[#292f3b] text-[#ffffff] font-bold tracking-widest uppercase text-[12px] rounded-full shadow-[0_10px_30px_rgba(104,66,189,0.15)] hover:bg-brand-purple hover:shadow-[0_15px_40px_rgba(104,66,189,0.3)] transition-all duration-500 ease-[cubic-bezier(0.17,0.67,0.21,1)] transform hover:scale-105 active:scale-95">
+              <Calendar className="w-4 h-4" />
+              <span>Book Call</span>
+            </a>
+          )}
+        </div>
 
         <button 
           className="md:hidden text-[#292f3b] hover:text-brand-purple transition-all duration-300 active:scale-90"
