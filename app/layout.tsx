@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Outfit, JetBrains_Mono } from "next/font/google";
 import Navbar from "@/components/Navbar";
 import RealtimeProvider from "@/components/RealtimeProvider";
+import SmoothScrolling from "@/components/SmoothScrolling";
+import Cursor from "@/components/Cursor";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
@@ -53,16 +55,22 @@ export default function RootLayout({
         <link rel="preconnect" href="https://api.fontshare.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://api.fontshare.com" />
         <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet" />
+        <style dangerouslySetInnerHTML={{ __html: `
+          * { cursor: none !important; } /* Global custom cursor override */
+          a, button, [role="button"], input, select, textarea { cursor: none !important; }
+        `}} />
       </head>
-      <body className="bg-[#050505] text-white overflow-x-hidden selection:bg-brand-purple selection:text-white min-h-full flex flex-col font-sans">
-        {/* Global Noise — uses inline CSS data URI, no external dependency */}
-        <div className="noise-overlay" aria-hidden="true" />
-        <RealtimeProvider />
-        
-        
-        <Navbar />
-        {children}
-        <Analytics />
+      <body className="bg-[#f5f6ff] text-[#292f3b] overflow-x-hidden selection:bg-brand-purple selection:text-[#f8f0ff] min-h-full flex flex-col font-sans">
+        <SmoothScrolling>
+          <Cursor />
+          {/* Global Noise — extremely subtle */}
+          <div className="noise-overlay opacity-30" aria-hidden="true" />
+          <RealtimeProvider />
+          
+          <Navbar />
+          {children}
+          <Analytics />
+        </SmoothScrolling>
 
         {/* JSON-LD Schema */}
         <script
