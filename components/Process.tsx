@@ -150,41 +150,60 @@ export default function Process({
               </defs>
             </svg>
             
-            {/* Cards */}
-            <div className="process-step bg-[#ffffff] shadow-[0_20px_40px_rgba(104,66,189,0.06)] border-0 relative z-10 p-8 rounded-3xl group cursor-default">
-              <div className="w-14 h-14 rounded-2xl bg-brand-purple/10 flex items-center justify-center mb-6">
-                <ScanSearch className="w-6 h-6 text-brand-purple" />
+            {/* Premium Glassmorphic Cards */}
+            <div className="process-step group relative p-8 md:p-10 rounded-[2.5rem] bg-[#ffffff]/60 saturate-150 backdrop-blur-3xl border border-[#ffffff] shadow-[0_8px_30px_rgba(104,66,189,0.04)] hover:shadow-[0_20px_60px_rgba(104,66,189,0.1)] transition-all duration-700 ease-[cubic-bezier(0.17,0.67,0.21,1)] hover:-translate-y-4 overflow-hidden">
+              <span className="absolute -bottom-6 -right-6 text-[10rem] font-display font-black text-brand-purple/[0.03] group-hover:text-brand-purple/[0.08] transition-colors duration-700 pointer-events-none z-0 tracking-tighter">1</span>
+              
+              <div className="relative z-10 flex items-center justify-between mb-12">
+                <div className="w-16 h-16 rounded-full bg-[#f5f6ff] group-hover:bg-brand-purple transition-all duration-500 flex items-center justify-center border border-[#e1e8fc] group-hover:border-transparent group-hover:scale-110 shadow-sm">
+                   <ScanSearch className="w-7 h-7 text-[#a7adbd] group-hover:text-white transition-colors duration-500" />
+                </div>
+                <div className="w-12 h-px bg-[#a7adbd]/30 group-hover:bg-brand-purple/50 transition-colors duration-500 hidden lg:block"></div>
               </div>
-              <span className="text-7xl font-display font-bold text-[#292f3b]/5 absolute top-4 right-6 pointer-events-none">01</span>
-              <h3 className="text-xl font-display font-bold mb-3 text-[#292f3b] relative z-10">Problem</h3>
-              <p className="text-[#4f5d6d] text-sm leading-relaxed relative z-10">Deep dive into the core challenge. Understanding data, requirements, and hidden patterns.</p>
+
+              <h3 className="text-2xl font-display font-bold text-[#292f3b] mb-4 relative z-10 tracking-tight">Problem</h3>
+              <p className="text-[#4f5d6d] text-sm leading-relaxed relative z-10 font-medium">Deep dive into the core challenge. Understanding data, requirements, and hidden patterns.</p>
             </div>
             
-            <div className="process-step bg-[#ffffff] shadow-[0_20px_40px_rgba(104,66,189,0.06)] border-0 relative z-10 p-8 rounded-3xl group cursor-default">
-              <div className="w-14 h-14 rounded-2xl bg-brand-purple/10 flex items-center justify-center mb-6">
-                <Layers className="w-6 h-6 text-brand-purple" />
+            <div className="process-step group relative p-8 md:p-10 rounded-[2.5rem] bg-[#ffffff]/60 saturate-150 backdrop-blur-3xl border border-[#ffffff] shadow-[0_8px_30px_rgba(104,66,189,0.04)] hover:shadow-[0_20px_60px_rgba(104,66,189,0.1)] transition-all duration-700 ease-[cubic-bezier(0.17,0.67,0.21,1)] hover:-translate-y-4 overflow-hidden">
+              <span className="absolute -bottom-6 -right-6 text-[10rem] font-display font-black text-brand-purple/[0.03] group-hover:text-brand-purple/[0.08] transition-colors duration-700 pointer-events-none z-0 tracking-tighter">2</span>
+              
+              <div className="relative z-10 flex items-center justify-between mb-12">
+                <div className="w-16 h-16 rounded-full bg-[#f5f6ff] group-hover:bg-brand-purple transition-all duration-500 flex items-center justify-center border border-[#e1e8fc] group-hover:border-transparent group-hover:scale-110 shadow-sm">
+                   <Layers className="w-7 h-7 text-[#a7adbd] group-hover:text-white transition-colors duration-500" />
+                </div>
+                <div className="w-12 h-px bg-[#a7adbd]/30 group-hover:bg-brand-purple/50 transition-colors duration-500 hidden lg:block"></div>
               </div>
-              <span className="text-7xl font-display font-bold text-[#292f3b]/5 absolute top-4 right-6 pointer-events-none">02</span>
-              <h3 className="text-xl font-display font-bold mb-3 text-[#292f3b] relative z-10">Architecture</h3>
-              <p className="text-[#4f5d6d] text-sm leading-relaxed relative z-10">Selecting the right models, tech stack, and designing for scalability from day one.</p>
+
+              <h3 className="text-2xl font-display font-bold text-[#292f3b] mb-4 relative z-10 tracking-tight">Architecture</h3>
+              <p className="text-[#4f5d6d] text-sm leading-relaxed relative z-10 font-medium">Selecting the right models, tech stack, and designing for scalability from day one.</p>
             </div>
             
-            <div className="process-step bg-[#ffffff] shadow-[0_20px_40px_rgba(104,66,189,0.06)] border-0 relative z-10 p-8 rounded-3xl group cursor-default">
-              <div className="w-14 h-14 rounded-2xl bg-brand-purple/10 flex items-center justify-center mb-6">
-                <Code2 className="w-6 h-6 text-brand-purple" />
+            <div className="process-step group relative p-8 md:p-10 rounded-[2.5rem] bg-[#ffffff]/60 saturate-150 backdrop-blur-3xl border border-[#ffffff] shadow-[0_8px_30px_rgba(104,66,189,0.04)] hover:shadow-[0_20px_60px_rgba(104,66,189,0.1)] transition-all duration-700 ease-[cubic-bezier(0.17,0.67,0.21,1)] hover:-translate-y-4 overflow-hidden">
+              <span className="absolute -bottom-6 -right-6 text-[10rem] font-display font-black text-brand-purple/[0.03] group-hover:text-brand-purple/[0.08] transition-colors duration-700 pointer-events-none z-0 tracking-tighter">3</span>
+              
+              <div className="relative z-10 flex items-center justify-between mb-12">
+                <div className="w-16 h-16 rounded-full bg-[#f5f6ff] group-hover:bg-brand-purple transition-all duration-500 flex items-center justify-center border border-[#e1e8fc] group-hover:border-transparent group-hover:scale-110 shadow-sm">
+                   <Code2 className="w-7 h-7 text-[#a7adbd] group-hover:text-white transition-colors duration-500" />
+                </div>
+                <div className="w-12 h-px bg-[#a7adbd]/30 group-hover:bg-brand-purple/50 transition-colors duration-500 hidden lg:block"></div>
               </div>
-              <span className="text-7xl font-display font-bold text-[#292f3b]/5 absolute top-4 right-6 pointer-events-none">03</span>
-              <h3 className="text-xl font-display font-bold mb-3 text-[#292f3b] relative z-10">Build</h3>
-              <p className="text-[#4f5d6d] text-sm leading-relaxed relative z-10">Clean, efficient code. Blending backend logic with stunning frontend interactivity.</p>
+
+              <h3 className="text-2xl font-display font-bold text-[#292f3b] mb-4 relative z-10 tracking-tight">Build</h3>
+              <p className="text-[#4f5d6d] text-sm leading-relaxed relative z-10 font-medium">Clean, efficient code. Blending backend logic with stunning frontend interactivity.</p>
             </div>
             
-            <div className="process-step bg-[#ffffff] shadow-[0_20px_40px_rgba(104,66,189,0.06)] border-0 relative z-10 p-8 rounded-3xl group cursor-default">
-              <div className="w-14 h-14 rounded-2xl bg-brand-purple/10 flex items-center justify-center mb-6">
-                <Rocket className="w-6 h-6 text-brand-purple" />
+            <div className="process-step group relative p-8 md:p-10 rounded-[2.5rem] bg-[#ffffff]/60 saturate-150 backdrop-blur-3xl border border-[#ffffff] shadow-[0_8px_30px_rgba(104,66,189,0.04)] hover:shadow-[0_20px_60px_rgba(104,66,189,0.1)] transition-all duration-700 ease-[cubic-bezier(0.17,0.67,0.21,1)] hover:-translate-y-4 overflow-hidden">
+              <span className="absolute -bottom-6 -right-6 text-[10rem] font-display font-black text-brand-purple/[0.03] group-hover:text-brand-purple/[0.08] transition-colors duration-700 pointer-events-none z-0 tracking-tighter">4</span>
+              
+              <div className="relative z-10 flex items-center justify-between mb-12">
+                <div className="w-16 h-16 rounded-full bg-[#f5f6ff] group-hover:bg-brand-purple transition-all duration-500 flex items-center justify-center border border-[#e1e8fc] group-hover:border-transparent group-hover:scale-110 shadow-sm">
+                   <Rocket className="w-7 h-7 text-[#a7adbd] group-hover:text-white transition-colors duration-500" />
+                </div>
               </div>
-              <span className="text-7xl font-display font-bold text-[#292f3b]/5 absolute top-4 right-6 pointer-events-none">04</span>
-              <h3 className="text-xl font-display font-bold mb-3 text-[#292f3b] relative z-10">Optimize</h3>
-              <p className="text-[#4f5d6d] text-sm leading-relaxed relative z-10">Performance tuning, testing, CI/CD pipelines, and real-world validation.</p>
+
+              <h3 className="text-2xl font-display font-bold text-[#292f3b] mb-4 relative z-10 tracking-tight">Optimize</h3>
+              <p className="text-[#4f5d6d] text-sm leading-relaxed relative z-10 font-medium">Performance tuning, testing, CI/CD pipelines, and real-world validation.</p>
             </div>
           </div>
         </div>
