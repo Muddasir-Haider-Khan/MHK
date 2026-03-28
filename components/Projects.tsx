@@ -71,7 +71,7 @@ export default function Projects({ initialProjects }: { initialProjects?: Projec
   }, [selectedProject]);
 
   return (
-    <section id="work" className="pt-32 pb-0 bg-[#f5f6ff] relative z-10" ref={containerRef}>
+    <section id="work" className="pt-32 pb-20 bg-[#f5f6ff] relative z-10" ref={containerRef}>
       <div className="absolute top-[10%] left-0 w-[40vw] h-[40vw] bg-brand-purple/10 rounded-full blur-[140px] pointer-events-none"></div>
 
       {/* Minimalist Grid Line Scaffold (Desktop) */}
@@ -88,7 +88,7 @@ export default function Projects({ initialProjects }: { initialProjects?: Projec
         </h2>
       </div>
       
-        <div className="max-w-[1400px] w-full mx-auto px-4 md:px-12 relative z-10 flex flex-col lg:flex-row h-[130vh] lg:h-[70vh] gap-4 md:gap-5 pb-12 items-stretch accordion-container overflow-hidden">
+        <div className="max-w-[1400px] w-full mx-auto px-4 md:px-12 relative z-10 flex flex-col lg:flex-row h-[130vh] lg:h-[80vh] gap-4 md:gap-5 pb-12 items-stretch accordion-container overflow-hidden">
           {projects.map((proj: Project, index: number) => {
             const isActive = (activeProject || projects[0])?.id === proj.id;
             
