@@ -113,7 +113,7 @@ export default function Experience({
   }, [timelineItems]);
 
   return (
-    <section id="experience" className="py-32 relative bg-[#f5f6ff]" ref={containerRef}>
+    <section id="experience" className="pt-8 pb-32 relative bg-[#f5f6ff]" ref={containerRef}>
       <div className="mx-auto max-w-7xl px-4 md:px-12 relative z-10 w-full mb-16">
         <p className="text-sm uppercase tracking-widest text-[#4f5d6d] font-bold mb-8 font-mono">03 / Journey</p>
         <h2 className="text-5xl md:text-7xl font-display font-bold text-[#292f3b] tracking-tighter" style={{ letterSpacing: '-0.04em' }}>
