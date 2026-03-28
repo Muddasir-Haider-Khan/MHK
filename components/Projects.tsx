@@ -82,13 +82,10 @@ export default function Projects({ initialProjects }: { initialProjects?: Projec
          <div className="border-l border-r border-[#a7adbd]"></div>
       </div>
 
-      <div className="px-4 md:px-12 mb-24 flex justify-between items-end max-w-7xl mx-auto relative z-10">
-        <div>
-          <p className="text-sm uppercase tracking-widest text-[#4f5d6d] font-bold mb-8 font-mono">02 / Portfolio</p>
-          <h2 className="text-6xl md:text-8xl font-display font-bold text-[#292f3b] tracking-tighter" style={{ letterSpacing: '-0.04em' }}>
-            Selected<br/>Works
-          </h2>
-        </div>
+      <div className="px-4 md:px-12 mb-24 max-w-7xl mx-auto relative z-10">
+        <h2 className="text-6xl md:text-8xl font-display font-bold text-[#292f3b] tracking-tighter" style={{ letterSpacing: '-0.04em' }}>
+          Selected Works
+        </h2>
       </div>
       
         <div className="max-w-[1400px] w-full mx-auto px-4 md:px-12 relative z-10 flex flex-col lg:flex-row h-[120vh] lg:h-[75vh] gap-3 md:gap-4 pb-24 items-stretch accordion-container overflow-hidden">
