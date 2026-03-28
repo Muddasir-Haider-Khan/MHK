@@ -14,14 +14,14 @@ export default async function Home() {
 
   if (!data) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#050505] text-brand-purple font-mono">
+      <div className="min-h-screen flex items-center justify-center bg-[#f5f6ff] text-brand-purple font-mono font-bold tracking-widest">
         INITIALIZING DATABASE CONNECTION...
       </div>
     );
   }
 
   return (
-    <main className="relative z-10 bg-[#050505]">
+    <main className="relative z-10 bg-[#f5f6ff]">
       <Hero profile={data.profile} />
       <Story narrativeRaw={data.profile.narrative} />
       <Skills initialSkills={data.skills} />
