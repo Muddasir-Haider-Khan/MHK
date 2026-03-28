@@ -129,7 +129,6 @@ export default function Process({
         </div>
 
         <div className="px-4 md:px-12 mb-20 max-w-7xl mx-auto relative z-10">
-          <p className="text-sm uppercase tracking-widest text-[#4f5d6d] font-bold mb-8 font-mono">04 / Method</p>
           <h2 className="text-5xl md:text-7xl font-display font-bold text-[#292f3b] tracking-tighter" style={{ letterSpacing: '-0.04em' }}>
             How I <span className="text-brand-purple italic">Think</span>
           </h2>
