@@ -70,43 +70,55 @@ export default function Projects({ initialProjects }: { initialProjects?: Projec
   }, [selectedProject]);
 
   return (
-    <section id="work" className="py-32 bg-[#080808] relative z-10" ref={containerRef}>
-      <div className="px-4 md:px-12 mb-24 flex justify-between items-end max-w-7xl mx-auto">
+    <section id="work" className="py-32 bg-[#f5f6ff] relative z-10" ref={containerRef}>
+      <div className="absolute top-[10%] left-0 w-[40vw] h-[40vw] bg-brand-purple/10 rounded-full blur-[140px] pointer-events-none"></div>
+
+      {/* Minimalist Grid Line Scaffold (Desktop) */}
+      <div className="absolute inset-0 pointer-events-none hidden md:grid grid-cols-4 gap-4 px-12 z-0 opacity-[0.08]">
+         <div className="border-l border-[#a7adbd]"></div>
+         <div className="border-l border-[#a7adbd]"></div>
+         <div className="border-l border-[#a7adbd]"></div>
+         <div className="border-l border-r border-[#a7adbd]"></div>
+      </div>
+
+      <div className="px-4 md:px-12 mb-24 flex justify-between items-end max-w-7xl mx-auto relative z-10">
         <div>
-          <p className="text-sm uppercase tracking-widest text-gray-500 mb-8 font-mono">02 / Portfolio</p>
-          <h2 className="text-6xl md:text-8xl font-display font-bold text-white">Selected<br/>Works</h2>
+          <p className="text-sm uppercase tracking-widest text-[#4f5d6d] font-bold mb-8 font-mono">02 / Portfolio</p>
+          <h2 className="text-6xl md:text-8xl font-display font-bold text-[#292f3b] tracking-tighter" style={{ letterSpacing: '-0.04em' }}>
+            Selected<br/>Works
+          </h2>
         </div>
       </div>
       
-      <div className="space-y-40 px-4 md:px-12 max-w-7xl mx-auto">
+      <div className="space-y-40 px-4 md:px-12 max-w-7xl mx-auto relative z-10">
         {projects.map((proj: Project, i: number) => {
           const isOdd = i % 2 !== 0;
           return (
             <div key={proj.id} className="project-card group grid md:grid-cols-2 gap-12 items-center">
               <div 
                 onClick={() => setSelectedProject(proj)}
-                className={`relative overflow-hidden aspect-[4/3] cursor-pointer project-image-container ${isOdd ? 'order-2' : 'order-2 md:order-1'}`}
+                className={`relative overflow-hidden aspect-[4/3] cursor-pointer project-image-container rounded-3xl shadow-[0_20px_40px_rgba(104,66,189,0.06)] hover:shadow-[0_20px_40px_rgba(104,66,189,0.12)] transition-shadow ${isOdd ? 'order-2' : 'order-1'}`}
               >
                 <img 
                   src={proj.image || 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop'}
                   alt={proj.title} 
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-6">
-                  <span className="text-sm font-mono text-white/80">Click to explore →</span>
+                <div className="absolute inset-0 bg-gradient-to-t from-white/90 via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-8">
+                  <span className="text-sm font-mono text-[#4f5d6d] font-bold tracking-wider">Click to explore →</span>
                 </div>
               </div>
-              <div className={`${isOdd ? 'order-1 md:text-right' : 'order-1 md:order-2'}`}>
+              <div className={`${isOdd ? 'order-1 md:text-right md:pr-12' : 'order-2 md:pl-12'}`}>
                 <h3 
                   onClick={() => setSelectedProject(proj)}
-                  className="text-4xl md:text-5xl font-display font-bold mb-4 text-white group-hover:text-brand-purple transition-colors cursor-pointer"
+                  className="text-4xl md:text-5xl font-display font-bold mb-4 text-[#292f3b] group-hover:text-brand-purple transition-colors cursor-pointer"
                 >
                   {proj.title}
                 </h3>
-                <p className={`text-gray-400 mb-6 max-w-md ${isOdd ? 'ml-auto' : ''}`}>{proj.description}</p>
+                <p className={`text-[#4f5d6d] text-lg font-medium mb-8 max-w-md ${isOdd ? 'ml-auto' : ''}`}>{proj.description}</p>
                 <div className={`flex flex-wrap gap-2 ${isOdd ? 'justify-end' : ''}`}>
                   {proj.technologies?.map(t => (
-                    <span key={t} className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-xs text-brand-purple font-mono">
+                    <span key={t} className="px-4 py-1.5 bg-[#d6e4f7] rounded-full text-[10px] text-[#455363] font-bold tracking-wider font-mono">
                       {t}
                     </span>
                   ))}
@@ -125,15 +137,15 @@ export default function Projects({ initialProjects }: { initialProjects?: Projec
         aria-label={selectedProject ? `Project details: ${selectedProject.title}` : undefined}
       >
         <div 
-          className="absolute inset-0 bg-black/90 backdrop-blur-md cursor-pointer" 
+          className="absolute inset-0 bg-[#ffffff]/80 backdrop-blur-md cursor-pointer" 
           onClick={() => setSelectedProject(null)}
         />
         
         {selectedProject && (
-          <div className="relative bg-[#050505] border border-white/5 rounded-3xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto transform transition-transform duration-500 scale-100 shadow-2xl">
+          <div className="relative bg-[#ffffff] shadow-[0_40px_80px_rgba(104,66,189,0.12)] rounded-3xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto transform transition-transform duration-500 scale-100 border-0">
             <button 
               onClick={() => setSelectedProject(null)} 
-              className="absolute top-6 right-6 z-10 text-gray-400 hover:text-white bg-black/40 p-3 rounded-full transition-colors backdrop-blur-sm"
+              className="absolute top-6 right-6 z-10 text-[#4f5d6d] hover:text-[#292f3b] bg-white/90 shadow p-3 rounded-full transition-colors backdrop-blur-sm"
               aria-label="Close project details"
             >
               <X className="w-6 h-6" />
@@ -143,32 +155,34 @@ export default function Projects({ initialProjects }: { initialProjects?: Projec
               src={selectedProject.image || 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070'} 
               alt={selectedProject.title} 
             />
-            <div className="p-8 md:p-16">
-              <h3 className="text-4xl md:text-5xl font-display font-bold mb-4 text-white">{selectedProject.title}</h3>
-              <p className="text-brand-purple text-lg mb-8 font-mono">{selectedProject.role}</p>
-              <p className="text-gray-300 text-lg leading-relaxed mb-8 whitespace-pre-line">{selectedProject.long_description || selectedProject.description}</p>
+            <div className="p-8 md:p-16 relative">
+              <div className="absolute top-0 right-0 w-[40vw] h-[40vw] bg-brand-purple/5 rounded-full blur-[100px] pointer-events-none"></div>
+
+              <h3 className="text-4xl md:text-5xl font-display font-bold mb-4 text-[#292f3b] relative z-10">{selectedProject.title}</h3>
+              <p className="text-brand-purple text-lg mb-8 font-mono font-bold relative z-10">{selectedProject.role}</p>
+              <p className="text-[#4f5d6d] text-lg leading-relaxed mb-8 whitespace-pre-line relative z-10">{selectedProject.long_description || selectedProject.description}</p>
               
-              <div className="bg-white/5 border border-white/10 rounded-xl p-4 mb-6">
-                <p className="text-sm font-mono text-gray-500 mb-1">Outcome</p>
-                <p className="text-white">{selectedProject.outcome}</p>
+              <div className="bg-[#f5f6ff] rounded-2xl p-6 mb-8 relative z-10 shadow-[0_10px_20px_rgba(104,66,189,0.02)]">
+                <p className="text-sm font-mono text-[#a7adbd] font-bold tracking-wider mb-2">Outcome</p>
+                <p className="text-[#292f3b] font-medium leading-relaxed">{selectedProject.outcome}</p>
               </div>
               
-              <div className="flex flex-wrap gap-2 mb-8">
+              <div className="flex flex-wrap gap-2 mb-10 relative z-10">
                 {selectedProject.technologies?.map(t => (
-                  <span key={t} className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-xs text-brand-purple font-mono">
+                  <span key={t} className="px-4 py-1.5 bg-[#d6e4f7] rounded-full text-[10px] text-[#455363] font-bold tracking-wider font-mono">
                     {t}
                   </span>
                 ))}
               </div>
 
-              <div className="flex gap-4">
+              <div className="flex gap-4 relative z-10">
                 {selectedProject.link && (
-                  <a href={selectedProject.link} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-6 py-3 bg-brand-purple hover:bg-brand-accent transition-colors rounded-full text-white font-bold text-sm">
+                  <a href={selectedProject.link} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-8 py-4 bg-brand-purple hover:bg-brand-purple/90 transition-colors rounded-full text-white font-bold text-sm shadow-[0_10px_20px_rgba(104,66,189,0.2)]">
                     <ExternalLink className="w-4 h-4" /> Live Demo
                   </a>
                 )}
                 {selectedProject.github_link && (
-                  <a href={selectedProject.github_link} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-6 py-3 bg-white/5 hover:bg-white/10 transition-colors border border-white/10 rounded-full text-white font-bold text-sm">
+                  <a href={selectedProject.github_link} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-8 py-4 bg-[#ffffff] shadow-[0_10px_20px_rgba(104,66,189,0.06)] hover:shadow-[0_10px_20px_rgba(104,66,189,0.12)] transition-shadow rounded-full text-[#4f5d6d] hover:text-brand-purple font-bold text-sm">
                     <Github className="w-4 h-4" /> Source
                   </a>
                 )}

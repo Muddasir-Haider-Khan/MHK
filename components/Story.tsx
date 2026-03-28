@@ -72,7 +72,7 @@ export default function Story({ narrativeRaw }: { narrativeRaw?: string }) {
         <div className="max-w-4xl text-center">
           <h2 
             ref={textRef}
-            className="text-3xl md:text-6xl font-display font-medium leading-snug text-transparent bg-clip-text bg-gradient-to-br from-white via-white to-gray-600"
+            className="text-4xl md:text-7xl font-display font-medium leading-[1.1] text-transparent bg-clip-text bg-gradient-to-br from-[#292f3b] via-[#292f3b] to-brand-purple tracking-tighter" style={{ letterSpacing: '-0.04em' }}
           >
           </h2>
         </div>

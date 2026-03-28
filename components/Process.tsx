@@ -116,19 +116,29 @@ export default function Process({
   return (
     <>
       {/* ========== 6. THINKING PROCESS ========== */}
-      <section id="process" className="py-32 bg-[#080808] relative overflow-hidden" ref={processRef}>
-        <div className="absolute top-1/3 right-0 w-[30vw] h-[30vw] bg-brand-purple/5 rounded-full blur-[150px] pointer-events-none"></div>
-        <div className="absolute bottom-0 left-0 w-[20vw] h-[20vw] bg-brand-accent/5 rounded-full blur-[100px] pointer-events-none"></div>
+      <section id="process" className="py-32 bg-[#ecf0ff] relative overflow-hidden" ref={processRef}>
+        <div className="absolute top-1/3 right-0 w-[30vw] h-[30vw] bg-brand-purple/10 rounded-full blur-[150px] pointer-events-none"></div>
+        <div className="absolute bottom-0 left-0 w-[20vw] h-[20vw] bg-blue-300/10 rounded-full blur-[100px] pointer-events-none"></div>
 
-        <div className="px-4 md:px-12 mb-20 max-w-7xl mx-auto">
-          <p className="text-sm uppercase tracking-widest text-gray-500 mb-8 font-mono">04 / Method</p>
-          <h2 className="text-5xl md:text-7xl font-display font-bold text-white">How I <span className="gradient-text-animated italic">Think</span></h2>
+        {/* Minimalist Grid Line Scaffold (Desktop) */}
+        <div className="absolute inset-0 pointer-events-none hidden md:grid grid-cols-4 gap-4 px-12 z-0 opacity-[0.08]">
+           <div className="border-l border-[#a7adbd]"></div>
+           <div className="border-l border-[#a7adbd]"></div>
+           <div className="border-l border-[#a7adbd]"></div>
+           <div className="border-l border-r border-[#a7adbd]"></div>
+        </div>
+
+        <div className="px-4 md:px-12 mb-20 max-w-7xl mx-auto relative z-10">
+          <p className="text-sm uppercase tracking-widest text-[#4f5d6d] font-bold mb-8 font-mono">04 / Method</p>
+          <h2 className="text-5xl md:text-7xl font-display font-bold text-[#292f3b] tracking-tighter" style={{ letterSpacing: '-0.04em' }}>
+            How I <span className="text-brand-purple italic">Think</span>
+          </h2>
         </div>
         
         <div className="max-w-6xl mx-auto px-4 md:px-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 relative">
             {/* Animated connectors (desktop) */}
-            <svg className="hidden md:block absolute top-1/2 left-0 w-full h-4 -translate-y-1/2 z-0" preserveAspectRatio="none">
+            <svg className="hidden md:block absolute top-1/2 left-0 w-full h-4 -translate-y-1/2 z-0 opacity-40" preserveAspectRatio="none">
               <line x1="12.5%" y1="50%" x2="37.5%" y2="50%" stroke="url(#connector-grad)" strokeWidth="2" className="process-connector" strokeDasharray="100" strokeDashoffset="0" />
               <line x1="37.5%" y1="50%" x2="62.5%" y2="50%" stroke="url(#connector-grad)" strokeWidth="2" className="process-connector" strokeDasharray="100" strokeDashoffset="0" />
               <line x1="62.5%" y1="50%" x2="87.5%" y2="50%" stroke="url(#connector-grad)" strokeWidth="2" className="process-connector" strokeDasharray="100" strokeDashoffset="0" />
@@ -141,97 +151,99 @@ export default function Process({
             </svg>
             
             {/* Cards */}
-            <div className="process-step glass-card bg-white/5 border border-white/10 relative z-10 p-8 rounded-3xl group cursor-default">
+            <div className="process-step bg-[#ffffff] shadow-[0_20px_40px_rgba(104,66,189,0.06)] border-0 relative z-10 p-8 rounded-3xl group cursor-default">
               <div className="w-14 h-14 rounded-2xl bg-brand-purple/10 flex items-center justify-center mb-6">
                 <ScanSearch className="w-6 h-6 text-brand-purple" />
               </div>
-              <span className="text-7xl font-display font-bold text-white/[0.03] absolute top-4 right-6 pointer-events-none">01</span>
-              <h3 className="text-xl font-display font-bold mb-3 text-white relative z-10">Problem</h3>
-              <p className="text-gray-400 text-sm leading-relaxed relative z-10">Deep dive into the core challenge. Understanding data, requirements, and hidden patterns.</p>
+              <span className="text-7xl font-display font-bold text-[#292f3b]/5 absolute top-4 right-6 pointer-events-none">01</span>
+              <h3 className="text-xl font-display font-bold mb-3 text-[#292f3b] relative z-10">Problem</h3>
+              <p className="text-[#4f5d6d] text-sm leading-relaxed relative z-10">Deep dive into the core challenge. Understanding data, requirements, and hidden patterns.</p>
             </div>
             
-            <div className="process-step glass-card bg-white/5 border border-white/10 relative z-10 p-8 rounded-3xl group cursor-default">
+            <div className="process-step bg-[#ffffff] shadow-[0_20px_40px_rgba(104,66,189,0.06)] border-0 relative z-10 p-8 rounded-3xl group cursor-default">
               <div className="w-14 h-14 rounded-2xl bg-brand-purple/10 flex items-center justify-center mb-6">
                 <Layers className="w-6 h-6 text-brand-purple" />
               </div>
-              <span className="text-7xl font-display font-bold text-white/[0.03] absolute top-4 right-6 pointer-events-none">02</span>
-              <h3 className="text-xl font-display font-bold mb-3 text-white relative z-10">Architecture</h3>
-              <p className="text-gray-400 text-sm leading-relaxed relative z-10">Selecting the right models, tech stack, and designing for scalability from day one.</p>
+              <span className="text-7xl font-display font-bold text-[#292f3b]/5 absolute top-4 right-6 pointer-events-none">02</span>
+              <h3 className="text-xl font-display font-bold mb-3 text-[#292f3b] relative z-10">Architecture</h3>
+              <p className="text-[#4f5d6d] text-sm leading-relaxed relative z-10">Selecting the right models, tech stack, and designing for scalability from day one.</p>
             </div>
             
-            <div className="process-step glass-card bg-white/5 border border-white/10 relative z-10 p-8 rounded-3xl group cursor-default">
+            <div className="process-step bg-[#ffffff] shadow-[0_20px_40px_rgba(104,66,189,0.06)] border-0 relative z-10 p-8 rounded-3xl group cursor-default">
               <div className="w-14 h-14 rounded-2xl bg-brand-purple/10 flex items-center justify-center mb-6">
                 <Code2 className="w-6 h-6 text-brand-purple" />
               </div>
-              <span className="text-7xl font-display font-bold text-white/[0.03] absolute top-4 right-6 pointer-events-none">03</span>
-              <h3 className="text-xl font-display font-bold mb-3 text-white relative z-10">Build</h3>
-              <p className="text-gray-400 text-sm leading-relaxed relative z-10">Clean, efficient code. Blending backend logic with stunning frontend interactivity.</p>
+              <span className="text-7xl font-display font-bold text-[#292f3b]/5 absolute top-4 right-6 pointer-events-none">03</span>
+              <h3 className="text-xl font-display font-bold mb-3 text-[#292f3b] relative z-10">Build</h3>
+              <p className="text-[#4f5d6d] text-sm leading-relaxed relative z-10">Clean, efficient code. Blending backend logic with stunning frontend interactivity.</p>
             </div>
             
-            <div className="process-step glass-card bg-white/5 border border-white/10 relative z-10 p-8 rounded-3xl group cursor-default">
+            <div className="process-step bg-[#ffffff] shadow-[0_20px_40px_rgba(104,66,189,0.06)] border-0 relative z-10 p-8 rounded-3xl group cursor-default">
               <div className="w-14 h-14 rounded-2xl bg-brand-purple/10 flex items-center justify-center mb-6">
                 <Rocket className="w-6 h-6 text-brand-purple" />
               </div>
-              <span className="text-7xl font-display font-bold text-white/[0.03] absolute top-4 right-6 pointer-events-none">04</span>
-              <h3 className="text-xl font-display font-bold mb-3 text-white relative z-10">Optimize</h3>
-              <p className="text-gray-400 text-sm leading-relaxed relative z-10">Performance tuning, testing, CI/CD pipelines, and real-world validation.</p>
+              <span className="text-7xl font-display font-bold text-[#292f3b]/5 absolute top-4 right-6 pointer-events-none">04</span>
+              <h3 className="text-xl font-display font-bold mb-3 text-[#292f3b] relative z-10">Optimize</h3>
+              <p className="text-[#4f5d6d] text-sm leading-relaxed relative z-10">Performance tuning, testing, CI/CD pipelines, and real-world validation.</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* ========== 7. PERSONAL PHILOSOPHY ========== */}
-      <section id="philosophy" className="min-h-[60vh] md:min-h-[80vh] flex items-center justify-center relative px-6 md:px-12" ref={philosophyRef}>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[60vw] bg-brand-accent/5 rounded-full blur-[120px] pointer-events-none"></div>
-        <blockquote className="philosophy-text opacity-0 text-3xl sm:text-4xl md:text-7xl lg:text-8xl font-display font-bold text-center leading-[1.1] max-w-5xl relative z-10 text-white">
-          <span className="absolute -top-8 -left-4 md:-top-16 md:-left-12 text-white/5 text-8xl md:text-[12rem] pointer-events-none">"</span>
+      <section id="philosophy" className="py-40 bg-[#f5f6ff] flex items-center justify-center relative px-6 md:px-12" ref={philosophyRef}>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[60vw] bg-brand-purple/5 rounded-full blur-[120px] pointer-events-none"></div>
+        <blockquote className="philosophy-text opacity-0 text-3xl sm:text-4xl md:text-7xl lg:text-8xl font-display font-bold text-center leading-[1.1] max-w-5xl relative z-10 text-[#292f3b] tracking-tighter" style={{ letterSpacing: '-0.04em' }}>
+          <span className="absolute -top-8 -left-4 md:-top-16 md:-left-12 text-[#292f3b]/5 text-8xl md:text-[12rem] pointer-events-none">"</span>
           <span>{philosophy || 'I build systems that run quietly for years.'}</span>
-          <span className="absolute -bottom-16 -right-4 md:-bottom-32 md:-right-12 text-white/5 text-8xl md:text-[12rem] rotate-180 pointer-events-none">"</span>
+          <span className="absolute -bottom-16 -right-4 md:-bottom-32 md:-right-12 text-[#292f3b]/5 text-8xl md:text-[12rem] rotate-180 pointer-events-none">"</span>
         </blockquote>
       </section>
 
-      <div className="w-full h-px bg-white/10 max-w-7xl mx-auto"></div>
+      <div className="w-full h-px bg-[#a7adbd] opacity-20 max-w-7xl mx-auto"></div>
 
       {/* ========== 8. TRUST SECTION ========== */}
-      <section id="trust" className="py-40 relative overflow-hidden" ref={trustRef}>
-        <div className="absolute top-1/4 left-0 w-[30vw] h-[30vw] bg-brand-purple/5 rounded-full blur-[120px] pointer-events-none"></div>
-        <div className="absolute bottom-0 right-0 w-[25vw] h-[25vw] bg-brand-accent/5 rounded-full blur-[100px] pointer-events-none"></div>
+      <section id="trust" className="py-40 bg-[#f5f6ff] relative overflow-hidden" ref={trustRef}>
+        <div className="absolute top-1/4 left-0 w-[30vw] h-[30vw] bg-brand-purple/10 rounded-full blur-[120px] pointer-events-none"></div>
+        <div className="absolute bottom-0 right-0 w-[25vw] h-[25vw] bg-blue-300/10 rounded-full blur-[100px] pointer-events-none"></div>
 
         <div className="max-w-6xl mx-auto px-4 md:px-12">
-          <div className="text-center mb-20 text-white">
-            <p className="text-sm uppercase tracking-widest text-gray-500 mb-8 font-mono">Numbers That Speak</p>
-            <h2 className="text-4xl md:text-6xl font-display font-bold">Impact at a <span className="gradient-text-animated italic">Glance</span></h2>
+          <div className="text-center mb-20">
+            <p className="text-sm uppercase tracking-widest text-[#4f5d6d] font-bold mb-8 font-mono">Numbers That Speak</p>
+            <h2 className="text-4xl md:text-6xl font-display font-bold text-[#292f3b] tracking-tighter" style={{ letterSpacing: '-0.04em' }}>
+              Impact at a <span className="text-brand-purple italic">Glance</span>
+            </h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="trust-counter glass-card p-8 rounded-3xl bg-white/5 border border-white/10 text-center relative overflow-hidden group">
-              <div className="absolute inset-0 bg-gradient-to-t from-brand-purple/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-              <div className="w-16 h-16 rounded-full bg-brand-purple/10 mx-auto flex items-center justify-center mb-6 relative z-10">
+            <div className="trust-counter bg-[#ffffff] shadow-[0_20px_40px_rgba(104,66,189,0.06)] border-0 p-8 rounded-3xl text-center relative overflow-hidden group">
+              <div className="absolute inset-0 bg-gradient-to-t from-brand-purple/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <div className="w-16 h-16 rounded-full bg-brand-purple/10 mx-auto flex items-center justify-center mb-6 relative z-10 transition-transform group-hover:scale-110 duration-300">
                 <FolderCheck className="w-8 h-8 text-brand-purple" />
               </div>
-              <span className="counter-value text-5xl font-display font-bold text-white relative z-10 block mb-2" data-target={settings?.projects_completed || "25"}>0</span>
-              <p className="text-white font-medium relative z-10">Projects Completed</p>
-              <p className="text-gray-500 text-xs mt-2 relative z-10">Web apps, APIs & AI systems</p>
+              <span className="counter-value text-5xl font-display font-bold text-[#292f3b] tracking-tighter relative z-10 block mb-2" data-target={settings?.projects_completed || "25"}>0</span>
+              <p className="text-[#292f3b] font-medium relative z-10">Projects Completed</p>
+              <p className="text-[#4f5d6d] text-xs mt-2 relative z-10">Web apps, APIs & AI systems</p>
             </div>
 
-            <div className="trust-counter glass-card p-8 rounded-3xl bg-white/5 border border-white/10 text-center relative overflow-hidden group">
-              <div className="absolute inset-0 bg-gradient-to-t from-brand-purple/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-              <div className="w-16 h-16 rounded-full bg-brand-purple/10 mx-auto flex items-center justify-center mb-6 relative z-10">
+            <div className="trust-counter bg-[#ffffff] shadow-[0_20px_40px_rgba(104,66,189,0.06)] border-0 p-8 rounded-3xl text-center relative overflow-hidden group">
+              <div className="absolute inset-0 bg-gradient-to-t from-brand-purple/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <div className="w-16 h-16 rounded-full bg-brand-purple/10 mx-auto flex items-center justify-center mb-6 relative z-10 transition-transform group-hover:scale-110 duration-300">
                 <Clock className="w-8 h-8 text-brand-purple" />
               </div>
-              <span className="counter-value text-5xl font-display font-bold text-white relative z-10 block mb-2" data-target={settings?.years_experience || "4"}>0</span>
-              <p className="text-white font-medium relative z-10">Years Experience</p>
-              <p className="text-gray-500 text-xs mt-2 relative z-10">Continuous learning & shipping</p>
+              <span className="counter-value text-5xl font-display font-bold text-[#292f3b] tracking-tighter relative z-10 block mb-2" data-target={settings?.years_experience || "4"}>0</span>
+              <p className="text-[#292f3b] font-medium relative z-10">Years Experience</p>
+              <p className="text-[#4f5d6d] text-xs mt-2 relative z-10">Continuous learning & shipping</p>
             </div>
 
-            <div className="trust-counter glass-card p-8 rounded-3xl bg-white/5 border border-white/10 text-center relative overflow-hidden group">
-              <div className="absolute inset-0 bg-gradient-to-t from-brand-purple/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-              <div className="w-16 h-16 rounded-full bg-brand-purple/10 mx-auto flex items-center justify-center mb-6 relative z-10">
+            <div className="trust-counter bg-[#ffffff] shadow-[0_20px_40px_rgba(104,66,189,0.06)] border-0 p-8 rounded-3xl text-center relative overflow-hidden group">
+              <div className="absolute inset-0 bg-gradient-to-t from-brand-purple/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <div className="w-16 h-16 rounded-full bg-brand-purple/10 mx-auto flex items-center justify-center mb-6 relative z-10 transition-transform group-hover:scale-110 duration-300">
                 <Cpu className="w-8 h-8 text-brand-purple" />
               </div>
-              <span className="counter-value text-5xl font-display font-bold text-white relative z-10 block mb-2" data-target={settings?.technologies_used || "40"}>0</span>
-              <p className="text-white font-medium relative z-10">Technologies Mastered</p>
-              <p className="text-gray-500 text-xs mt-2 relative z-10">Frontend, Backend & DevOps</p>
+              <span className="counter-value text-5xl font-display font-bold text-[#292f3b] tracking-tighter relative z-10 block mb-2" data-target={settings?.technologies_used || "40"}>0</span>
+              <p className="text-[#292f3b] font-medium relative z-10">Technologies Mastered</p>
+              <p className="text-[#4f5d6d] text-xs mt-2 relative z-10">Frontend, Backend & DevOps</p>
             </div>
           </div>
         </div>
