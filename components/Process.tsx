@@ -209,7 +209,6 @@ export default function Process({
 
         <div className="max-w-6xl mx-auto px-4 md:px-12">
           <div className="text-center mb-20">
-            <p className="text-sm uppercase tracking-widest text-[#4f5d6d] font-bold mb-8 font-mono">Numbers That Speak</p>
             <h2 className="text-4xl md:text-6xl font-display font-bold text-[#292f3b] tracking-tighter" style={{ letterSpacing: '-0.04em' }}>
               Impact at a <span className="text-brand-purple italic">Glance</span>
             </h2>
