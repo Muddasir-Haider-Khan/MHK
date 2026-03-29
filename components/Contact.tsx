@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useProfile } from '@/hooks/useContent';
-import { Mail, Phone, Linkedin, Instagram, Facebook, Calendar, ExternalLink, ArrowUpRight } from 'lucide-react';
+import { Mail, Phone, Linkedin, Instagram, Facebook, Calendar, ExternalLink } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -15,7 +15,7 @@ export default function Contact({ profile: initialProfile }: { profile?: any }) 
   const profile = fetchedProfile || initialProfile || {};
 
   useEffect(() => {
-    // Live Clock
+    // Clock
     const updateTime = () => {
       const now = new Date();
       setTime(now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
@@ -23,46 +23,20 @@ export default function Contact({ profile: initialProfile }: { profile?: any }) 
     updateTime();
     const interval = setInterval(updateTime, 1000);
 
-    // Dark Pro Exit Animations
+    // Animation
     let ctx = gsap.context(() => {
       if (contactRef.current) {
         ScrollTrigger.create({
           trigger: contactRef.current,
-          start: 'top 70%',
+          start: 'top 60%',
           onEnter: () => {
-            // Massive background text fade
-            gsap.fromTo('.bg-massive-text',
-              { y: 100, opacity: 0 },
-              { y: 0, opacity: 0.03, duration: 1.5, ease: "power3.out" }
-            );
-
             gsap.fromTo('.contact-title', 
               { opacity: 0, y: 50 },
-              { opacity: 1, y: 0, duration: 1.2, ease: "expo.out" }
-            );
-
-            // Staggered Social Icons Entrance
-            gsap.fromTo('.social-icon',
-              { opacity: 0, y: 30, scale: 0.9 },
-              { opacity: 1, y: 0, scale: 1, duration: 1, stagger: 0.1, ease: "back.out(1.2)", delay: 0.3 }
+              { opacity: 1, y: 0, duration: 1.2, ease: "power3.out" }
             );
           },
           once: true
         });
-
-        // Magnet Effect for huge primary email button
-        const mailBtn = document.querySelector('.magnetic-btn');
-        if (mailBtn) {
-          mailBtn.addEventListener('mousemove', (e: any) => {
-            const rect = mailBtn.getBoundingClientRect();
-            const x = (e.clientX - rect.left) / rect.width - 0.5;
-            const y = (e.clientY - rect.top) / rect.height - 0.5;
-            gsap.to(mailBtn, { x: x * 30, y: y * 30, duration: 0.4, ease: "power2.out" });
-          });
-          mailBtn.addEventListener('mouseleave', () => {
-             gsap.to(mailBtn, { x: 0, y: 0, duration: 0.7, ease: "elastic.out(1, 0.4)" });
-          });
-        }
       }
     });
 
@@ -73,6 +47,7 @@ export default function Contact({ profile: initialProfile }: { profile?: any }) 
   }, []);
 
   const socialLinks = [
+    { id: 'email', label: 'Email', icon: Mail, url: profile.email ? `mailto:${profile.email}` : null },
     { id: 'whatsapp', label: 'WhatsApp', icon: Phone, url: profile.phone ? `https://wa.me/${profile.phone.replace(/[^0-9]/g, '')}` : null },
     { id: 'linkedin', label: 'LinkedIn', icon: Linkedin, url: profile.linkedin },
     { id: 'instagram', label: 'Instagram', icon: Instagram, url: profile.instagram },
@@ -82,74 +57,46 @@ export default function Contact({ profile: initialProfile }: { profile?: any }) 
   ].filter(link => link.url);
 
   return (
-    <section id="contact" className="min-h-screen flex flex-col justify-between px-6 md:px-12 relative overflow-hidden bg-[#0a0c12] pt-32 pb-8" ref={contactRef}>
-      
-      {/* Massive Background Typography */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center pointer-events-none z-0 overflow-hidden mix-blend-screen">
-        <h1 className="bg-massive-text text-[15vw] font-display font-black text-white opacity-0 whitespace-nowrap tracking-tighter mix-blend-overlay">
-          LET'S CONNECT
-        </h1>
+    <section id="contact" className="min-h-[90vh] flex flex-col justify-center items-center px-4 md:px-12 relative overflow-hidden bg-[#ecf0ff]" ref={contactRef}>
+      <div className="absolute inset-0 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[60vw] bg-brand-purple/5 rounded-full blur-[150px] pointer-events-none"></div>
+
+      {/* Minimalist Grid Line Scaffold (Desktop) */}
+      <div className="absolute inset-0 pointer-events-none hidden md:grid grid-cols-4 gap-4 px-12 z-0 opacity-[0.08]">
+         <div className="border-l border-[#a7adbd]"></div>
+         <div className="border-l border-[#a7adbd]"></div>
+         <div className="border-l border-[#a7adbd]"></div>
+         <div className="border-l border-r border-[#a7adbd]"></div>
       </div>
+      
+      <div className="relative z-10 w-full py-16 max-w-7xl mx-auto flex flex-col md:flex-row gap-16 md:gap-8 justify-between">
+        {/* Left column: Title & Info */}
+        <div className="flex-1 max-w-xl md:sticky md:top-40 self-start">
+          <h2 className="opacity-0 text-6xl md:text-[6rem] font-display font-bold leading-none mb-4 contact-title text-[#292f3b] tracking-tighter" style={{ letterSpacing: '-0.04em' }}>
+            Let's<br/><span className="text-brand-purple">Connect.</span>
+          </h2>
+        </div>
 
-      {/* Cinematic Glowing Orb */}
-      <div className="absolute inset-0 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[60vw] bg-brand-purple/10 rounded-full blur-[200px] pointer-events-none z-0"></div>
-
-      {/* Main Content */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto flex flex-col items-center text-center mt-12 md:mt-24">
-        
-        <p className="contact-title text-sm md:text-base uppercase tracking-[0.4em] font-mono text-[#a7adbd] mb-8 font-semibold">
-          <span className="text-brand-purple">///</span> Ready to drop a project?
-        </p>
-
-        <h2 className="contact-title text-6xl md:text-[7rem] lg:text-[9rem] font-display font-semibold leading-none mb-16 text-white tracking-tighter" style={{ letterSpacing: '-0.03em' }}>
-          Let's<br/>
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-brand-purple/80 to-brand-purple">Create Together.</span>
-        </h2>
-
-        {/* Primary Giant Call to Action */}
-        {profile.email && (
-           <a 
-             href={`mailto:${profile.email}`} 
-             className="contact-title magnetic-btn relative group inline-flex items-center gap-4 px-10 py-6 md:px-14 md:py-8 rounded-[3rem] bg-white/[0.03] border border-white/10 hover:border-brand-purple/50 transition-colors backdrop-blur-xl mb-24 overflow-hidden"
-           >
-             <div className="absolute inset-0 bg-brand-purple/20 translate-y-[100%] group-hover:translate-y-0 transition-transform duration-500 ease-in-out z-0"></div>
-             
-             <Mail className="w-8 h-8 md:w-10 md:h-10 text-white relative z-10" strokeWidth={1.5} />
-             <span className="text-2xl md:text-4xl lg:text-5xl font-display font-medium text-white relative z-10 tracking-tight">
-               {profile.email}
-             </span>
-             <ArrowUpRight className="w-8 h-8 md:w-10 md:h-10 text-[#a7adbd] group-hover:text-white transition-colors relative z-10" strokeWidth={1.5} />
-           </a>
-        )}
-
-        {/* Social Dock (Apple-style frosted glass pill) */}
-        <div className="flex flex-wrap justify-center gap-4 md:gap-6 p-4 rounded-[2.5rem] bg-white/[0.02] border border-white/5 backdrop-blur-2xl z-20">
-          {socialLinks.map((link, i) => (
+        {/* Right column: Editorial Icon Dock */}
+        <div className="flex-1 flex flex-wrap content-start gap-6 w-full z-20">
+          {socialLinks.map((link) => (
             <a 
               key={link.id}
               href={link.url} 
               target="_blank" 
               title={link.label}
               rel="noopener noreferrer"
-              className="social-icon group w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center bg-white/[0.03] border border-white/10 hover:border-brand-purple/50 hover:bg-brand-purple hover:shadow-[0_0_20px_rgba(104,66,189,0.4)] transition-all duration-500 transform hover:-translate-y-2"
+              className="group w-20 h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center bg-[#ffffff]/80 backdrop-blur-xl border border-[#ffffff] shadow-[0_10px_30px_rgba(104,66,189,0.08)] hover:shadow-[0_20px_40px_rgba(104,66,189,0.2)] hover:bg-brand-purple transition-all duration-500 ease-[cubic-bezier(0.17,0.67,0.21,1)] transform hover:-translate-y-2"
             >
-              <link.icon className="w-6 h-6 md:w-7 md:h-7 text-[#a7adbd] group-hover:text-white transition-colors duration-500" strokeWidth={2} />
+              <link.icon className="w-8 h-8 md:w-10 md:h-10 text-[#4b5563] group-hover:text-white transition-colors duration-500" strokeWidth={2.5} />
             </a>
           ))}
         </div>
       </div>
       
-      {/* Footer Strip */}
-      <footer className="w-full max-w-7xl mx-auto pt-20 flex flex-col md:flex-row items-center justify-between gap-6 text-xs md:text-sm tracking-widest font-mono text-center md:text-left z-10 text-[#a7adbd] border-t border-white/5 mt-auto">
+      <footer className="w-full px-6 md:px-12 pb-8 pt-16 flex flex-col md:flex-row items-center justify-between gap-4 text-xs tracking-widest font-mono text-center md:text-left z-10 text-[#4f5d6d] font-bold">
         <span>&copy; {new Date().getFullYear()} {profile.name || 'MHK'} — AI Engineer</span>
-        <div className="flex gap-8 items-center">
-          <span className="flex items-center gap-2">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-purple opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-purple"></span>
-            </span>
-            {time}
-          </span>
+        <div className="flex gap-6">
+          <span>Local Time: <span className="text-brand-purple">{time}</span></span>
           <span className="hidden md:block">Based in {profile.location || 'Islamabad'}</span>
         </div>
       </footer>
