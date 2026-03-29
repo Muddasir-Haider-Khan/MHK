@@ -115,13 +115,13 @@ export default function Skills({ initialSkills }: { initialSkills?: Skill[] }) {
          <div className="border-l border-r border-[#a7adbd]"></div>
       </div>
 
-      <div className="px-4 md:px-12 mb-16 max-w-7xl mx-auto relative z-10">
-        <h2 className="text-5xl md:text-8xl font-display font-bold text-[#292f3b] tracking-tighter leading-[0.9]" style={{ letterSpacing: '-0.04em' }}>
+      <div className="px-6 md:px-12 mb-16 max-w-7xl mx-auto relative z-10">
+        <h2 className="text-mobile-title md:text-8xl font-display font-bold text-[#292f3b] tracking-tighter leading-[0.9]" style={{ letterSpacing: '-0.04em' }}>
            Technical <span className="text-brand-purple italic">Arsenal</span>
         </h2>
       </div>
 
-      <div className="max-w-[1400px] w-full mx-auto px-4 md:px-12 relative z-10 flex flex-col lg:flex-row h-[140vh] lg:h-[70vh] gap-4 md:gap-5 pb-8 items-stretch skills-accordion-container overflow-hidden">
+      <div className="max-w-[1400px] w-full mx-auto px-4 md:px-12 relative z-10 flex flex-col lg:flex-row h-[120vh] lg:h-[70vh] gap-4 md:gap-5 pb-8 items-stretch skills-accordion-container overflow-hidden">
         {pillarNames.map((pillarName) => {
           const isActive = activePillar === pillarName;
           const info = pillarInfo[pillarName];

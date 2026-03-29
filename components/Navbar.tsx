@@ -61,11 +61,11 @@ export default function Navbar() {
         
         <div className="hidden md:flex items-center gap-3">
           {/* Quick Social Icons */}
-          <a href={profile?.phone ? `https://wa.me/${profile.phone.replace(/[^0-9]/g, '')}` : '#'} target="_blank" rel="noreferrer" title="WhatsApp" className="w-11 h-11 rounded-full bg-[#ffffff]/60 saturate-200 backdrop-blur-3xl flex items-center justify-center border border-[#ffffff] shadow-[0_5px_15px_rgba(104,66,189,0.06)] hover:bg-[#25D366] hover:border-transparent hover:text-white text-[#a7adbd] transition-all duration-300 ease-[cubic-bezier(0.17,0.67,0.21,1)] transform hover:scale-110">
-             <Phone className="w-[18px] h-[18px]" />
+          <a href={profile?.phone ? `https://wa.me/${profile.phone.replace(/[^0-9]/g, '')}` : '#'} target="_blank" rel="noreferrer" title="WhatsApp" className="w-11 h-11 rounded-full bg-[#ffffff]/60 saturate-200 backdrop-blur-3xl flex items-center justify-center border border-[#ffffff] shadow-[0_5px_15px_rgba(104,66,189,0.06)] hover:bg-[#25D366] hover:border-transparent hover:text-white text-[#4b5563] transition-all duration-300 ease-[cubic-bezier(0.17,0.67,0.21,1)] transform hover:scale-110">
+             <Phone className="w-[18px] h-[18px]" strokeWidth={2.5} />
           </a>
-          <a href={profile?.instagram || '#'} target="_blank" rel="noreferrer" title="Instagram" className="w-11 h-11 rounded-full bg-[#ffffff]/60 saturate-200 backdrop-blur-3xl flex items-center justify-center border border-[#ffffff] shadow-[0_5px_15px_rgba(104,66,189,0.06)] hover:bg-[#bc1888] hover:border-transparent hover:text-white text-[#a7adbd] transition-all duration-300 ease-[cubic-bezier(0.17,0.67,0.21,1)] transform hover:scale-110 mr-2">
-             <Instagram className="w-[18px] h-[18px]" />
+          <a href={profile?.instagram || '#'} target="_blank" rel="noreferrer" title="Instagram" className="w-11 h-11 rounded-full bg-[#ffffff]/60 saturate-200 backdrop-blur-3xl flex items-center justify-center border border-[#ffffff] shadow-[0_5px_15px_rgba(104,66,189,0.06)] hover:bg-[#bc1888] hover:border-transparent hover:text-white text-[#4b5563] transition-all duration-300 ease-[cubic-bezier(0.17,0.67,0.21,1)] transform hover:scale-110 mr-2">
+             <Instagram className="w-[18px] h-[18px]" strokeWidth={2.5} />
           </a>
           
           {isLoading ? (
@@ -84,6 +84,15 @@ export default function Navbar() {
           )}
         </div>
 
+        <div className="flex md:hidden items-center gap-2 mr-1">
+          <a href={profile?.phone ? `https://wa.me/${profile.phone.replace(/[^0-9]/g, '')}` : '#'} target="_blank" rel="noreferrer" title="WhatsApp" className="w-10 h-10 rounded-full bg-white/60 saturate-200 backdrop-blur-3xl flex items-center justify-center border border-white shadow-[0_5px_15px_rgba(104,66,189,0.06)] text-[#4b5563] active:scale-90 transition-all">
+             <Phone className="w-[18px] h-[18px]" strokeWidth={2.5} />
+          </a>
+          <a href={profile?.instagram || '#'} target="_blank" rel="noreferrer" title="Instagram" className="w-10 h-10 rounded-full bg-white/60 saturate-200 backdrop-blur-3xl flex items-center justify-center border border-white shadow-[0_5px_15px_rgba(104,66,189,0.06)] text-[#4b5563] active:scale-90 transition-all">
+             <Instagram className="w-[18px] h-[18px]" strokeWidth={2.5} />
+          </a>
+        </div>
+
         <button 
           className="md:hidden text-[#292f3b] hover:text-brand-purple transition-all duration-300 active:scale-90"
           onClick={() => setIsMobileMenuOpen(true)}
@@ -95,8 +104,8 @@ export default function Navbar() {
 
       {/* Mobile Menu Overlay */}
       <div 
-        className={`fixed inset-0 bg-[#ffffff]/90 saturate-200 backdrop-blur-3xl z-[100] flex flex-col items-center justify-center gap-10 transition-transform duration-700 ease-[cubic-bezier(0.17,0.67,0.21,1)] text-[#292f3b] ${
-          isMobileMenuOpen ? 'translate-y-0' : '-translate-y-full'
+        className={`fixed inset-0 glass-menu z-[100] flex flex-col items-center justify-center gap-8 transition-all duration-700 ease-[cubic-bezier(0.17,0.67,0.21,1)] text-[#292f3b] ${
+          isMobileMenuOpen ? 'translate-x-0 opacity-100' : 'translate-x-[100%] opacity-0'
         }`}
         role="dialog"
         aria-modal="true"
@@ -117,12 +126,12 @@ export default function Navbar() {
           ))
         ) : (
           <>
-            <a href="#story" className="text-5xl font-display font-bold hover:text-brand-purple hover:italic transition-all tracking-tighter" style={{ letterSpacing: '-0.04em' }} onClick={() => setIsMobileMenuOpen(false)}>Story</a>
-            <a href="#skills" className="text-5xl font-display font-bold hover:text-brand-purple hover:italic transition-all tracking-tighter" style={{ letterSpacing: '-0.04em' }} onClick={() => setIsMobileMenuOpen(false)}>Skills</a>
-            <a href="#work" className="text-5xl font-display font-bold hover:text-brand-purple hover:italic transition-all tracking-tighter" style={{ letterSpacing: '-0.04em' }} onClick={() => setIsMobileMenuOpen(false)}>Work</a>
-            <a href="#experience" className="text-5xl font-display font-bold hover:text-brand-purple hover:italic transition-all tracking-tighter" style={{ letterSpacing: '-0.04em' }} onClick={() => setIsMobileMenuOpen(false)}>Journey</a>
-            <a href="#process" className="text-5xl font-display font-bold hover:text-brand-purple hover:italic transition-all tracking-tighter" style={{ letterSpacing: '-0.04em' }} onClick={() => setIsMobileMenuOpen(false)}>Process</a>
-            <a href="#contact" className="text-5xl font-display font-bold text-brand-purple mt-8" style={{ letterSpacing: '-0.04em' }} onClick={() => setIsMobileMenuOpen(false)}>Connect</a>
+            <a href="#story" className="mobile-nav-link text-5xl font-display font-medium hover:text-brand-purple hover:italic transition-all tracking-tighter" style={{ letterSpacing: '-0.04em' }} onClick={() => setIsMobileMenuOpen(false)}>Story</a>
+            <a href="#skills" className="mobile-nav-link text-5xl font-display font-medium hover:text-brand-purple hover:italic transition-all tracking-tighter" style={{ letterSpacing: '-0.04em' }} onClick={() => setIsMobileMenuOpen(false)}>Skills</a>
+            <a href="#work" className="mobile-nav-link text-5xl font-display font-medium hover:text-brand-purple hover:italic transition-all tracking-tighter" style={{ letterSpacing: '-0.04em' }} onClick={() => setIsMobileMenuOpen(false)}>Work</a>
+            <a href="#experience" className="mobile-nav-link text-5xl font-display font-medium hover:text-brand-purple hover:italic transition-all tracking-tighter" style={{ letterSpacing: '-0.04em' }} onClick={() => setIsMobileMenuOpen(false)}>Journey</a>
+            <a href="#process" className="mobile-nav-link text-5xl font-display font-medium hover:text-brand-purple hover:italic transition-all tracking-tighter" style={{ letterSpacing: '-0.04em' }} onClick={() => setIsMobileMenuOpen(false)}>Process</a>
+            <a href="#contact" className="mobile-nav-link text-5xl font-display font-bold text-brand-purple mt-8" style={{ letterSpacing: '-0.04em' }} onClick={() => setIsMobileMenuOpen(false)}>Connect</a>
           </>
         )}
       </div>

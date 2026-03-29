@@ -46,11 +46,14 @@ export default function Hero({ profile }: { profile?: any }) {
   return (
     <section 
       ref={containerRef}
-      className="min-h-screen flex flex-col justify-center items-center relative px-4 overflow-hidden bg-transparent"
+      className="min-h-screen pt-28 md:pt-0 flex flex-col justify-center items-center relative px-4 overflow-hidden bg-transparent"
     >
       {/* Mesh Gradients / Tonal Layers */}
       <div className="hero-mesh hero-mesh-1 absolute top-[20%] left-[20%] -translate-x-1/2 -translate-y-1/2 w-[70vw] lg:w-[50vw] h-[70vw] lg:h-[50vw] bg-brand-purple/15 rounded-full blur-[120px] pointer-events-none"></div>
       <div className="hero-mesh hero-mesh-2 absolute bottom-[10%] right-[10%] translate-x-1/2 translate-y-1/2 w-[60vw] lg:w-[40vw] h-[60vw] lg:h-[40vw] bg-blue-400/10 rounded-full blur-[100px] pointer-events-none"></div>
+      
+      {/* Mobile-Only Ambient Atmosphere */}
+      <div className="mobile-aura" aria-hidden="true" />
       
       {/* Scaffold minimal lines */}
       <div className="absolute inset-0 pointer-events-none hidden md:grid grid-cols-4 gap-4 px-12 z-0 opacity-[0.08]">
@@ -65,7 +68,7 @@ export default function Hero({ profile }: { profile?: any }) {
           {isLoading ? <span className="inline-block w-40 h-4 bg-[#e1e8fc] animate-pulse rounded"></span> : (hero?.badge_text || profile?.tagline || 'Based in Islamabad')}
         </p>
         
-        <h1 className="hero-title-blur font-display font-medium text-[20vw] md:text-[16vw] lg:text-[14vw] leading-[0.85] tracking-tighter text-[#292f3b]" style={{ letterSpacing: '-0.04em' }}>
+        <h1 className="hero-title-blur font-display font-medium text-[22vw] md:text-[16vw] lg:text-[15vw] leading-[0.85] tracking-tighter text-[#292f3b] opacity-5 md:opacity-100" style={{ letterSpacing: '-0.04em' }}>
           {isLoading ? (
             <span className="inline-block w-64 h-32 md:h-48 bg-[#e1e8fc] animate-pulse rounded-3xl"></span>
           ) : (

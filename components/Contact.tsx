@@ -87,7 +87,7 @@ export default function Contact({ profile: initialProfile }: { profile?: any }) 
               rel="noopener noreferrer"
               className="group w-20 h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center bg-[#ffffff]/80 backdrop-blur-xl border border-[#ffffff] shadow-[0_10px_30px_rgba(104,66,189,0.08)] hover:shadow-[0_20px_40px_rgba(104,66,189,0.2)] hover:bg-brand-purple transition-all duration-500 ease-[cubic-bezier(0.17,0.67,0.21,1)] transform hover:-translate-y-2"
             >
-              <link.icon className="w-8 h-8 md:w-10 md:h-10 text-[#a7adbd] group-hover:text-white transition-colors duration-500" />
+              <link.icon className="w-8 h-8 md:w-10 md:h-10 text-[#4b5563] group-hover:text-white transition-colors duration-500" strokeWidth={2.5} />
             </a>
           ))}
         </div>

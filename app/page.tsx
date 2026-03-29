@@ -23,11 +23,11 @@ export default async function Home() {
   return (
     <main className="relative z-10 bg-[#f5f6ff]">
       <Hero profile={data.profile} />
-      <Story narrativeRaw={data.profile.narrative} />
       <Skills initialSkills={data.skills} />
       <Projects initialProjects={data.projects} />
-      <Experience experience={data.experience} education={data.education} />
-      <Process philosophy={data.profile.philosophy} settings={data.settings} />
+      <Story narrativeRaw={data.profile.narrative} />
+      {/* <Experience experience={data.experience} education={data.education} /> */}
+      {/* <Process philosophy={data.profile.philosophy} settings={data.settings} /> */}
       <Contact profile={data.profile} />
     </main>
   );

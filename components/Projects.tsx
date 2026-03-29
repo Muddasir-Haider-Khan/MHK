@@ -91,7 +91,7 @@ export default function Projects({ initialProjects }: { initialProjects?: Projec
            <p className="text-sm uppercase tracking-[0.4em] text-brand-purple font-bold font-mono">02 / Portfolio Showcase</p>
         </div>
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-12">
-           <h2 className="text-6xl md:text-8xl lg:text-9xl font-display font-bold text-[#1a1f2b] tracking-tighter leading-[0.85]" style={{ letterSpacing: '-0.05em' }}>
+           <h2 className="text-mobile-title md:text-8xl lg:text-9xl font-display font-bold text-[#1a1f2b] tracking-tighter leading-[0.85]" style={{ letterSpacing: '-0.05em' }}>
             Selected <br/><span className="text-brand-purple italic font-medium">Artifacts</span>
           </h2>
           <div className="max-w-md space-y-6">
@@ -137,17 +137,17 @@ export default function Projects({ initialProjects }: { initialProjects?: Projec
                 {/* Enhanced mask for perfect readability */}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0a0c12] via-[#0a0c12]/40 to-transparent opacity-90 transition-opacity duration-700" />
                 
-                <div className="absolute inset-0 p-10 md:p-14 flex flex-col justify-end z-20">
+                <div className="absolute inset-0 p-8 md:p-14 flex flex-col justify-end text-center md:text-left z-20">
                    <div className="transform translate-y-6 group-hover:translate-y-0 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]">
-                      <div className="flex flex-wrap gap-2 mb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                      <div className="flex flex-wrap justify-center md:justify-start gap-2 mb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                           {proj.technologies?.slice(0, 3).map(tech => (
-                            <span key={tech} className="px-4 py-1.5 bg-white/5 backdrop-blur-xl border border-white/10 rounded-full text-[9px] font-bold text-white uppercase tracking-[0.3em]">{tech}</span>
+                            <span key={tech} className="px-3 md:px-4 py-1.5 bg-white/5 backdrop-blur-xl border border-white/10 rounded-full text-[8px] md:text-[9px] font-bold text-white uppercase tracking-[0.3em]">{tech}</span>
                           ))}
                       </div>
                       <div className="flex items-end justify-between gap-6">
-                          <div className="space-y-4">
-                             <h3 className="text-3xl md:text-5xl font-display font-bold text-white tracking-tighter leading-[0.9] opacity-100">{proj.title}</h3>
-                             <p className="text-white/40 text-sm font-medium line-clamp-2 max-w-sm opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-100 hidden md:block">{proj.description}</p>
+                          <div className="space-y-4 w-full">
+                             <h3 className="text-mobile-card-title md:text-5xl font-display font-bold text-white tracking-tighter leading-[0.9] opacity-100">{proj.title}</h3>
+                             <p className="text-white/40 text-sm font-medium line-clamp-2 max-w-sm mx-auto md:mx-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-100 hidden md:block">{proj.description}</p>
                           </div>
                           <div className="magnetic-btn w-16 h-16 rounded-full bg-white flex items-center justify-center shrink-0 shadow-2xl text-brand-purple hover:bg-brand-purple hover:text-white transition-all transform md:translate-y-12 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 duration-700 scale-90 group-hover:scale-100">
                              <ArrowUpRight className="w-8 h-8" />
