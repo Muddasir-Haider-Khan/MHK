@@ -117,7 +117,7 @@ export default function Skills({ initialSkills }: { initialSkills?: Skill[] }) {
 
       <div className="px-6 md:px-12 mb-16 max-w-7xl mx-auto relative z-10">
         <h2 className="text-mobile-title md:text-8xl font-display font-bold text-[#292f3b] tracking-tighter leading-[0.9]" style={{ letterSpacing: '-0.04em' }}>
-           Technical <span className="text-brand-purple italic">Arsenal</span>
+           Technical&nbsp;<span className="text-brand-purple italic" style={{ letterSpacing: '-0.01em' }}>Arsenal</span>
         </h2>
       </div>
 

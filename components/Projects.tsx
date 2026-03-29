@@ -85,7 +85,7 @@ export default function Projects({ initialProjects }: { initialProjects?: Projec
       {/* Section Header */}
       <div className="px-6 md:px-12 mb-16 max-w-7xl mx-auto relative z-10">
         <h2 className="text-mobile-title md:text-8xl font-display font-bold text-[#1a1f2b] tracking-tighter leading-[0.9]" style={{ letterSpacing: '-0.04em' }}>
-          Selected <span className="text-brand-purple italic">Artifacts</span>
+          Selected&nbsp;<span className="text-brand-purple italic" style={{ letterSpacing: '-0.01em' }}>Artifacts</span>
         </h2>
       </div>
 
