@@ -19,17 +19,17 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Muddasir Haider Khan | Top AI Engineer & Freelancer in Islamabad",
-  description: "Muddasir Haider Khan is a Top AI Engineer and the best freelance software developer in Islamabad, Rawalpindi, and Pakistan. Hire Muddasir for custom machine learning, SaaS, and AI development globally.",
+  title: "Muddasir Haider Khan | DevAI-Consultants",
+  description: "Muddasir Haider Khan is a Top AI Engineer and the best freelance software developer and Founder of DevAI-Consultants in Islamabad, Rawalpindi, and Pakistan. Hire Muddasir for custom machine learning, SaaS, and AI development globally.",
   keywords: "Muddasir Haider Khan, muddasir haider, top ai engineer, best ai engineer in the world, freelance software developer islamabad, freelancer rawalpindi, best ai developer pakistan, saas software engineer",
   alternates: {
     canonical: "https://portfolio-eta-blue-72.vercel.app"
   },
   openGraph: {
     title: "Muddasir Haider Khan | Top AI Engineer & Freelance Software Developer",
-    description: "Hire Muddasir Haider Khan, the best freelance AI engineer and SaaS developer in Islamabad/Rawalpindi for global custom software solutions.",
+    description: "Muddasir Haider Khan is a Top AI Engineer and the best freelance software developer and Founder of DevAI-Consultants in Islamabad, Rawalpindi, and Pakistan. Hire Muddasir for custom machine learning, SaaS, and AI development globally.",
     url: "https://portfolio-eta-blue-72.vercel.app",
-    siteName: "Muddasir Haider Khan Portfolio",
+    siteName: "Muddasir Haider Khan | DevAI-Consultants",
     type: "profile",
     firstName: "Muddasir",
     lastName: "Haider Khan",
@@ -37,8 +37,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Muddasir Haider Khan | Top AI Engineer",
-    description: "Hire the best freelance AI engineer and SaaS developer in Pakistan for global custom software solutions."
+    title: "Muddasir Haider Khan | DevAI-Consultants ",
+    description: "Muddasir Haider Khan is the best freelance software developer and Founder of DevAI-Consultants in Islamabad, Rawalpindi, and Pakistan. Hire Muddasir for custom machine learning, SaaS, and AI development globally."
   }
 };
 
