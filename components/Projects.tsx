@@ -111,8 +111,8 @@ export default function Projects({ initialProjects }: { initialProjects?: Projec
               />
               
               {/* Gradient overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0a0c12] via-[#0a0c12]/60 to-[#0a0c12]/30" />
-              <div className={`absolute inset-0 bg-[#0a0c12] transition-opacity duration-700 ${isActive ? 'opacity-85' : 'opacity-0'}`} />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0a0c12] via-[#0a0c12]/80 to-[#0a0c12]/40" />
+              <div className={`absolute inset-0 bg-[#0a0c12] transition-opacity duration-700 ${isActive ? 'opacity-80' : 'opacity-0'}`} />
 
               {/* Active Content - Shows when expanded */}
               <div className={`absolute inset-0 p-8 md:p-12 flex flex-col transition-all duration-700 ${isActive ? 'opacity-100 delay-300 translate-y-0' : 'opacity-0 translate-y-8 pointer-events-none'}`}>
