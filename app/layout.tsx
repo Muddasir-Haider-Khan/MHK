@@ -4,6 +4,7 @@ import Navbar from "@/components/Navbar";
 import RealtimeProvider from "@/components/RealtimeProvider";
 import SmoothScrolling from "@/components/SmoothScrolling";
 import Cursor from "@/components/Cursor";
+import SEOSchema from "@/components/SEOSchema";
 
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
@@ -19,27 +20,32 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Muddasir Haider Khan | DevAI-Consultants",
-  description: "Muddasir Haider Khan is a Top AI Engineer and the best freelance software developer and Founder of DevAI-Consultants in Islamabad, Rawalpindi, and Pakistan. Hire Muddasir for custom machine learning, SaaS, and AI development globally.",
-  keywords: "Muddasir Haider Khan, muddasir haider, top ai engineer, best ai engineer in the world, freelance software developer islamabad, freelancer rawalpindi, best ai developer pakistan, saas software engineer",
+  title: { default: "Muddasir Haider Khan | AI Engineer & Web Designer", template: "%s | DevAI Consultants" },
+  description: "Muddasir Haider Khan is a globally recognized AI Engineer, Web Designer, eCommerce Website Designer, and n8n Workflow Automation Expert based in Pakistan. Hire DevAI Consultants for custom scalable software.",
+  keywords: ["Muddasir Haider Khan", "muddasir haider", "AI Engineer", "Web Designer", "eCommerce Website Designer", "n8n Workflow Designer", "DevAI Consultants", "hire best ai engineer", "Top freelance software developer Islamababad"],
+  authors: [{ name: "Muddasir Haider Khan" }],
+  creator: "Muddasir Haider Khan - DevAI Consultants",
   alternates: {
-    canonical: "https://portfolio-eta-blue-72.vercel.app"
+    canonical: "https://devaiconsultants.com"
   },
   openGraph: {
-    title: "Muddasir Haider Khan | Top AI Engineer & Freelance Software Developer",
-    description: "Muddasir Haider Khan is a Top AI Engineer and the best freelance software developer and Founder of DevAI-Consultants in Islamabad, Rawalpindi, and Pakistan. Hire Muddasir for custom machine learning, SaaS, and AI development globally.",
-    url: "https://portfolio-eta-blue-72.vercel.app",
+    title: "Muddasir Haider Khan | Top AI Engineer & Web Designer",
+    description: "Muddasir Haider Khan is a globally recognized AI Engineer, Web Designer, eCommerce Website Designer, and n8n Workflow Automation Expert based in Pakistan. Hire DevAI Consultants.",
+    url: "https://devaiconsultants.com",
     siteName: "Muddasir Haider Khan | DevAI-Consultants",
     type: "profile",
     firstName: "Muddasir",
     lastName: "Haider Khan",
-    username: "muddasirhaider048"
+    username: "muddasirhaider048",
+    images: [{ url: "https://devaiconsultants.com/og-image.jpg", width: 1200, height: 630 }]
   },
   twitter: {
     card: "summary_large_image",
-    title: "Muddasir Haider Khan | DevAI-Consultants ",
-    description: "Muddasir Haider Khan is the best freelance software developer and Founder of DevAI-Consultants in Islamabad, Rawalpindi, and Pakistan. Hire Muddasir for custom machine learning, SaaS, and AI development globally."
-  }
+    title: "Muddasir Haider Khan | AI Engineer & Web Designer",
+    description: "Hire Muddasir Haider Khan (DevAI Consultants) for custom AI Engineering, eCommerce, and n8n workflow design.",
+    creator: "@muddasirhaider048" // Assuming this is close based on GitHub/IG handles
+  },
+  robots: { index: true, follow: true, "max-snippet": -1, "max-image-preview": "large" }
 };
 
 export default function RootLayout({
@@ -60,6 +66,7 @@ export default function RootLayout({
           * { cursor: none !important; } /* Global custom cursor override */
           a, button, [role="button"], input, select, textarea { cursor: none !important; }
         `}} />
+        <SEOSchema />
       </head>
       <body className="bg-[#f5f6ff] text-[#292f3b] overflow-x-hidden selection:bg-brand-purple selection:text-[#f8f0ff] min-h-full flex flex-col font-sans">
         <SmoothScrolling>
@@ -72,31 +79,6 @@ export default function RootLayout({
           {children}
           <Analytics />
         </SmoothScrolling>
-
-        {/* JSON-LD Schema */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Person",
-              name: "Muddasir Haider Khan",
-              url: "https://portfolio-eta-blue-72.vercel.app",
-              jobTitle: "Top AI Engineer & Freelance Software Developer",
-              description: "Muddasir Haider Khan is the top AI engineer and freelance software developer based in Islamabad and Rawalpindi, Pakistan. He builds cutting-edge SaaS platforms and machine learning systems for global clients.",
-              address: {
-                "@type": "PostalAddress",
-                "addressLocality": "Islamabad",
-                "addressRegion": "Rawalpindi",
-                "addressCountry": "PK"
-              },
-              sameAs: [
-                "https://www.linkedin.com/in/muddasir-haider-khan/",
-                "https://github.com/muddasir-haider"
-              ]
-            })
-          }}
-        />
       </body>
     </html>
   );
