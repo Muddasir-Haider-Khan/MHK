@@ -26,8 +26,8 @@ export default async function Home() {
       <Skills initialSkills={data.skills} />
       <Projects initialProjects={data.projects} />
       <Story narrativeRaw={data.profile.narrative} />
-      {/* <Experience experience={data.experience} education={data.education} /> */}
-      {/* <Process philosophy={data.profile.philosophy} settings={data.settings} /> */}
+      <Experience experience={data.experience} education={data.education} />
+      <Process philosophy={data.profile.philosophy} settings={data.settings} />
       <Contact profile={data.profile} />
     </main>
   );

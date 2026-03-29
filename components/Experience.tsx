@@ -51,17 +51,12 @@ export default function Experience({
   education?: EducationItem[]; 
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({});
 
-  const { experience: fetchedExperience, isLoading: isExpLoading } = useExperience();
-  const { education: fetchedEducation, isLoading: isEduLoading } = useEducation();
+  const { experience: fetchedExperience } = useExperience();
+  const { education: fetchedEducation } = useEducation();
 
-  const experience = Array.isArray(fetchedExperience) ? fetchedExperience : (Array.isArray(initialExperience) ? initialExperience : []);
-  const education = Array.isArray(fetchedEducation) ? fetchedEducation : (Array.isArray(initialEducation) ? initialEducation : []);
-
-  const toggleExpand = (id: string) => {
-    setExpandedItems(prev => ({ ...prev, [id]: !prev[id] }));
-  };
+  const experience = Array.isArray(fetchedExperience) && fetchedExperience.length > 0 ? fetchedExperience : (Array.isArray(initialExperience) ? initialExperience : []);
+  const education = Array.isArray(fetchedEducation) && fetchedEducation.length > 0 ? fetchedEducation : (Array.isArray(initialEducation) ? initialEducation : []);
 
   const timelineItems: TimelineItemProps[] = [
     ...experience.map((e: any) => ({ 
@@ -80,12 +75,13 @@ export default function Experience({
 
   useEffect(() => {
     let ctx = gsap.context(() => {
-      // Animate items natively
-      gsap.utils.toArray('.timeline-item').forEach((item: any, i) => {
+      // Cinematic upward entrance
+      gsap.utils.toArray('.journey-card').forEach((item: any) => {
         gsap.from(item, {
           opacity: 0,
-          x: i % 2 === 0 ? -40 : 40,
-          duration: 0.8,
+          y: 40,
+          duration: 1.5,
+          ease: "expo.out",
           scrollTrigger: {
             trigger: item,
             start: "top 85%",
@@ -93,99 +89,110 @@ export default function Experience({
           }
         });
       });
-
-      // Progress line
-      const timelineLine = document.querySelector('.timeline-progress');
-      if (timelineLine) {
-        gsap.to(timelineLine, {
-          height: '100%',
-          ease: 'none',
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: 'top center',
-            end: 'bottom center',
-            scrub: true
-          }
-        });
-      }
+      
+      // Animate sticky title natively
+      gsap.from('.journey-title', {
+        opacity: 0,
+        x: -30,
+        duration: 1.5,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: '.journey-title',
+          start: 'top 80%',
+          toggleActions: "play none none reverse"
+        }
+      });
     }, containerRef);
     return () => ctx.revert();
   }, [timelineItems]);
 
   return (
-    <section id="experience" className="pt-8 pb-16 relative bg-transparent scroll-mt-32" ref={containerRef}>
-      <div className="mx-auto max-w-7xl px-4 md:px-12 relative z-10 w-full mb-20">
-        <p className="text-sm uppercase tracking-[0.4em] text-brand-purple/60 font-bold mb-8 font-mono">03 / Journey</p>
-        <h2 className="text-5xl md:text-8xl font-display font-bold text-[#292f3b] tracking-tighter leading-[0.9]" style={{ letterSpacing: '-0.04em' }}>
-          The Path<br/>
-          <span className="text-brand-purple">So Far</span>
-        </h2>
-      </div>
-
-      <div className="max-w-4xl mx-auto px-4 md:px-12 relative">
-        <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-[2px] bg-[#a7adbd]/20 timeline-line">
-          <div className="timeline-progress absolute top-0 left-0 w-full bg-brand-purple" style={{ height: '0%' }}></div>
-        </div>
+    <section id="experience" className="pt-24 md:pt-32 pb-16 relative bg-[#0a0c12] scroll-mt-28 overflow-hidden" ref={containerRef}>
+      {/* Cinematic Glowing Background Aura */}
+      <div className="absolute top-1/4 left-[-10%] w-[50vw] h-[50vw] bg-brand-purple/10 rounded-full blur-[150px] pointer-events-none opacity-50"></div>
+      
+      <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10 flex flex-col lg:flex-row gap-16 lg:gap-32">
         
-        <div id="timeline-container" className="space-y-16">
+        {/* Left Column: Asymmetrical Sticky Layout */}
+        <div className="w-full lg:w-4/12 relative">
+           <div className="sticky top-40 journey-title">
+             <p className="text-xs md:text-sm uppercase tracking-[0.3em] text-brand-purple font-semibold mb-4 flex items-center gap-3">
+               <span className="w-6 h-px bg-brand-purple/50 hidden md:block"></span>
+               03 / Journey
+             </p>
+             <h2 className="text-5xl md:text-6xl lg:text-7xl font-display font-semibold text-white tracking-tight leading-[1.05]">
+               The Path<br/>
+               <span className="text-[#a7adbd]">So Far</span>
+             </h2>
+             <p className="text-[#a7adbd] mt-6 text-[15px] max-w-sm font-medium leading-relaxed">
+               A detailed chronology of my technical evolution, engineering roles, and academic foundation.
+             </p>
+           </div>
+        </div>
+
+        {/* Right Column: Professional Journey Cards */}
+        <div className="w-full lg:w-8/12 flex flex-col gap-16 lg:mt-32 pb-12">
           {timelineItems.map((item, i) => {
-            const isLeft = i % 2 === 0;
             const uid = `${item.type}-${item.id}`;
-            const isExpanded = expandedItems[uid];
+            let parsedDescription = [];
+            
+            // Parse descriptions array if necessary
+            try {
+              if (item.description.startsWith('[')) {
+                parsedDescription = JSON.parse(item.description);
+              } else {
+                parsedDescription = [item.description];
+              }
+            } catch (e) {
+              parsedDescription = [item.description];
+            }
             
             return (
-              <div key={uid} className={`timeline-item relative flex w-full md:w-1/2 ${isLeft ? 'md:mr-auto md:pr-12 md:justify-end' : 'md:ml-auto md:pl-12'}`}>
-                {/* Visual Dot */}
-                <div className={`absolute top-0 w-4 h-4 bg-[#ffffff] border-2 border-brand-purple rounded-full z-10 ${isLeft ? 'left-[-7px] md:right-[-9px] md:left-auto' : 'left-[-7px]'}`}>
-                   <div className="absolute inset-0 m-auto w-1.5 h-1.5 bg-brand-purple rounded-full animate-ping opacity-50"></div>
+              <div key={uid} className="journey-card group relative pl-8 md:pl-12 border-l border-white/10 hover:border-brand-purple transition-colors duration-700 py-1">
+                
+                {/* Visual Glowing Ring */}
+                <div className="absolute left-[-5px] top-6 w-2 h-2 rounded-full bg-[#0a0c12] border-[2px] border-white/20 group-hover:border-brand-purple group-hover:bg-brand-purple group-hover:shadow-[0_0_15px_rgba(104,66,189,0.8)] transition-all duration-500 shadow-[0_0_0_6px_#0a0c12]"></div>
+                
+                {/* Year Badge & Type */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
+                  <span className="text-[11px] md:text-xs font-mono tracking-widest font-semibold text-white/80 bg-white/[0.03] px-4 py-1.5 rounded-full w-max border border-white/10 transition-colors group-hover:border-brand-purple/30 group-hover:bg-brand-purple/5">
+                    {item.start_date} — {item.current ? 'Present' : item.end_date}
+                  </span>
+                  {item.type === 'education' && (
+                    <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-white/40">Education</span>
+                  )}
                 </div>
 
-                {/* Content Card */}
-                <div 
-                  className={`w-full max-w-sm bg-[#ffffff] shadow-[0_20px_40px_rgba(104,66,189,0.06)] border-0 p-6 rounded-2xl cursor-pointer hover:shadow-[0_20px_40px_rgba(104,66,189,0.12)] transition-shadow focus-visible ${isLeft ? 'md:text-right' : ''}`}
-                  onClick={() => toggleExpand(uid)}
-                  tabIndex={0}
-                  role="button"
-                  aria-expanded={isExpanded}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      e.preventDefault();
-                      toggleExpand(uid);
-                    }
-                  }}
-                >
-                  <div className={`flex items-center gap-2 mb-2 ${isLeft ? 'md:justify-end' : ''}`}>
-                    <span className="text-xs text-brand-purple font-mono font-bold">
-                      {item.start_date} — {item.current ? 'Present' : item.end_date}
-                    </span>
-                    {item.type === 'education' && (
-                      <span className="text-xs bg-brand-purple/10 text-brand-purple px-2 py-0.5 rounded-full font-bold">Education</span>
-                    )}
-                  </div>
-                  
-                  <h3 className="text-2xl font-display font-bold text-[#292f3b] mb-1">{item.position}</h3>
-                  <p className="text-[#4f5d6d] text-sm font-medium">{item.company}</p>
-                  
-                  <div className={`mt-4 overflow-hidden transition-all duration-300 ${isExpanded ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}>
-                    <p className={`text-[#4f5d6d] text-sm leading-relaxed ${isLeft ? 'md:text-right' : ''}`}>
-                      {item.description}
+                {/* Role / Degree */}
+                <h3 className="text-3xl md:text-4xl lg:text-5xl font-display font-semibold text-white mb-2 transition-colors duration-500 tracking-tight leading-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-brand-purple/80">
+                  {item.position}
+                </h3>
+                
+                {/* Company / Institution */}
+                <h4 className="text-lg md:text-xl text-[#a7adbd] font-medium mb-6 flex items-center gap-3">
+                  {item.company}
+                  {item.current === 1 && <span className="w-2 h-2 rounded-full bg-brand-purple animate-pulse shadow-[0_0_10px_rgba(104,66,189,0.5)]"></span>}
+                </h4>
+
+                {/* Description (List or Paragraph) */}
+                <div className="text-[#a7adbd] text-[15px] leading-relaxed max-w-2xl space-y-3 mb-8 font-medium">
+                  {parsedDescription.map((desc: string, idx: number) => (
+                    <p key={idx} className="relative pl-0">
+                      {desc}
                     </p>
-                    
-                    {item.technologies && item.technologies.length > 0 && (
-                      <div className={`flex flex-wrap gap-2 mt-4 ${isLeft ? 'md:justify-end' : ''}`}>
-                        {item.technologies.map(t => (
-                          <span key={t} className="px-2 py-1 bg-[#d6e4f7] rounded-full text-[10px] text-[#455363] font-bold tracking-wider font-mono">
-                            {t}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                  
-                  <p className={`text-xs text-brand-purple/60 hover:text-brand-purple mt-4 font-bold transition-colors ${isLeft ? 'md:text-right' : ''}`}>
-                    {isExpanded ? 'Show less' : 'Click to expand'}
-                  </p>
+                  ))}
                 </div>
+
+                {/* Technologies */}
+                {item.technologies && item.technologies.length > 0 && (
+                  <div className="flex flex-wrap gap-2 pt-6">
+                    {item.technologies.map(t => (
+                      <span key={t} className="px-3.5 py-1.5 bg-white/[0.02] border border-white/[0.08] group-hover:border-white/20 transition-all duration-300 rounded-lg text-[11px] font-semibold text-white/70 uppercase tracking-[0.15em] hover:bg-brand-purple/10 hover:text-white">
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
             );
           })}

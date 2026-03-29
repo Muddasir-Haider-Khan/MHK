@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ScanSearch, Layers, Code2, Rocket, FolderCheck, Clock, Cpu } from 'lucide-react';
+import { ScanSearch, Layers, Code2, Rocket } from 'lucide-react';
 import { useProfile, useSiteSettings } from '@/hooks/useContent';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -26,58 +26,67 @@ export default function Process({
 
   useEffect(() => {
     let ctx = gsap.context(() => {
-      // Process animation
+      // Process animation - Cinematic Fade-up
       if (processRef.current) {
         ScrollTrigger.create({
           trigger: processRef.current,
           start: 'top 70%',
           onEnter: () => {
-            gsap.fromTo('.process-step', 
-              { opacity: 0, y: 50, scale: 0.9, rotation: -5 },
-              { opacity: 1, y: 0, scale: 1, rotation: 0, duration: 1, stagger: 0.15, ease: "elastic.out(1, 0.8)" }
-            );
-            gsap.fromTo('.process-connector',
+             // Connector lines draw animation
+             gsap.fromTo('.process-connector',
               { strokeDashoffset: 100 },
-              { strokeDashoffset: 0, duration: 1.2, stagger: 0.25, delay: 0.6, ease: "power2.inOut" }
+              { strokeDashoffset: 0, duration: 2, stagger: 0.3, ease: "power2.inOut" }
+            );
+
+            gsap.fromTo('.process-step', 
+              { opacity: 0, y: 50, scale: 0.98 },
+              { opacity: 1, y: 0, scale: 1, duration: 1.2, stagger: 0.2, ease: "power3.out" }
             );
           },
           once: true
         });
-        
-        // Tilt effect
+
+        // Deep 3D Magnetic Hover
         document.querySelectorAll('.process-step').forEach((card: any) => {
           card.addEventListener('mousemove', (e: MouseEvent) => {
             const rect = card.getBoundingClientRect();
             const x = (e.clientX - rect.left) / rect.width - 0.5;
             const y = (e.clientY - rect.top) / rect.height - 0.5;
             gsap.to(card, {
-              rotationY: x * 10,
-              rotationX: -y * 10,
-              transformPerspective: 800,
+              rotationY: x * 20,
+              rotationX: -y * 20,
+              transformPerspective: 1200,
               duration: 0.4,
               ease: "power2.out"
             });
+            // Dynamic inner glow
+            gsap.to(card.querySelector('.glare'), {
+               x: x * 100,
+               y: y * 100,
+               opacity: 0.15,
+               duration: 0.4 
+            });
           });
           card.addEventListener('mouseleave', () => {
-            gsap.to(card, { rotationX: 0, rotationY: 0, duration: 0.6, ease: "elastic.out(1, 0.5)" });
+            gsap.to(card, { rotationX: 0, rotationY: 0, duration: 0.8, ease: "elastic.out(1, 0.4)" });
+            gsap.to(card.querySelector('.glare'), { opacity: 0, duration: 0.8 });
           });
         });
       }
 
-
-
-      // Trust Counters animation
+      // Massive Typography Counters (Dark Mode)
       if (trustRef.current) {
         ScrollTrigger.create({
           trigger: trustRef.current,
-          start: 'top 70%',
+          start: 'top 75%',
           onEnter: () => {
             document.querySelectorAll('.trust-counter').forEach((counter: any, i) => {
               gsap.fromTo(counter, 
-                { opacity: 0, y: 50 },
-                { opacity: 1, y: 0, duration: 0.8, delay: i * 0.2, ease: "back.out(1.5)" }
+                { opacity: 0, y: 30 },
+                { opacity: 1, y: 0, duration: 1, delay: i * 0.15, ease: "expo.out" }
               );
             });
+
             document.querySelectorAll('.counter-value').forEach((el: any) => {
               const target = parseInt(el.dataset.target) || 0;
               const obj = { val: 0 };
@@ -94,7 +103,7 @@ export default function Process({
           once: true
         });
       }
-    });
+    }, [processRef, trustRef]);
 
     return () => ctx.revert();
   }, []);
@@ -102,147 +111,156 @@ export default function Process({
   return (
     <>
       {/* ========== 6. THINKING PROCESS ========== */}
-      <section id="process" className="pt-16 pb-16 bg-transparent relative overflow-hidden" ref={processRef}>
-        <div className="absolute top-1/3 right-0 w-[30vw] h-[30vw] bg-brand-purple/10 rounded-full blur-[150px] pointer-events-none"></div>
-        <div className="absolute bottom-0 left-0 w-[20vw] h-[20vw] bg-blue-300/10 rounded-full blur-[100px] pointer-events-none"></div>
+      <section id="process" className="pt-24 pb-32 bg-[#0a0c12] relative overflow-hidden" ref={processRef}>
+        {/* Glow Effects */}
+        <div className="absolute top-1/2 left-0 w-[40vw] h-[40vw] bg-brand-purple/10 rounded-full blur-[200px] pointer-events-none -translate-x-1/2"></div>
+        <div className="absolute bottom-0 right-0 w-[30vw] h-[30vw] bg-blue-500/10 rounded-full blur-[150px] pointer-events-none translate-x-1/3"></div>
 
-        {/* Minimalist Grid Line Scaffold (Desktop) */}
-        <div className="absolute inset-0 pointer-events-none hidden md:grid grid-cols-4 gap-4 px-12 z-0 opacity-[0.08]">
-           <div className="border-l border-[#a7adbd]"></div>
-           <div className="border-l border-[#a7adbd]"></div>
-           <div className="border-l border-[#a7adbd]"></div>
-           <div className="border-l border-r border-[#a7adbd]"></div>
-        </div>
-
-        <div className="px-4 md:px-12 mb-20 max-w-7xl mx-auto relative z-10">
-          <h2 className="text-5xl md:text-7xl font-display font-bold text-[#292f3b] tracking-tighter" style={{ letterSpacing: '-0.04em' }}>
-            How I <span className="text-brand-purple">Think</span>
+        <div className="px-6 md:px-12 mb-20 max-w-7xl mx-auto relative z-10 text-center">
+          <p className="text-xs md:text-sm uppercase tracking-[0.3em] text-[#a7adbd] font-semibold mb-4 text-brand-purple">Methodology</p>
+          <h2 className="text-4xl md:text-6xl lg:text-7xl font-display font-semibold text-white tracking-tight">
+            How I Think
           </h2>
         </div>
         
-        <div className="max-w-6xl mx-auto px-4 md:px-12">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 relative">
-            {/* Animated connectors (desktop) */}
-            <svg className="hidden md:block absolute top-1/2 left-0 w-full h-4 -translate-y-1/2 z-0 opacity-40" preserveAspectRatio="none">
-              <line x1="12.5%" y1="50%" x2="37.5%" y2="50%" stroke="url(#connector-grad)" strokeWidth="2" className="process-connector" strokeDasharray="100" strokeDashoffset="0" />
-              <line x1="37.5%" y1="50%" x2="62.5%" y2="50%" stroke="url(#connector-grad)" strokeWidth="2" className="process-connector" strokeDasharray="100" strokeDashoffset="0" />
-              <line x1="62.5%" y1="50%" x2="87.5%" y2="50%" stroke="url(#connector-grad)" strokeWidth="2" className="process-connector" strokeDasharray="100" strokeDashoffset="0" />
+        <div className="max-w-7xl mx-auto px-6 md:px-12">
+          {/* Dark Glass Card Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative pb-16">
+            
+            {/* Desktop Connectors */}
+            <svg className="hidden lg:block absolute top-[100px] left-[12.5%] w-[75%] h-4 z-0 opacity-40" preserveAspectRatio="none">
+              <line x1="0%" y1="50%" x2="33.3%" y2="50%" stroke="url(#connector-grad-dark)" strokeWidth="2" className="process-connector" strokeDasharray="100" strokeDashoffset="0" />
+              <line x1="33.3%" y1="50%" x2="66.6%" y2="50%" stroke="url(#connector-grad-dark)" strokeWidth="2" className="process-connector" strokeDasharray="100" strokeDashoffset="0" />
+              <line x1="66.6%" y1="50%" x2="100%" y2="50%" stroke="url(#connector-grad-dark)" strokeWidth="2" className="process-connector" strokeDasharray="100" strokeDashoffset="0" />
               <defs>
-                <linearGradient id="connector-grad">
-                  <stop offset="0%" stopColor="#8b5cf6" />
-                  <stop offset="100%" stopColor="#6366f1" />
+                <linearGradient id="connector-grad-dark">
+                  <stop offset="0%" stopColor="#ffffff" stopOpacity="0.1" />
+                  <stop offset="50%" stopColor="#8b5cf6" stopOpacity="0.8" />
+                  <stop offset="100%" stopColor="#ffffff" stopOpacity="0.1" />
                 </linearGradient>
               </defs>
             </svg>
             
-            {/* Premium Glassmorphic Cards */}
-            <div className="process-step group relative p-8 md:p-10 rounded-[2.5rem] bg-[#ffffff]/60 saturate-150 backdrop-blur-3xl border border-[#ffffff] shadow-[0_8px_30px_rgba(104,66,189,0.04)] hover:shadow-[0_20px_60px_rgba(104,66,189,0.1)] transition-all duration-700 ease-[cubic-bezier(0.17,0.67,0.21,1)] hover:-translate-y-4 overflow-hidden">
-              <span className="absolute -bottom-6 -right-6 text-[10rem] font-display font-black text-brand-purple/[0.03] group-hover:text-brand-purple/[0.08] transition-colors duration-700 pointer-events-none z-0 tracking-tighter">1</span>
+            {/* Card 1 */}
+            <div className="process-step group flex flex-col p-10 rounded-[2rem] bg-white/[0.02] border border-white/5 hover:border-brand-purple/40 hover:bg-white/[0.04] transition-all duration-500 overflow-hidden relative z-10">
+              {/* Fake Glare Pointer */}
+              <div className="glare absolute top-0 left-0 w-full h-full bg-gradient-radial from-brand-purple/20 to-transparent opacity-0 pointer-events-none rounded-[2rem] scale-150 transform-gpu"></div>
+
+              <span className="text-[11px] font-mono tracking-widest text-brand-purple mb-8 uppercase font-semibold">Phase 01</span>
               
-              <div className="relative z-10 flex items-center justify-between mb-12">
-                <div className="w-16 h-16 rounded-full bg-[#f5f6ff] group-hover:bg-brand-purple transition-all duration-500 flex items-center justify-center border border-[#e1e8fc] group-hover:border-transparent group-hover:scale-110 shadow-sm">
-                   <ScanSearch className="w-7 h-7 text-[#a7adbd] group-hover:text-white transition-colors duration-500" />
+              <div className="mb-8 relative">
+                <div className="w-16 h-16 rounded-2xl bg-white/[0.03] border border-white/10 group-hover:border-brand-purple/50 transition-colors flex items-center justify-center shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]">
+                   <ScanSearch className="w-7 h-7 text-white group-hover:text-brand-purple transition-colors" strokeWidth={1.5} />
                 </div>
-                <div className="w-12 h-px bg-[#a7adbd]/30 group-hover:bg-brand-purple/50 transition-colors duration-500 hidden lg:block"></div>
               </div>
 
-              <h3 className="text-2xl font-display font-bold text-[#292f3b] mb-4 relative z-10 tracking-tight">Problem</h3>
-              <p className="text-[#4f5d6d] text-sm leading-relaxed relative z-10 font-medium">Deep dive into the core challenge. Understanding data, requirements, and hidden patterns.</p>
+              <h3 className="text-2xl font-semibold text-white mb-3 tracking-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-brand-purple">Discover</h3>
+              <p className="text-[#a7adbd] text-[15px] leading-relaxed font-medium">
+                Deep dive into your data, business requirements, and unearthing hidden architectural patterns.
+              </p>
             </div>
             
-            <div className="process-step group relative p-8 md:p-10 rounded-[2.5rem] bg-[#ffffff]/60 saturate-150 backdrop-blur-3xl border border-[#ffffff] shadow-[0_8px_30px_rgba(104,66,189,0.04)] hover:shadow-[0_20px_60px_rgba(104,66,189,0.1)] transition-all duration-700 ease-[cubic-bezier(0.17,0.67,0.21,1)] hover:-translate-y-4 overflow-hidden">
-              <span className="absolute -bottom-6 -right-6 text-[10rem] font-display font-black text-brand-purple/[0.03] group-hover:text-brand-purple/[0.08] transition-colors duration-700 pointer-events-none z-0 tracking-tighter">2</span>
+            {/* Card 2 */}
+            <div className="process-step group flex flex-col p-10 rounded-[2rem] bg-white/[0.02] border border-white/5 hover:border-brand-purple/40 hover:bg-white/[0.04] transition-all duration-500 overflow-hidden relative z-10 lg:mt-8">
+              <div className="glare absolute top-0 left-0 w-full h-full bg-gradient-radial from-brand-purple/20 to-transparent opacity-0 pointer-events-none rounded-[2rem] scale-150 transform-gpu"></div>
+
+              <span className="text-[11px] font-mono tracking-widest text-brand-purple mb-8 uppercase font-semibold">Phase 02</span>
               
-              <div className="relative z-10 flex items-center justify-between mb-12">
-                <div className="w-16 h-16 rounded-full bg-[#f5f6ff] group-hover:bg-brand-purple transition-all duration-500 flex items-center justify-center border border-[#e1e8fc] group-hover:border-transparent group-hover:scale-110 shadow-sm">
-                   <Layers className="w-7 h-7 text-[#a7adbd] group-hover:text-white transition-colors duration-500" />
+              <div className="mb-8 relative">
+                <div className="w-16 h-16 rounded-2xl bg-white/[0.03] border border-white/10 group-hover:border-brand-purple/50 transition-colors flex items-center justify-center shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]">
+                   <Layers className="w-7 h-7 text-white group-hover:text-brand-purple transition-colors" strokeWidth={1.5} />
                 </div>
-                <div className="w-12 h-px bg-[#a7adbd]/30 group-hover:bg-brand-purple/50 transition-colors duration-500 hidden lg:block"></div>
               </div>
 
-              <h3 className="text-2xl font-display font-bold text-[#292f3b] mb-4 relative z-10 tracking-tight">Architecture</h3>
-              <p className="text-[#4f5d6d] text-sm leading-relaxed relative z-10 font-medium">Selecting the right models, tech stack, and designing for scalability from day one.</p>
+              <h3 className="text-2xl font-semibold text-white mb-3 tracking-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-brand-purple">Architect</h3>
+              <p className="text-[#a7adbd] text-[15px] leading-relaxed font-medium">
+                Drafting system design, structured data modeling, and laying robust, scalable foundational blocks.
+              </p>
             </div>
             
-            <div className="process-step group relative p-8 md:p-10 rounded-[2.5rem] bg-[#ffffff]/60 saturate-150 backdrop-blur-3xl border border-[#ffffff] shadow-[0_8px_30px_rgba(104,66,189,0.04)] hover:shadow-[0_20px_60px_rgba(104,66,189,0.1)] transition-all duration-700 ease-[cubic-bezier(0.17,0.67,0.21,1)] hover:-translate-y-4 overflow-hidden">
-              <span className="absolute -bottom-6 -right-6 text-[10rem] font-display font-black text-brand-purple/[0.03] group-hover:text-brand-purple/[0.08] transition-colors duration-700 pointer-events-none z-0 tracking-tighter">3</span>
+            {/* Card 3 */}
+            <div className="process-step group flex flex-col p-10 rounded-[2rem] bg-white/[0.02] border border-white/5 hover:border-brand-purple/40 hover:bg-white/[0.04] transition-all duration-500 overflow-hidden relative z-10 lg:mt-16">
+              <div className="glare absolute top-0 left-0 w-full h-full bg-gradient-radial from-brand-purple/20 to-transparent opacity-0 pointer-events-none rounded-[2rem] scale-150 transform-gpu"></div>
+
+              <span className="text-[11px] font-mono tracking-widest text-brand-purple mb-8 uppercase font-semibold">Phase 03</span>
               
-              <div className="relative z-10 flex items-center justify-between mb-12">
-                <div className="w-16 h-16 rounded-full bg-[#f5f6ff] group-hover:bg-brand-purple transition-all duration-500 flex items-center justify-center border border-[#e1e8fc] group-hover:border-transparent group-hover:scale-110 shadow-sm">
-                   <Code2 className="w-7 h-7 text-[#a7adbd] group-hover:text-white transition-colors duration-500" />
+              <div className="mb-8 relative">
+                <div className="w-16 h-16 rounded-2xl bg-white/[0.03] border border-white/10 group-hover:border-brand-purple/50 transition-colors flex items-center justify-center shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]">
+                   <Code2 className="w-7 h-7 text-white group-hover:text-brand-purple transition-colors" strokeWidth={1.5} />
                 </div>
-                <div className="w-12 h-px bg-[#a7adbd]/30 group-hover:bg-brand-purple/50 transition-colors duration-500 hidden lg:block"></div>
               </div>
 
-              <h3 className="text-2xl font-display font-bold text-[#292f3b] mb-4 relative z-10 tracking-tight">Build</h3>
-              <p className="text-[#4f5d6d] text-sm leading-relaxed relative z-10 font-medium">Clean, efficient code. Blending backend logic with stunning frontend interactivity.</p>
+              <h3 className="text-2xl font-semibold text-white mb-3 tracking-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-brand-purple">Engineer</h3>
+              <p className="text-[#a7adbd] text-[15px] leading-relaxed font-medium">
+                Executing clean, responsive, and highly optimized production-grade code with zero compromises.
+              </p>
             </div>
             
-            <div className="process-step group relative p-8 md:p-10 rounded-[2.5rem] bg-[#ffffff]/60 saturate-150 backdrop-blur-3xl border border-[#ffffff] shadow-[0_8px_30px_rgba(104,66,189,0.04)] hover:shadow-[0_20px_60px_rgba(104,66,189,0.1)] transition-all duration-700 ease-[cubic-bezier(0.17,0.67,0.21,1)] hover:-translate-y-4 overflow-hidden">
-              <span className="absolute -bottom-6 -right-6 text-[10rem] font-display font-black text-brand-purple/[0.03] group-hover:text-brand-purple/[0.08] transition-colors duration-700 pointer-events-none z-0 tracking-tighter">4</span>
+            {/* Card 4 */}
+            <div className="process-step group flex flex-col p-10 rounded-[2rem] bg-white/[0.02] border border-white/5 hover:border-brand-purple/40 hover:bg-white/[0.04] transition-all duration-500 overflow-hidden relative z-10 lg:mt-24">
+              <div className="glare absolute top-0 left-0 w-full h-full bg-gradient-radial from-brand-purple/20 to-transparent opacity-0 pointer-events-none rounded-[2rem] scale-150 transform-gpu"></div>
+
+              <span className="text-[11px] font-mono tracking-widest text-brand-purple mb-8 uppercase font-semibold">Phase 04</span>
               
-              <div className="relative z-10 flex items-center justify-between mb-12">
-                <div className="w-16 h-16 rounded-full bg-[#f5f6ff] group-hover:bg-brand-purple transition-all duration-500 flex items-center justify-center border border-[#e1e8fc] group-hover:border-transparent group-hover:scale-110 shadow-sm">
-                   <Rocket className="w-7 h-7 text-[#a7adbd] group-hover:text-white transition-colors duration-500" />
+              <div className="mb-8 relative">
+                <div className="w-16 h-16 rounded-2xl bg-white/[0.03] border border-white/10 group-hover:border-brand-purple/50 transition-colors flex items-center justify-center shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]">
+                   <Rocket className="w-7 h-7 text-white group-hover:text-brand-purple transition-colors" strokeWidth={1.5} />
                 </div>
               </div>
 
-              <h3 className="text-2xl font-display font-bold text-[#292f3b] mb-4 relative z-10 tracking-tight">Optimize</h3>
-              <p className="text-[#4f5d6d] text-sm leading-relaxed relative z-10 font-medium">Performance tuning, testing, CI/CD pipelines, and real-world validation.</p>
+              <h3 className="text-2xl font-semibold text-white mb-3 tracking-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-brand-purple">Deploy</h3>
+              <p className="text-[#a7adbd] text-[15px] leading-relaxed font-medium">
+                Setting up seamless CI/CD pipelines, live deployment, and meticulous post-launch optimization.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
+      {/* ========== 8. IMPACT SECTION ========== */}
+      <section id="trust" className="py-24 bg-[#0a0c12] relative overflow-hidden border-t border-white/5" ref={trustRef}>
+        
+        {/* Deep Gradient Void */}
+        <div className="absolute top-0 right-1/4 w-[50vw] h-[50vw] bg-brand-purple/5 rounded-full blur-[150px] pointer-events-none"></div>
 
-
-      {/* ========== 8. TRUST SECTION ========== */}
-      <section id="trust" className="py-20 bg-transparent relative overflow-hidden" ref={trustRef}>
-        <div className="absolute top-1/4 left-0 w-[30vw] h-[30vw] bg-brand-purple/10 rounded-full blur-[120px] pointer-events-none"></div>
-        <div className="absolute bottom-0 right-0 w-[25vw] h-[25vw] bg-blue-300/10 rounded-full blur-[100px] pointer-events-none"></div>
-
-        <div className="max-w-6xl mx-auto px-4 md:px-12">
+        <div className="max-w-6xl mx-auto px-6 md:px-12 relative z-10">
           <div className="text-center mb-20">
-            <h2 className="text-4xl md:text-6xl font-display font-bold text-[#292f3b] tracking-tighter" style={{ letterSpacing: '-0.04em' }}>
-              Impact at a <span className="text-brand-purple">Glance</span>
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-display font-semibold text-white tracking-tight">
+              Impact at a Glance
             </h2>
           </div>
 
-          <div className="flex flex-col md:flex-row justify-between items-center gap-24 md:gap-8 w-full relative">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-0 relative">
             
-            {/* Massive Background Text Elements */}
-            <div className="absolute inset-0 pointer-events-none flex justify-between items-center z-0 overflow-hidden hidden lg:flex">
-              <span className="text-[18rem] font-display font-bold text-brand-purple/[0.02] -ml-20 tracking-tighter">25+</span>
-              <span className="text-[18rem] font-display font-bold text-brand-purple/[0.02] tracking-tighter">04+</span>
-              <span className="text-[18rem] font-display font-bold text-brand-purple/[0.02] -mr-20 tracking-tighter">40+</span>
+            <div className="trust-counter flex flex-col items-center justify-center text-center group py-8 relative">
+               <div className="relative overflow-hidden mb-4">
+                 {/* Massive number in white with opacity */}
+                 <span className="counter-value text-7xl md:text-8xl lg:text-9xl font-display font-semibold text-white opacity-90 tracking-tight group-hover:text-brand-purple transition-colors duration-700" data-target={settings?.projects_completed || "25"}>0</span>
+               </div>
+               <p className="text-[11px] md:text-xs uppercase tracking-[0.3em] font-bold text-[#a7adbd] mb-2">Projects Delivered</p>
+               <p className="text-white/30 text-sm hidden md:block">End-to-end execution</p>
+               
+               {/* Minimalist Dark Divider */}
+               <div className="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 w-px h-32 bg-gradient-to-b from-transparent via-white/10 to-transparent"></div>
             </div>
 
-            <div className="trust-counter flex-1 flex flex-col items-center justify-center relative z-10 group w-full">
-              <div className="w-full flex flex-col items-center justify-center py-10 border border-transparent hover:border-[#a7adbd]/20 rounded-[3rem] transition-all duration-700 hover:bg-[#ffffff]/50 backdrop-blur-xl hover:shadow-[0_20px_40px_rgba(104,66,189,0.04)]">
-                <span className="counter-value text-7xl md:text-8xl lg:text-9xl font-display font-medium text-[#292f3b] tracking-tighter group-hover:text-brand-purple transition-colors duration-500 mb-6" data-target={settings?.projects_completed || "25"}>0</span>
-                <p className="text-xs md:text-sm uppercase tracking-[0.2em] font-bold text-[#4f5d6d]">Projects Delivered</p>
-                <p className="text-[#a7adbd] text-xs mt-3 font-mono">Web / AI / SaaS</p>
-              </div>
+            <div className="trust-counter flex flex-col items-center justify-center text-center group py-8 relative">
+               <div className="relative overflow-hidden mb-4">
+                 <span className="counter-value text-7xl md:text-8xl lg:text-9xl font-display font-semibold text-white opacity-90 tracking-tight group-hover:text-brand-purple transition-colors duration-700" data-target={settings?.years_experience || "4"}>0</span>
+               </div>
+               <p className="text-[11px] md:text-xs uppercase tracking-[0.3em] font-bold text-[#a7adbd] mb-2">Years Experience</p>
+               <p className="text-white/30 text-sm hidden md:block">Continuous learning</p>
+
+               {/* Minimalist Dark Divider */}
+               <div className="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 w-px h-32 bg-gradient-to-b from-transparent via-white/10 to-transparent"></div>
             </div>
 
-            <div className="hidden md:block w-px h-32 bg-gradient-to-b from-transparent via-[#a7adbd]/30 to-transparent"></div>
-
-            <div className="trust-counter flex-1 flex flex-col items-center justify-center relative z-10 group w-full">
-              <div className="w-full flex flex-col items-center justify-center py-10 border border-transparent hover:border-[#a7adbd]/20 rounded-[3rem] transition-all duration-700 hover:bg-[#ffffff]/50 backdrop-blur-xl hover:shadow-[0_20px_40px_rgba(104,66,189,0.04)]">
-                <span className="counter-value text-7xl md:text-8xl lg:text-9xl font-display font-medium text-[#292f3b] tracking-tighter group-hover:text-brand-purple transition-colors duration-500 mb-6" data-target={settings?.years_experience || "4"}>0</span>
-                <p className="text-xs md:text-sm uppercase tracking-[0.2em] font-bold text-[#4f5d6d]">Years Experience</p>
-                <p className="text-[#a7adbd] text-xs mt-3 font-mono">Continuous Shipping</p>
-              </div>
-            </div>
-
-            <div className="hidden md:block w-px h-32 bg-gradient-to-b from-transparent via-[#a7adbd]/30 to-transparent"></div>
-
-            <div className="trust-counter flex-1 flex flex-col items-center justify-center relative z-10 group w-full">
-              <div className="w-full flex flex-col items-center justify-center py-10 border border-transparent hover:border-[#a7adbd]/20 rounded-[3rem] transition-all duration-700 hover:bg-[#ffffff]/50 backdrop-blur-xl hover:shadow-[0_20px_40px_rgba(104,66,189,0.04)]">
-                <span className="counter-value text-7xl md:text-8xl lg:text-9xl font-display font-medium text-[#292f3b] tracking-tighter group-hover:text-brand-purple transition-colors duration-500 mb-6" data-target={settings?.technologies_used || "40"}>0</span>
-                <p className="text-xs md:text-sm uppercase tracking-[0.2em] font-bold text-[#4f5d6d]">Core Tech</p>
-                <p className="text-[#a7adbd] text-xs mt-3 font-mono">Mastered Stack</p>
-              </div>
+            <div className="trust-counter flex flex-col items-center justify-center text-center group py-8">
+               <div className="relative overflow-hidden mb-4">
+                 <span className="counter-value text-7xl md:text-8xl lg:text-9xl font-display font-semibold text-white opacity-90 tracking-tight group-hover:text-brand-purple transition-colors duration-700" data-target={settings?.technologies_used || "40"}>0</span>
+               </div>
+               <p className="text-[11px] md:text-xs uppercase tracking-[0.3em] font-bold text-[#a7adbd] mb-2">Core Tech</p>
+               <p className="text-white/30 text-sm hidden md:block">Mastered stack</p>
             </div>
 
           </div>

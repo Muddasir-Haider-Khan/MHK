@@ -23,7 +23,7 @@ async function seed() {
         technologies: JSON.stringify(['Python', 'Next.js', 'PyTorch', 'LangChain']),
         role: 'AI Innovation Lead',
         outcome: 'Automated 70% of research workflows.',
-        link: 'https://altertec.ai',
+        link: 'https://altertecai.com/',
         github_link: '',
         featured: 1,
         sort_order: 1,
