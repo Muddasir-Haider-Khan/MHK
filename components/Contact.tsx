@@ -68,7 +68,7 @@ export default function Contact({ profile: initialProfile }: { profile?: any }) 
          <div className="border-l border-r border-[#a7adbd]"></div>
       </div>
       
-      <div className="relative z-10 w-full py-32 max-w-7xl mx-auto flex flex-col md:flex-row gap-16 md:gap-8 justify-between">
+      <div className="relative z-10 w-full py-16 max-w-7xl mx-auto flex flex-col md:flex-row gap-16 md:gap-8 justify-between">
         {/* Left column: Title & Info */}
         <div className="flex-1 max-w-xl md:sticky md:top-40 self-start">
           <h2 className="opacity-0 text-6xl md:text-[6rem] font-display font-bold leading-none mb-4 contact-title text-[#292f3b] tracking-tighter" style={{ letterSpacing: '-0.04em' }}>

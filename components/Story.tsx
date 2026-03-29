@@ -35,7 +35,7 @@ export default function Story({ narrativeRaw }: { narrativeRaw?: string }) {
     }
 
     let ctx = gsap.context(() => {
-      const scrollDistance = sentences.length * 60; // 60vh per sentence
+      const scrollDistance = sentences.length * 25; // 25vh per sentence
 
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -94,7 +94,7 @@ export default function Story({ narrativeRaw }: { narrativeRaw?: string }) {
   }
 
   return (
-    <section id="story" className="relative bg-[#f5f6ff]" ref={storyRef}>
+    <section id="story" className="relative bg-transparent" ref={storyRef}>
       <div className="h-screen flex items-center justify-center px-4 relative overflow-hidden" ref={containerRef}>
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[50vw] h-[50vw] bg-brand-purple/5 rounded-full blur-[140px] pointer-events-none"></div>
         

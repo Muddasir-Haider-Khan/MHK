@@ -102,7 +102,7 @@ export default function Process({
   return (
     <>
       {/* ========== 6. THINKING PROCESS ========== */}
-      <section id="process" className="py-32 bg-[#ecf0ff] relative overflow-hidden" ref={processRef}>
+      <section id="process" className="pt-16 pb-16 bg-transparent relative overflow-hidden" ref={processRef}>
         <div className="absolute top-1/3 right-0 w-[30vw] h-[30vw] bg-brand-purple/10 rounded-full blur-[150px] pointer-events-none"></div>
         <div className="absolute bottom-0 left-0 w-[20vw] h-[20vw] bg-blue-300/10 rounded-full blur-[100px] pointer-events-none"></div>
 
@@ -197,7 +197,7 @@ export default function Process({
 
 
       {/* ========== 8. TRUST SECTION ========== */}
-      <section id="trust" className="py-40 bg-[#f5f6ff] relative overflow-hidden" ref={trustRef}>
+      <section id="trust" className="py-20 bg-transparent relative overflow-hidden" ref={trustRef}>
         <div className="absolute top-1/4 left-0 w-[30vw] h-[30vw] bg-brand-purple/10 rounded-full blur-[120px] pointer-events-none"></div>
         <div className="absolute bottom-0 right-0 w-[25vw] h-[25vw] bg-blue-300/10 rounded-full blur-[100px] pointer-events-none"></div>
 

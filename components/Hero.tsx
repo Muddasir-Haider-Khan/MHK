@@ -46,7 +46,7 @@ export default function Hero({ profile }: { profile?: any }) {
   return (
     <section 
       ref={containerRef}
-      className="min-h-screen flex flex-col justify-center items-center relative px-4 overflow-hidden bg-[#f5f6ff]"
+      className="min-h-screen flex flex-col justify-center items-center relative px-4 overflow-hidden bg-transparent"
     >
       {/* Mesh Gradients / Tonal Layers */}
       <div className="hero-mesh hero-mesh-1 absolute top-[20%] left-[20%] -translate-x-1/2 -translate-y-1/2 w-[70vw] lg:w-[50vw] h-[70vw] lg:h-[50vw] bg-brand-purple/15 rounded-full blur-[120px] pointer-events-none"></div>

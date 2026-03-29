@@ -4,6 +4,7 @@ import Navbar from "@/components/Navbar";
 import RealtimeProvider from "@/components/RealtimeProvider";
 import SmoothScrolling from "@/components/SmoothScrolling";
 import Cursor from "@/components/Cursor";
+
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 

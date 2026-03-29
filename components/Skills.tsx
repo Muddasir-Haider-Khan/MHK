@@ -57,6 +57,15 @@ export default function Skills({ initialSkills }: { initialSkills?: Skill[] }) {
 
   const skills = Array.isArray(fetchedSkills) ? fetchedSkills : (Array.isArray(initialSkills) ? initialSkills : []);
 
+  useEffect(() => {
+    if (skills.length > 0 && !activePillar) {
+      // Find the first category from actual skills and map to pillar
+      const firstSkill = skills[0];
+      const pillar = categoryToPillar[firstSkill.category] || 'Intelligence';
+      setActivePillar(pillar);
+    }
+  }, [skills]);
+
   const categoryToPillar: Record<string, string> = {
     'AI/ML': 'Intelligence',
     'Frontend': 'Visuals',
@@ -81,14 +90,13 @@ export default function Skills({ initialSkills }: { initialSkills?: Skill[] }) {
   useEffect(() => {
     let ctx = gsap.context(() => {
       gsap.from('.skills-accordion-container > div', {
-        opacity: 0,
-        y: 40,
-        duration: 1,
+        y: 30,
+        duration: 0.8,
         stagger: 0.1,
         ease: "power3.out",
         scrollTrigger: {
           trigger: containerRef.current,
-          start: "top 70%",
+          start: "top bottom",
         }
       });
     }, containerRef);
@@ -96,16 +104,24 @@ export default function Skills({ initialSkills }: { initialSkills?: Skill[] }) {
   }, [skills]);
 
   return (
-    <section id="skills" className="pt-4 pb-12 relative overflow-hidden bg-[#f5f6ff] scroll-mt-32" ref={containerRef}>
+    <section id="skills" className="pt-24 pb-16 relative overflow-hidden bg-transparent scroll-mt-28" ref={containerRef}>
       <div className="absolute top-[10%] right-0 w-[40vw] h-[40vw] bg-brand-purple/5 rounded-full blur-[140px] pointer-events-none"></div>
 
-      <div className="px-4 md:px-12 mb-2 max-w-7xl mx-auto relative z-10">
-        <h2 className="text-5xl md:text-7xl font-display font-bold text-[#292f3b] tracking-tighter leading-tight" style={{ letterSpacing: '-0.04em' }}>
+      {/* Grid Lines */}
+      <div className="absolute inset-0 pointer-events-none hidden md:grid grid-cols-4 px-12 z-0 opacity-[0.05]">
+         <div className="border-l border-[#a7adbd]"></div>
+         <div className="border-l border-[#a7adbd]"></div>
+         <div className="border-l border-[#a7adbd]"></div>
+         <div className="border-l border-r border-[#a7adbd]"></div>
+      </div>
+
+      <div className="px-4 md:px-12 mb-16 max-w-7xl mx-auto relative z-10">
+        <h2 className="text-5xl md:text-8xl font-display font-bold text-[#292f3b] tracking-tighter leading-[0.9]" style={{ letterSpacing: '-0.04em' }}>
            Technical <span className="text-brand-purple italic">Arsenal</span>
         </h2>
       </div>
 
-      <div className="max-w-[1400px] w-full mx-auto px-4 md:px-12 relative z-10 flex flex-col lg:flex-row h-[120vh] lg:h-[75vh] gap-3 md:gap-4 pb-12 items-stretch skills-accordion-container overflow-hidden mt-0">
+      <div className="max-w-[1400px] w-full mx-auto px-4 md:px-12 relative z-10 flex flex-col lg:flex-row h-[140vh] lg:h-[70vh] gap-4 md:gap-5 pb-8 items-stretch skills-accordion-container overflow-hidden">
         {pillarNames.map((pillarName) => {
           const isActive = activePillar === pillarName;
           const info = pillarInfo[pillarName];
@@ -115,8 +131,8 @@ export default function Skills({ initialSkills }: { initialSkills?: Skill[] }) {
             <div
               key={pillarName}
               onMouseEnter={() => setActivePillar(pillarName)}
-              className={`group relative overflow-hidden rounded-[2.5rem] transition-all duration-700 ease-[cubic-bezier(0.19,1,0.22,1)] cursor-pointer shadow-[0_20px_40px_rgba(104,66,189,0.06)] bg-[#ffffff] border border-[#a7adbd]/10`}
-              style={{ flex: isActive ? 6 : 1 }}
+              className={`group relative overflow-hidden rounded-[2.5rem] transition-all duration-700 ease-[cubic-bezier(0.19,1,0.22,1)] cursor-pointer shadow-[0_20px_40px_rgba(104,66,189,0.06)] bg-[#ffffff] border border-[#a7adbd]/10 min-w-[70px] lg:min-w-[80px]`}
+              style={{ flex: isActive ? 10 : 1 }}
             >
               <div className={`absolute inset-0 p-8 md:p-12 flex flex-col transition-all duration-700 ${isActive ? 'opacity-100 delay-300 translate-y-0' : 'opacity-0 translate-y-8 pointer-events-none'}`}>
                 <div className="mb-6">
@@ -150,8 +166,8 @@ export default function Skills({ initialSkills }: { initialSkills?: Skill[] }) {
 
               <div className={`absolute inset-0 flex items-center justify-center transition-opacity duration-700 pointer-events-none ${isActive ? 'opacity-0 delay-0' : 'opacity-100 delay-300'}`}>
                  <div className="lg:-rotate-90 origin-center flex flex-col items-center gap-4">
-                   <DynamicIcon name={info.icon} className="w-4 h-4 text-brand-purple/40 group-hover:text-brand-purple transition-colors" />
-                   <h3 className="text-[#292f3b]/30 font-display font-bold text-[10px] md:text-xs uppercase tracking-[0.4em] whitespace-nowrap group-hover:text-brand-purple/60 transition-colors">
+                   <DynamicIcon name={info.icon} className="w-5 h-5 text-brand-purple/40 group-hover:text-brand-purple transition-colors" />
+                   <h3 className="text-[#292f3b]/30 font-display font-bold text-[11px] md:text-xs uppercase tracking-[0.5em] whitespace-nowrap group-hover:text-brand-purple/60 transition-colors">
                      {pillarName}
                    </h3>
                  </div>
