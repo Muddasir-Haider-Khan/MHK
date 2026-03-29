@@ -116,7 +116,7 @@ export default function Process({
 
         <div className="px-4 md:px-12 mb-20 max-w-7xl mx-auto relative z-10">
           <h2 className="text-5xl md:text-7xl font-display font-bold text-[#292f3b] tracking-tighter" style={{ letterSpacing: '-0.04em' }}>
-            How I <span className="text-brand-purple italic">Think</span>
+            How I <span className="text-brand-purple">Think</span>
           </h2>
         </div>
         
@@ -204,7 +204,7 @@ export default function Process({
         <div className="max-w-6xl mx-auto px-4 md:px-12">
           <div className="text-center mb-20">
             <h2 className="text-4xl md:text-6xl font-display font-bold text-[#292f3b] tracking-tighter" style={{ letterSpacing: '-0.04em' }}>
-              Impact at a <span className="text-brand-purple italic">Glance</span>
+              Impact at a <span className="text-brand-purple">Glance</span>
             </h2>
           </div>
 

@@ -72,7 +72,7 @@ export default function Contact({ profile: initialProfile }: { profile?: any }) 
         {/* Left column: Title & Info */}
         <div className="flex-1 max-w-xl md:sticky md:top-40 self-start">
           <h2 className="opacity-0 text-6xl md:text-[6rem] font-display font-bold leading-none mb-4 contact-title text-[#292f3b] tracking-tighter" style={{ letterSpacing: '-0.04em' }}>
-            Let's<br/><span className="text-brand-purple italic">Connect.</span>
+            Let's<br/><span className="text-brand-purple">Connect.</span>
           </h2>
         </div>
 

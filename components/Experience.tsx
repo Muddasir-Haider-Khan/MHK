@@ -118,7 +118,7 @@ export default function Experience({
         <p className="text-sm uppercase tracking-[0.4em] text-brand-purple/60 font-bold mb-8 font-mono">03 / Journey</p>
         <h2 className="text-5xl md:text-8xl font-display font-bold text-[#292f3b] tracking-tighter leading-[0.9]" style={{ letterSpacing: '-0.04em' }}>
           The Path<br/>
-          <span className="text-brand-purple italic">So Far</span>
+          <span className="text-brand-purple">So Far</span>
         </h2>
       </div>
 

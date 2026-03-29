@@ -120,17 +120,17 @@ export default function Navbar() {
         </button>
         {Array.isArray(navItems) && navItems.length > 0 ? (
           navItems.map((item: any) => (
-            <a key={item.id} href={item.url} target={item.open_in_new_tab ? "_blank" : "_self"} className="text-4xl font-display font-medium tracking-tighter hover:text-brand-purple hover:italic transition-colors" style={{ letterSpacing: '-0.04em' }} onClick={() => setIsMobileMenuOpen(false)}>
+            <a key={item.id} href={item.url} target={item.open_in_new_tab ? "_blank" : "_self"} className="text-4xl font-display font-medium tracking-tighter hover:text-brand-purple transition-colors" style={{ letterSpacing: '-0.04em' }} onClick={() => setIsMobileMenuOpen(false)}>
               {item.label}
             </a>
           ))
         ) : (
           <>
-            <a href="#story" className="mobile-nav-link text-5xl font-display font-medium hover:text-brand-purple hover:italic transition-all tracking-tighter" style={{ letterSpacing: '-0.04em' }} onClick={() => setIsMobileMenuOpen(false)}>Story</a>
-            <a href="#skills" className="mobile-nav-link text-5xl font-display font-medium hover:text-brand-purple hover:italic transition-all tracking-tighter" style={{ letterSpacing: '-0.04em' }} onClick={() => setIsMobileMenuOpen(false)}>Skills</a>
-            <a href="#work" className="mobile-nav-link text-5xl font-display font-medium hover:text-brand-purple hover:italic transition-all tracking-tighter" style={{ letterSpacing: '-0.04em' }} onClick={() => setIsMobileMenuOpen(false)}>Work</a>
-            <a href="#experience" className="mobile-nav-link text-5xl font-display font-medium hover:text-brand-purple hover:italic transition-all tracking-tighter" style={{ letterSpacing: '-0.04em' }} onClick={() => setIsMobileMenuOpen(false)}>Journey</a>
-            <a href="#process" className="mobile-nav-link text-5xl font-display font-medium hover:text-brand-purple hover:italic transition-all tracking-tighter" style={{ letterSpacing: '-0.04em' }} onClick={() => setIsMobileMenuOpen(false)}>Process</a>
+            <a href="#story" className="mobile-nav-link text-5xl font-display font-medium hover:text-brand-purple transition-all tracking-tighter" style={{ letterSpacing: '-0.04em' }} onClick={() => setIsMobileMenuOpen(false)}>Story</a>
+            <a href="#skills" className="mobile-nav-link text-5xl font-display font-medium hover:text-brand-purple transition-all tracking-tighter" style={{ letterSpacing: '-0.04em' }} onClick={() => setIsMobileMenuOpen(false)}>Skills</a>
+            <a href="#work" className="mobile-nav-link text-5xl font-display font-medium hover:text-brand-purple transition-all tracking-tighter" style={{ letterSpacing: '-0.04em' }} onClick={() => setIsMobileMenuOpen(false)}>Work</a>
+            <a href="#experience" className="mobile-nav-link text-5xl font-display font-medium hover:text-brand-purple transition-all tracking-tighter" style={{ letterSpacing: '-0.04em' }} onClick={() => setIsMobileMenuOpen(false)}>Journey</a>
+            <a href="#process" className="mobile-nav-link text-5xl font-display font-medium hover:text-brand-purple transition-all tracking-tighter" style={{ letterSpacing: '-0.04em' }} onClick={() => setIsMobileMenuOpen(false)}>Process</a>
             <a href="#contact" className="mobile-nav-link text-5xl font-display font-bold text-brand-purple mt-8" style={{ letterSpacing: '-0.04em' }} onClick={() => setIsMobileMenuOpen(false)}>Connect</a>
           </>
         )}

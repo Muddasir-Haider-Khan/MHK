@@ -85,7 +85,7 @@ export default function Projects({ initialProjects }: { initialProjects?: Projec
       {/* Section Header */}
       <div className="px-6 md:px-12 mb-16 max-w-7xl mx-auto relative z-10">
         <h2 className="text-mobile-title md:text-8xl font-display font-bold text-[#1a1f2b] tracking-tighter leading-[0.9]" style={{ letterSpacing: '-0.04em' }}>
-          Selected&nbsp;<span className="text-brand-purple italic" style={{ letterSpacing: '-0.01em' }}>Artifacts</span>
+          Selected&nbsp;<span className="text-brand-purple" style={{ letterSpacing: '-0.01em' }}>Artifacts</span>
         </h2>
       </div>
 
@@ -107,11 +107,12 @@ export default function Projects({ initialProjects }: { initialProjects?: Projec
               <img 
                 src={proj.image} 
                 alt={proj.title}
-                className={`absolute inset-0 w-full h-full object-cover transition-all duration-[1.5s] ease-out ${isActive ? 'opacity-60 scale-105' : 'opacity-20 scale-100'}`}
+                className={`absolute inset-0 w-full h-full object-cover transition-all duration-[1.5s] ease-out ${isActive ? 'opacity-50 scale-105' : 'opacity-20 scale-100'}`}
               />
               
               {/* Gradient overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-[#0a0c12] via-[#0a0c12]/60 to-[#0a0c12]/30" />
+              <div className={`absolute inset-0 bg-[#0a0c12] transition-opacity duration-700 ${isActive ? 'opacity-85' : 'opacity-0'}`} />
 
               {/* Active Content - Shows when expanded */}
               <div className={`absolute inset-0 p-8 md:p-12 flex flex-col transition-all duration-700 ${isActive ? 'opacity-100 delay-300 translate-y-0' : 'opacity-0 translate-y-8 pointer-events-none'}`}>
