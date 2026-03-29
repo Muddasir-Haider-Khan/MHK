@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, useMemo } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { X, ExternalLink, Github, ArrowUpRight, Loader2 } from 'lucide-react';
+import { X, ExternalLink, Github, ArrowUpRight, Brain, Cloud, Shield, BookOpen, Layers, Code2 } from 'lucide-react';
 import { useProjects } from '@/hooks/useContent';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -23,8 +23,11 @@ export type Project = {
   sort_order: number;
 };
 
+const projectIcons = [Brain, Cloud, Shield, BookOpen, Layers, Code2, Brain, Cloud];
+
 export default function Projects({ initialProjects }: { initialProjects?: Project[] }) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [activeProject, setActiveProject] = useState<number>(0);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const { projects: fetchedProjects } = useProjects();
 
@@ -34,41 +37,8 @@ export default function Projects({ initialProjects }: { initialProjects?: Projec
     return [];
   }, [fetchedProjects, initialProjects]);
 
-  useEffect(() => {
-    if (projects.length === 0) return;
-
-    let ctx = gsap.context(() => {
-      gsap.fromTo('.project-card', 
-        { y: 80, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 1.4,
-          stagger: 0.1,
-          ease: "power4.out",
-          scrollTrigger: {
-            trigger: '.projects-grid',
-            start: "top 95%",
-            once: true,
-          }
-        }
-      );
-
-      const magnets = document.querySelectorAll('.magnetic-btn');
-      magnets.forEach((btn) => {
-        btn.addEventListener('mousemove', (e: any) => {
-          const rect = btn.getBoundingClientRect();
-          const x = e.clientX - rect.left - rect.width / 2;
-          const y = e.clientY - rect.top - rect.height / 2;
-          gsap.to(btn, { x: x * 0.4, y: y * 0.4, duration: 0.4, ease: "power2.out" });
-        });
-        btn.addEventListener('mouseleave', () => {
-          gsap.to(btn, { x: 0, y: 0, duration: 0.6, ease: "elastic.out(1, 0.3)" });
-        });
-      });
-    }, containerRef);
-    return () => ctx.revert();
-  }, [projects]);
+  // Limit to max 5 projects for accordion
+  const displayProjects = useMemo(() => projects.slice(0, 5), [projects]);
 
   useEffect(() => {
     if (selectedProject) {
@@ -79,90 +49,129 @@ export default function Projects({ initialProjects }: { initialProjects?: Projec
     return () => { document.body.style.overflow = ''; };
   }, [selectedProject]);
 
+  useEffect(() => {
+    if (displayProjects.length === 0) return;
+    let ctx = gsap.context(() => {
+      gsap.from('.projects-accordion-container > div', {
+        opacity: 0,
+        y: 0,
+        scale: 0.98,
+        duration: 1.2,
+        stagger: 0.15,
+        ease: "expo.out",
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top 80%",
+        }
+      });
+    }, containerRef);
+    return () => ctx.revert();
+  }, [displayProjects]);
+
   return (
-    <section id="work" className="pt-32 pb-40 bg-transparent relative z-10 scroll-mt-28" ref={containerRef}>
-      {/* Dynamic Gradients */}
+    <section id="work" className="pt-24 pb-16 relative overflow-hidden bg-transparent scroll-mt-28" ref={containerRef}>
+      {/* Background Accents */}
       <div className="absolute top-[-10%] right-[-10%] w-[60vw] h-[60vw] bg-brand-purple/5 rounded-full blur-[150px] pointer-events-none opacity-50"></div>
-      
-      {/* Grid Header */}
-      <div className="px-6 md:px-12 mb-20 max-w-7xl mx-auto relative z-10">
-        <div className="flex items-center gap-4 mb-8">
-           <span className="h-[1px] w-12 bg-brand-purple/40"></span>
-           <p className="text-sm uppercase tracking-[0.4em] text-brand-purple font-bold font-mono">02 / Portfolio Showcase</p>
-        </div>
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-12">
-           <h2 className="text-mobile-title md:text-8xl lg:text-9xl font-display font-bold text-[#1a1f2b] tracking-tighter leading-[0.85]" style={{ letterSpacing: '-0.05em' }}>
-            Selected <br/><span className="text-brand-purple italic font-medium">Artifacts</span>
-          </h2>
-          <div className="max-w-md space-y-6">
-            <p className="text-[#4f5d6d] text-xl leading-relaxed font-medium">
-              High-performance digital products engineered at the intersection of <span className="text-[#1a1f2b] font-bold underline decoration-brand-purple/20 underline-offset-4">design & intelligence</span>.
-            </p>
-            <div className="flex gap-8 items-center pt-2">
-               <div className="flex flex-col">
-                  <span className="text-4xl font-display font-bold text-[#1a1f2b]">12+</span>
-                  <span className="text-[10px] uppercase tracking-widest text-[#a7adbd] font-bold">Deployments</span>
-               </div>
-               <div className="flex flex-col">
-                  <span className="text-4xl font-display font-bold text-[#1a1f2b]">99%</span>
-                  <span className="text-[10px] uppercase tracking-widest text-[#a7adbd] font-bold">Accuracy</span>
-               </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      {/* Bento Grid - Stabilized Layout */}
-      <div className="projects-grid max-w-[1440px] w-full mx-auto px-6 md:px-12 relative z-10 grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-10 auto-rows-fr">
-        {projects.length > 0 ? (
-          projects.map((proj: Project, index: number) => {
-            // Tier 1: Hero & Tall
-            let gridClass = "md:col-span-4 min-h-[450px]";
-            if (index === 0) gridClass = "md:col-span-8 md:row-span-2 min-h-[600px]";
-            else if (index === 1) gridClass = "md:col-span-4 md:row-span-2 min-h-[600px]";
-            // Tier 2: Medium
-            else if (index === 2) gridClass = "md:col-span-6 min-h-[400px]";
-            else if (index === 3) gridClass = "md:col-span-6 min-h-[400px]";
-            // Tier 3: Supporting
-            else gridClass = "md:col-span-4 min-h-[400px]";
-            
-            return (
-              <div 
-                key={proj.id}
-                onClick={() => setSelectedProject(proj)}
-                className={`project-card translate-y-12 opacity-0 group relative overflow-hidden rounded-[3rem] bg-[#0d0f14] cursor-pointer shadow-[0_20px_50px_rgba(0,0,0,0.08)] hover:shadow-[0_40px_100px_rgba(139,92,246,0.2)] transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.01] border border-white/5 ${gridClass}`}
-              >
-                <img src={proj.image} alt={proj.title} className="absolute inset-0 w-full h-full object-cover transition-all duration-[2s] ease-out group-hover:scale-105 group-hover:brightness-50" />
-                
-                {/* Enhanced mask for perfect readability */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0c12] via-[#0a0c12]/40 to-transparent opacity-90 transition-opacity duration-700" />
-                
-                <div className="absolute inset-0 p-8 md:p-14 flex flex-col justify-end text-center md:text-left z-20">
-                   <div className="transform translate-y-6 group-hover:translate-y-0 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]">
-                      <div className="flex flex-wrap justify-center md:justify-start gap-2 mb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                          {proj.technologies?.slice(0, 3).map(tech => (
-                            <span key={tech} className="px-3 md:px-4 py-1.5 bg-white/5 backdrop-blur-xl border border-white/10 rounded-full text-[8px] md:text-[9px] font-bold text-white uppercase tracking-[0.3em]">{tech}</span>
-                          ))}
-                      </div>
-                      <div className="flex items-end justify-between gap-6">
-                          <div className="space-y-4 w-full">
-                             <h3 className="text-mobile-card-title md:text-5xl font-display font-bold text-white tracking-tighter leading-[0.9] opacity-100">{proj.title}</h3>
-                             <p className="text-white/40 text-sm font-medium line-clamp-2 max-w-sm mx-auto md:mx-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-100 hidden md:block">{proj.description}</p>
-                          </div>
-                          <div className="magnetic-btn w-16 h-16 rounded-full bg-white flex items-center justify-center shrink-0 shadow-2xl text-brand-purple hover:bg-brand-purple hover:text-white transition-all transform md:translate-y-12 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 duration-700 scale-90 group-hover:scale-100">
-                             <ArrowUpRight className="w-8 h-8" />
-                          </div>
-                      </div>
-                   </div>
-                </div>
-                <div className="absolute top-10 right-10 text-white/10 font-display font-bold text-4xl group-hover:text-white/20 transition-colors">{(index + 1).toString().padStart(2, '0')}</div>
-              </div>
-            );
-          })
-        ) : null}
+
+      {/* Grid Lines (same as Skills) */}
+      <div className="absolute inset-0 pointer-events-none hidden md:grid grid-cols-4 px-12 z-0 opacity-[0.05]">
+        <div className="border-l border-[#a7adbd]"></div>
+        <div className="border-l border-[#a7adbd]"></div>
+        <div className="border-l border-[#a7adbd]"></div>
+        <div className="border-l border-r border-[#a7adbd]"></div>
       </div>
 
-      {/* Project Detail Modal */}
+
+      {/* Section Header */}
+      <div className="px-6 md:px-12 mb-16 max-w-7xl mx-auto relative z-10">
+        <h2 className="text-mobile-title md:text-8xl font-display font-bold text-[#1a1f2b] tracking-tighter leading-[0.9]" style={{ letterSpacing: '-0.04em' }}>
+          Selected <span className="text-brand-purple italic">Artifacts</span>
+        </h2>
+      </div>
+
+      {/* Accordion Layout — Single Frame */}
+      <div className="max-w-[1400px] w-full mx-auto px-4 md:px-12 relative z-10 flex flex-col lg:flex-row h-[120vh] lg:h-[70vh] gap-4 md:gap-5 pb-8 items-stretch projects-accordion-container overflow-hidden">
+        {displayProjects.map((proj: Project, index: number) => {
+          const isActive = activeProject === index;
+          const IconComponent = projectIcons[index % projectIcons.length];
+
+          return (
+            <div
+              key={proj.id}
+              onMouseEnter={() => setActiveProject(index)}
+              onClick={() => setSelectedProject(proj)}
+              className="group relative overflow-hidden rounded-[2.5rem] transition-all duration-700 ease-[cubic-bezier(0.19,1,0.22,1)] cursor-pointer shadow-[0_20px_40px_rgba(104,66,189,0.06)] bg-[#0d0f14] min-w-[70px] lg:min-w-[80px]"
+              style={{ flex: isActive ? 10 : 1 }}
+            >
+              {/* Project Image Background */}
+              <img 
+                src={proj.image} 
+                alt={proj.title}
+                className={`absolute inset-0 w-full h-full object-cover transition-all duration-[1.5s] ease-out ${isActive ? 'opacity-60 scale-105' : 'opacity-20 scale-100'}`}
+              />
+              
+              {/* Gradient overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0a0c12] via-[#0a0c12]/60 to-[#0a0c12]/30" />
+
+              {/* Active Content - Shows when expanded */}
+              <div className={`absolute inset-0 p-8 md:p-12 flex flex-col transition-all duration-700 ${isActive ? 'opacity-100 delay-300 translate-y-0' : 'opacity-0 translate-y-8 pointer-events-none'}`}>
+                {/* Top: Number + Icon */}
+                <div className="mb-6">
+                  <div className="w-14 h-14 bg-brand-purple/15 backdrop-blur-xl rounded-2xl flex items-center justify-center mb-6 border border-white/5">
+                    <IconComponent className="w-7 h-7 text-brand-purple" />
+                  </div>
+                  <h3 className="text-3xl md:text-4xl font-display font-bold text-white mb-2 tracking-tight">{proj.title}</h3>
+                  <p className="text-white/40 text-sm font-medium leading-relaxed max-w-sm line-clamp-2">{proj.description}</p>
+                </div>
+
+                {/* Tech Stack */}
+                <div className="flex-1 overflow-y-auto no-scrollbar space-y-4 pr-2">
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {proj.technologies?.slice(0, 5).map(tech => (
+                      <span key={tech} className="px-3 py-1.5 bg-white/5 backdrop-blur-xl border border-white/10 rounded-full text-[9px] font-bold text-white/70 uppercase tracking-[0.2em]">{tech}</span>
+                    ))}
+                  </div>
+                  
+                  {/* Role & Outcome */}
+                  {proj.role && (
+                    <div className="space-y-2">
+                      <p className="text-[10px] font-mono text-brand-purple font-bold tracking-[0.3em] uppercase">Role</p>
+                      <p className="text-white/50 text-xs leading-relaxed">{proj.role}</p>
+                    </div>
+                  )}
+                  {proj.outcome && (
+                    <div className="space-y-2 mt-3">
+                      <p className="text-[10px] font-mono text-brand-purple font-bold tracking-[0.3em] uppercase">Outcome</p>
+                      <p className="text-white/50 text-xs leading-relaxed">{proj.outcome}</p>
+                    </div>
+                  )}
+                </div>
+
+                {/* CTA */}
+                <div className="mt-auto pt-4 flex items-center gap-4">
+                  <div className="w-14 h-14 rounded-full bg-white flex items-center justify-center shrink-0 shadow-2xl text-brand-purple hover:bg-brand-purple hover:text-white transition-all duration-500 group-hover:scale-110">
+                    <ArrowUpRight className="w-7 h-7" />
+                  </div>
+                  <span className="text-white/30 text-[10px] font-bold uppercase tracking-[0.3em]">View Case Study</span>
+                </div>
+              </div>
+
+              {/* Collapsed State - Shows when panel is narrow */}
+              <div className={`absolute inset-0 flex items-center justify-center transition-opacity duration-700 pointer-events-none ${isActive ? 'opacity-0 delay-0' : 'opacity-100 delay-300'}`}>
+                <div className="lg:-rotate-90 origin-center flex flex-col items-center gap-4">
+                  <span className="text-white/20 font-display font-bold text-2xl">{(index + 1).toString().padStart(2, '0')}</span>
+                  <IconComponent className="w-5 h-5 text-brand-purple/40 group-hover:text-brand-purple transition-colors" />
+                  <h3 className="text-white/20 font-display font-bold text-[11px] md:text-xs uppercase tracking-[0.5em] whitespace-nowrap group-hover:text-brand-purple/60 transition-colors">
+                    {proj.title}
+                  </h3>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Project Detail Modal (preserved from original) */}
       {selectedProject && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8" role="dialog">
           <div className="absolute inset-0 bg-[#0a0c10]/85 backdrop-blur-2xl animate-in fade-in duration-500" onClick={() => setSelectedProject(null)} />
